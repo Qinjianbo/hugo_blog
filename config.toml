@@ -31,7 +31,7 @@ hasCJKLanguage = true
   avatar = "/img/avatar.jpeg"
   headerTitle = "BoBo`s Blog"
   motto = "每天进步一点点，能多一点是一点"
-  # maxTags = 5
+  maxTags = 13
   # categoriesLimitInHeader = 6 # deprecated
   # headerBottomText = "" # deprecated
 
