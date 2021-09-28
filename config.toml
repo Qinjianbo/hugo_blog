@@ -67,7 +67,7 @@ hasCJKLanguage = true
    highlightjsThemeDark = "gruvbox-dark"
 
   # search
-  # enableSearch = true
+   enableSearch = true
 
   # options
     showSummaryCoverInPost = true
@@ -82,6 +82,9 @@ hasCJKLanguage = true
   #   customCSS = ["css/custom.css"]
   #   customJSBefore = []
   #   customJS = []
+
+  [outputs]
+   home = ["html", "RSS", "JSON"]
 
   # [params.experimental]
      jsDate = true
