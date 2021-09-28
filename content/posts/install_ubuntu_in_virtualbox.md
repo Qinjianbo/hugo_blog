@@ -1,6 +1,6 @@
 ---
 title: windows下使用vitualbox进行ubuntu安装
-date: 2021-09-28T12:12:31+08:00
+date: 2020-10-31T12:12:31+08:00
 lastmod: 2021-09-28T12:12:31+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
