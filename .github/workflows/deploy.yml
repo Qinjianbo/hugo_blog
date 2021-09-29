@@ -32,3 +32,4 @@ jobs:
           cd $GITHUB_WORKSPACE
           pwd
           ./deploy.sh
+          pwd
