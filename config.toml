@@ -78,10 +78,10 @@ hasCJKLanguage = true
   # collapsibleTags = true
   # collapseBySummary = true
 
-  # [params.advanced]
+   [params.advanced]
   #   customCSS = ["css/custom.css"]
   #   customJSBefore = []
-  #   customJS = []
+      customJS = ["js/bd_push.js"]
 
   [outputs]
    home = ["html", "RSS", "JSON"]
