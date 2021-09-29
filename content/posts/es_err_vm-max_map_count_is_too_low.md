@@ -11,7 +11,7 @@ cover: /img/cover.jpg
 categories:
   - 问题积累
 tags:
-  - elasticearch
+  - elasticsearch
 # nolastmod: true
 draft: false
 ---
