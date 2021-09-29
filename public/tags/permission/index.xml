@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>permission on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/permission/</link>
+    <description>Recent content in permission on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 07 Nov 2017 18:12:22 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/permission/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>26054 open /var/lib/nginx/tmp/client_body/0000000005  failed (13 Permission denied)</title>
+      <link>https://www.boboidea.com/posts/nginx_permission_denied/</link>
+      <pubDate>Tue, 07 Nov 2017 18:12:22 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/nginx_permission_denied/</guid>
+      <description>&lt;p&gt;ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了标题中的错误！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

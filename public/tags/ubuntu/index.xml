@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ubuntu on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/ubuntu/</link>
+    <description>Recent content in ubuntu on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sat, 31 Oct 2020 12:12:31 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>windows下使用vitualbox进行ubuntu安装</title>
+      <link>https://www.boboidea.com/posts/install_ubuntu_in_virtualbox/</link>
+      <pubDate>Sat, 31 Oct 2020 12:12:31 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/install_ubuntu_in_virtualbox/</guid>
+      <description>&lt;p&gt;本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>zookeeper support requires libzookeeper ubuntu</title>
+      <link>https://www.boboidea.com/posts/zookeeper_support_requires_libzookeeper_ubuntu/</link>
+      <pubDate>Sun, 12 Jan 2020 16:15:50 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/zookeeper_support_requires_libzookeeper_ubuntu/</guid>
+      <description>&lt;p&gt;pecl install zookeeper error zookeeper support requires libzookeeper&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何在mac下制作ubuntu的u盘启动盘</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8B%E5%88%B6%E4%BD%9Cubuntu%E7%9A%84u%E7%9B%98%E5%90%AF%E5%8A%A8%E7%9B%98/</link>
+      <pubDate>Tue, 12 Jun 2018 18:36:03 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8B%E5%88%B6%E4%BD%9Cubuntu%E7%9A%84u%E7%9B%98%E5%90%AF%E5%8A%A8%E7%9B%98/</guid>
+      <description>&lt;p&gt;公司给我们配了台式机，要求开发统一安装ubuntu作为开发机系统，借此学习ubuntu的相关知识。目前用的mac，需要制作一个u盘启动盘来安装ubuntu到台式机，但是找不到好的工具，在网上看到一篇文章，在此进行记录。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

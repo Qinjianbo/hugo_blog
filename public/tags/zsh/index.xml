@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>zsh on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/zsh/</link>
+    <description>Recent content in zsh on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 12 Jun 2018 18:33:58 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/zsh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ubuntu安装oh My Zsh并将zsh设置成默认shell</title>
+      <link>https://www.boboidea.com/posts/ubuntu%E5%AE%89%E8%A3%85oh-my-zsh%E5%B9%B6%E5%B0%86zsh%E8%AE%BE%E7%BD%AE%E6%88%90%E9%BB%98%E8%AE%A4shell/</link>
+      <pubDate>Tue, 12 Jun 2018 18:33:58 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/ubuntu%E5%AE%89%E8%A3%85oh-my-zsh%E5%B9%B6%E5%B0%86zsh%E8%AE%BE%E7%BD%AE%E6%88%90%E9%BB%98%E8%AE%A4shell/</guid>
+      <description>&lt;p&gt;今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

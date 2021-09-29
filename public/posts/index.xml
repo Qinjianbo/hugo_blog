@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>归档 on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/posts/</link>
+    <description>Recent content in 归档 on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sun, 25 Apr 2021 22:16:44 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>nginx [error] open() &#34;/usr/local/var/run/nginx.pid&#34; failed</title>
+      <link>https://www.boboidea.com/posts/err_nginx_error_pid_failed/</link>
+      <pubDate>Sun, 25 Apr 2021 22:16:44 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_nginx_error_pid_failed/</guid>
+      <description>&lt;p&gt;nginx: [error] open() &amp;ldquo;/usr/local/var/run/nginx.pid&amp;rdquo; failed&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>missing xcrun at ...</title>
+      <link>https://www.boboidea.com/posts/err_missing_xcrun/</link>
+      <pubDate>Mon, 05 Apr 2021 21:35:01 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_missing_xcrun/</guid>
+      <description>&lt;p&gt;xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>上海个人积分办理流程</title>
+      <link>https://www.boboidea.com/posts/sh_jf/</link>
+      <pubDate>Sat, 13 Mar 2021 11:09:15 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/sh_jf/</guid>
+      <description>&lt;p&gt;最近在办理上海积分，在此梳理一份流程，方便参考&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>符号连接的层数过多</title>
+      <link>https://www.boboidea.com/posts/%E7%AC%A6%E5%8F%B7%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%B1%82%E6%95%B0%E8%BF%87%E5%A4%9A/</link>
+      <pubDate>Sat, 07 Nov 2020 22:03:14 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E7%AC%A6%E5%8F%B7%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%B1%82%E6%95%B0%E8%BF%87%E5%A4%9A/</guid>
+      <description>&lt;p&gt;今天在使用ln命令建立软连接后，想用cd进入建立的软连接文件夹，但是提示符号连接的层数过多&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何解决 error opening dictionary /usr/share/appdata</title>
+      <link>https://www.boboidea.com/posts/err_opening_dictionary/</link>
+      <pubDate>Sat, 07 Nov 2020 21:54:11 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_opening_dictionary/</guid>
+      <description>&lt;p&gt;今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>windows下使用vitualbox进行ubuntu安装</title>
+      <link>https://www.boboidea.com/posts/install_ubuntu_in_virtualbox/</link>
+      <pubDate>Sat, 31 Oct 2020 12:12:31 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/install_ubuntu_in_virtualbox/</guid>
+      <description>&lt;p&gt;本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>chsh PAM Authentication failure</title>
+      <link>https://www.boboidea.com/posts/chsh_pam_authentication_failure/</link>
+      <pubDate>Mon, 07 Sep 2020 22:06:13 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/chsh_pam_authentication_failure/</guid>
+      <description>&lt;p&gt;今天在装oh my zsh时遇到错误chsh: PAM: Authentication failure&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Limit of total fields [1000] in index [xxx] has been exceeded</title>
+      <link>https://www.boboidea.com/posts/err_limit_of_total_fields/</link>
+      <pubDate>Thu, 21 May 2020 22:09:46 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_limit_of_total_fields/</guid>
+      <description>&lt;p&gt;更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MAC dyld Library not loaded /usr/local/opt/openssl/lib/libssl</title>
+      <link>https://www.boboidea.com/posts/err_mac_dyid/</link>
+      <pubDate>Sun, 03 May 2020 22:13:14 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_mac_dyid/</guid>
+      <description>&lt;p&gt;在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>20200404哀悼日css实现全网置灰</title>
+      <link>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</link>
+      <pubDate>Sat, 04 Apr 2020 22:19:22 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</guid>
+      <description>&lt;p&gt;20200404哀悼日，我这个小网站也做了一下全网置灰，以表达对逝者的缅怀之情。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>zookeeper support requires libzookeeper ubuntu</title>
+      <link>https://www.boboidea.com/posts/zookeeper_support_requires_libzookeeper_ubuntu/</link>
+      <pubDate>Sun, 12 Jan 2020 16:15:50 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/zookeeper_support_requires_libzookeeper_ubuntu/</guid>
+      <description>&lt;p&gt;pecl install zookeeper error zookeeper support requires libzookeeper&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unable to fetch some archives, maybe run apt-get update or try with</title>
+      <link>https://www.boboidea.com/posts/err_unable_to_fetch_some_archives/</link>
+      <pubDate>Sat, 11 Jan 2020 22:19:43 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_unable_to_fetch_some_archives/</guid>
+      <description>&lt;p&gt;Unable to fetch some archives, maybe run apt-get update or try with &amp;ndash;fix-missing&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>项目无法编译是否要在visual studio中打开</title>
+      <link>https://www.boboidea.com/posts/%E9%A1%B9%E7%9B%AE%E6%97%A0%E6%B3%95%E7%BC%96%E8%AF%91%E6%98%AF%E5%90%A6%E8%A6%81%E5%9C%A8visual_studio%E4%B8%AD%E6%89%93%E5%BC%80/</link>
+      <pubDate>Tue, 24 Dec 2019 22:23:00 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E9%A1%B9%E7%9B%AE%E6%97%A0%E6%B3%95%E7%BC%96%E8%AF%91%E6%98%AF%E5%90%A6%E8%A6%81%E5%9C%A8visual_studio%E4%B8%AD%E6%89%93%E5%BC%80/</guid>
+      <description>&lt;p&gt;unreal4新建c++项目会提示项目无法编译是否要在visual studio中打开?这个怎么解决&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Please specify the install prefix of iconv with --with-iconv=</title>
+      <link>https://www.boboidea.com/posts/err_please_specify_the_install_prefix/</link>
+      <pubDate>Sun, 22 Dec 2019 22:28:26 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_please_specify_the_install_prefix/</guid>
+      <description>&lt;p&gt;Please specify the install prefix of iconv with &amp;ndash;with-iconv=&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>PHP compile fails with undefined symbols for architecture x86_64</title>
+      <link>https://www.boboidea.com/posts/err_php_compile_fails_with_undefined_symbols/</link>
+      <pubDate>Sun, 22 Dec 2019 22:26:09 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_php_compile_fails_with_undefined_symbols/</guid>
+      <description>&lt;p&gt;PHP compile fails with undefined symbols for architecture x86_64&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>missing function body;syntax error unexpected semicolon or newline before</title>
+      <link>https://www.boboidea.com/posts/err_missing_function_body/</link>
+      <pubDate>Sun, 22 Sep 2019 22:30:36 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_missing_function_body/</guid>
+      <description>&lt;p&gt;missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN</title>
+      <link>https://www.boboidea.com/posts/amqp_access_refused/</link>
+      <pubDate>Sun, 25 Aug 2019 16:26:25 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/amqp_access_refused/</guid>
+      <description>&lt;p&gt;ACCESS_REFUSED - Login was refused using authentication mechanism AMQPLAIN&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>PHP中的mkdir如何创建0777权限的文件夹</title>
+      <link>https://www.boboidea.com/posts/php%E4%B8%AD%E7%9A%84mkdir%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA0777%E6%9D%83%E9%99%90%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
+      <pubDate>Sat, 10 Aug 2019 17:22:09 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/php%E4%B8%AD%E7%9A%84mkdir%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA0777%E6%9D%83%E9%99%90%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
+      <description>&lt;p&gt;PHP中的mkdir写的0777创建出来的并不是0777&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>unauthorized incorrect username or password  docker</title>
+      <link>https://www.boboidea.com/posts/err_incorrect_username_or_password_docker/</link>
+      <pubDate>Fri, 26 Jul 2019 22:34:00 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_incorrect_username_or_password_docker/</guid>
+      <description>&lt;p&gt;docker pull 报错 error unauthorized: incorrect username or password&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在DaDa这一年</title>
+      <link>https://www.boboidea.com/posts/%E5%9C%A8dada%E8%BF%99%E4%B8%80%E5%B9%B4/</link>
+      <pubDate>Fri, 26 Jul 2019 10:38:16 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%9C%A8dada%E8%BF%99%E4%B8%80%E5%B9%B4/</guid>
+      <description>&lt;p&gt;马上就要离开DaDa了，简单总结从进入DaDa到离开DaDa的这一年中的生活以及学习。DaDa英语，上海卓赞教育信息有限公司。短链接。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何导出的csv文件同一个单元格内容换行</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%AF%BC%E5%87%BA%E7%9A%84csv%E6%96%87%E4%BB%B6%E5%90%8C%E4%B8%80%E4%B8%AA%E5%8D%95%E5%85%83%E6%A0%BC%E5%86%85%E5%AE%B9%E6%8D%A2%E8%A1%8C/</link>
+      <pubDate>Fri, 11 Jan 2019 17:24:38 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%AF%BC%E5%87%BA%E7%9A%84csv%E6%96%87%E4%BB%B6%E5%90%8C%E4%B8%80%E4%B8%AA%E5%8D%95%E5%85%83%E6%A0%BC%E5%86%85%E5%AE%B9%E6%8D%A2%E8%A1%8C/</guid>
+      <description>&lt;p&gt;导出csv时，使同一个单元格的内容换行的方法。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>HTTP学习之HTTPS</title>
+      <link>https://www.boboidea.com/posts/http%E5%AD%A6%E4%B9%A0%E4%B9%8Bhttps/</link>
+      <pubDate>Thu, 06 Dec 2018 17:25:59 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/http%E5%AD%A6%E4%B9%A0%E4%B9%8Bhttps/</guid>
+      <description>&lt;p&gt;HTTPS = HTTP + 加密 + 认证 + 完整性保护&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Tf_err_no_module_named_matplotlib Pyplot</title>
+      <link>https://www.boboidea.com/posts/tf_err_no_module_named_matplotlib-pyplot/</link>
+      <pubDate>Wed, 24 Oct 2018 18:25:10 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/tf_err_no_module_named_matplotlib-pyplot/</guid>
+      <description>&lt;p&gt;今天在编写tensorflow脚本时，报错No module named matplotlib.pyplot&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>TypeError Expected binary or unicode string</title>
+      <link>https://www.boboidea.com/posts/tf_err_expected_binary_or_unicode_string/</link>
+      <pubDate>Wed, 24 Oct 2018 18:16:00 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/tf_err_expected_binary_or_unicode_string/</guid>
+      <description>&lt;p&gt;TypeError: Expected binary or unicode string, got &amp;lt;tf.Tensor &amp;lsquo;EncodeJpeg:0&amp;rsquo; shape=() dtype=string&amp;gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>7分钟入门线性代数&#43;微积分</title>
+      <link>https://www.boboidea.com/posts/7%E5%88%86%E9%92%9F%E5%85%A5%E9%97%A8%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0&#43;%E5%BE%AE%E7%A7%AF%E5%88%86/</link>
+      <pubDate>Sat, 29 Sep 2018 17:39:45 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/7%E5%88%86%E9%92%9F%E5%85%A5%E9%97%A8%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0&#43;%E5%BE%AE%E7%A7%AF%E5%88%86/</guid>
+      <description>&lt;p&gt;7分钟入门线性代数+微积分&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>不错的概率论英文课程</title>
+      <link>https://www.boboidea.com/posts/%E4%B8%8D%E9%94%99%E7%9A%84%E6%A6%82%E7%8E%87%E8%AE%BA%E8%8B%B1%E6%96%87%E8%AF%BE%E7%A8%8B/</link>
+      <pubDate>Sat, 29 Sep 2018 17:30:36 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E4%B8%8D%E9%94%99%E7%9A%84%E6%A6%82%E7%8E%87%E8%AE%BA%E8%8B%B1%E6%96%87%E8%AF%BE%E7%A8%8B/</guid>
+      <description>&lt;p&gt;不错的概率论英文课程&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>不错的信息熵讲解</title>
+      <link>https://www.boboidea.com/posts/%E4%B8%8D%E9%94%99%E7%9A%84%E4%BF%A1%E6%81%AF%E7%86%B5%E8%AE%B2%E8%A7%A3/</link>
+      <pubDate>Sat, 29 Sep 2018 17:27:55 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E4%B8%8D%E9%94%99%E7%9A%84%E4%BF%A1%E6%81%AF%E7%86%B5%E8%AE%B2%E8%A7%A3/</guid>
+      <description>&lt;p&gt;不错的信息熵讲解，收藏学习&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>PHP二进制安全与redis二进制安全</title>
+      <link>https://www.boboidea.com/posts/php%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8%E4%B8%8Eredis%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/</link>
+      <pubDate>Mon, 03 Sep 2018 17:41:41 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/php%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8%E4%B8%8Eredis%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/</guid>
+      <description>&lt;p&gt;PHP二进制安全与redis二进制安全写的比较明白的文章链接记录&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用css固定背景图片 background-attachment</title>
+      <link>https://www.boboidea.com/posts/%E4%BD%BF%E7%94%A8css%E5%9B%BA%E5%AE%9A%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87_background-attachment/</link>
+      <pubDate>Fri, 27 Jul 2018 18:29:15 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E4%BD%BF%E7%94%A8css%E5%9B%BA%E5%AE%9A%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87_background-attachment/</guid>
+      <description>&lt;p&gt;最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动。这里使用到了background-attachment这个css属性。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MySQL复制之主从数据库设置</title>
+      <link>https://www.boboidea.com/posts/mysql%E5%A4%8D%E5%88%B6%E4%B9%8B%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E7%BD%AE/</link>
+      <pubDate>Sat, 14 Jul 2018 17:48:04 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/mysql%E5%A4%8D%E5%88%B6%E4%B9%8B%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E7%BD%AE/</guid>
+      <description>&lt;p&gt;最近又自己弄了台小服务器，学习了下mysql的主从数据库配置，记录一下配置过程，其实是mariadb的，但是应该都差不多。整个过程配置起来还是比较简单的，没有遇到什么坑，嘿嘿！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Nginx日志自动切分日期</title>
+      <link>https://www.boboidea.com/posts/nginx%E6%97%A5%E5%BF%97%E8%87%AA%E5%8A%A8%E5%88%87%E5%88%86%E6%97%A5%E6%9C%9F/</link>
+      <pubDate>Sat, 14 Jul 2018 17:44:16 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/nginx%E6%97%A5%E5%BF%97%E8%87%AA%E5%8A%A8%E5%88%87%E5%88%86%E6%97%A5%E6%9C%9F/</guid>
+      <description>&lt;p&gt;今天在网上查询nginx的其他问题的时候，无意间看到原来nginx其实是可以自动按天切分日志的，记得之前在公司看到公司的运维都是写脚本切分日志的，这里配置并记录一下nginx如何按天自动切分日志。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MySQL复制之复制概述</title>
+      <link>https://www.boboidea.com/posts/mysql%E5%A4%8D%E5%88%B6%E4%B9%8B%E5%A4%8D%E5%88%B6%E6%A6%82%E8%BF%B0/</link>
+      <pubDate>Sat, 07 Jul 2018 17:50:59 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/mysql%E5%A4%8D%E5%88%B6%E4%B9%8B%E5%A4%8D%E5%88%B6%E6%A6%82%E8%BF%B0/</guid>
+      <description>&lt;p&gt;记录mysql学习过程中对复制概念的学习。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu下安装tensorflow且使用virtualenv</title>
+      <link>https://www.boboidea.com/posts/ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85tensorflow%E4%B8%94%E4%BD%BF%E7%94%A8virtualenv/</link>
+      <pubDate>Fri, 15 Jun 2018 18:32:04 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85tensorflow%E4%B8%94%E4%BD%BF%E7%94%A8virtualenv/</guid>
+      <description>&lt;p&gt;早就知道有tensorflow这么一个东西，一直想玩一下，今天就对其在ubuntu上进行了安装，顺便记录一下安装过程，本来写了个安装脚本，但是忘记保存了。。。安装过程参考官网教程！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何修改mysql的root用户密码</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9mysql%E7%9A%84root%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81/</link>
+      <pubDate>Fri, 15 Jun 2018 17:52:25 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9mysql%E7%9A%84root%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81/</guid>
+      <description>&lt;p&gt;新装的mysql，用root用户就是登录不了，无奈只能更改mysql的root用户密码了，我使用的是方案B的方式，方案A不知道为什么用不了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何在mac下制作ubuntu的u盘启动盘</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8B%E5%88%B6%E4%BD%9Cubuntu%E7%9A%84u%E7%9B%98%E5%90%AF%E5%8A%A8%E7%9B%98/</link>
+      <pubDate>Tue, 12 Jun 2018 18:36:03 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8B%E5%88%B6%E4%BD%9Cubuntu%E7%9A%84u%E7%9B%98%E5%90%AF%E5%8A%A8%E7%9B%98/</guid>
+      <description>&lt;p&gt;公司给我们配了台式机，要求开发统一安装ubuntu作为开发机系统，借此学习ubuntu的相关知识。目前用的mac，需要制作一个u盘启动盘来安装ubuntu到台式机，但是找不到好的工具，在网上看到一篇文章，在此进行记录。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu安装oh My Zsh并将zsh设置成默认shell</title>
+      <link>https://www.boboidea.com/posts/ubuntu%E5%AE%89%E8%A3%85oh-my-zsh%E5%B9%B6%E5%B0%86zsh%E8%AE%BE%E7%BD%AE%E6%88%90%E9%BB%98%E8%AE%A4shell/</link>
+      <pubDate>Tue, 12 Jun 2018 18:33:58 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/ubuntu%E5%AE%89%E8%A3%85oh-my-zsh%E5%B9%B6%E5%B0%86zsh%E8%AE%BE%E7%BD%AE%E6%88%90%E9%BB%98%E8%AE%A4shell/</guid>
+      <description>&lt;p&gt;今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Form表单自动提交问题及解决办法</title>
+      <link>https://www.boboidea.com/posts/form%E8%A1%A8%E5%8D%95%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</link>
+      <pubDate>Tue, 15 May 2018 10:03:49 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/form%E8%A1%A8%E5%8D%95%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</guid>
+      <description>&lt;p&gt;今天收到一个任务，任务内容是这样：有一个搜索输入框，在搜索输入框内输入内容后，回车，发现页面自动刷新了，要求回车后进行搜索而不是刷新页面。开始以为是vue的问题，后来查了查原来是form表单的一种提交机制，解决办法有两种！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我的第三个Shell脚本  从Sql日志中找出所有涉及的表并可输出成md或者csv</title>
+      <link>https://www.boboidea.com/posts/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AAshell%E8%84%9A%E6%9C%AC-%E4%BB%8Esql%E6%97%A5%E5%BF%97%E4%B8%AD%E6%89%BE%E5%87%BA%E6%89%80%E6%9C%89%E6%B6%89%E5%8F%8A%E7%9A%84%E8%A1%A8%E5%B9%B6%E5%8F%AF%E8%BE%93%E5%87%BA%E6%88%90md%E6%88%96%E8%80%85csv/</link>
+      <pubDate>Fri, 13 Apr 2018 10:22:28 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AAshell%E8%84%9A%E6%9C%AC-%E4%BB%8Esql%E6%97%A5%E5%BF%97%E4%B8%AD%E6%89%BE%E5%87%BA%E6%89%80%E6%9C%89%E6%B6%89%E5%8F%8A%E7%9A%84%E8%A1%A8%E5%B9%B6%E5%8F%AF%E8%BE%93%E5%87%BA%E6%88%90md%E6%88%96%E8%80%85csv/</guid>
+      <description>&lt;p&gt;这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>No space left on device</title>
+      <link>https://www.boboidea.com/posts/err_no_space_left_on_device/</link>
+      <pubDate>Tue, 03 Apr 2018 18:45:13 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_no_space_left_on_device/</guid>
+      <description>&lt;p&gt;今天访问自己的博客，发现文章排序不正确了，知道是读数据库了，没有走ES！~然后就以为是ES出错了，后来登陆到服务器上面，想看看是怎么了，结果发现在按tab 进行命令提示时，总是报错 cannot create temp file for here-document: No space left on device。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>cluster_block_exception</title>
+      <link>https://www.boboidea.com/posts/es_err_cluster_block_exception/</link>
+      <pubDate>Tue, 03 Apr 2018 10:15:53 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/es_err_cluster_block_exception/</guid>
+      <description>&lt;p&gt;事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。  原因分析：  因为自己的读取策略是先读取ES，排序由ES进行！~若ES执行结果出错，则从数据库读取列表，排序默认。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我的第一个Shell脚本——批量检查有变化的PHP文件的语法</title>
+      <link>https://www.boboidea.com/posts/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAshell%E8%84%9A%E6%9C%AC%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E6%9C%89%E5%8F%98%E5%8C%96%E7%9A%84php%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AD%E6%B3%95/</link>
+      <pubDate>Tue, 20 Mar 2018 10:19:40 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAshell%E8%84%9A%E6%9C%AC%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E6%9C%89%E5%8F%98%E5%8C%96%E7%9A%84php%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%AD%E6%B3%95/</guid>
+      <description>&lt;p&gt;php -l 检查php文件的语法正确性，但是php -l 总是要一个一个文件的检查，感觉好麻烦，正好还没写过shell脚本，于是借着这个机会学习一下。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</title>
+      <link>https://www.boboidea.com/posts/es_err_vm-max_map_count_is_too_low/</link>
+      <pubDate>Sat, 30 Dec 2017 18:40:47 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/es_err_vm-max_map_count_is_too_low/</guid>
+      <description>&lt;p&gt;[Elasticsearch] 启动报错：max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何使用sed批量替换?</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8sed%E6%89%B9%E9%87%8F%E6%9B%BF%E6%8D%A2/</link>
+      <pubDate>Sat, 30 Dec 2017 18:38:29 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8sed%E6%89%B9%E9%87%8F%E6%9B%BF%E6%8D%A2/</guid>
+      <description>&lt;p&gt;如何使用sed批量替换？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git命令行如何批量删除本地无用分支</title>
+      <link>https://www.boboidea.com/posts/git%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A6%82%E4%BD%95%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E6%97%A0%E7%94%A8%E5%88%86%E6%94%AF/</link>
+      <pubDate>Thu, 07 Dec 2017 17:57:32 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/git%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%A6%82%E4%BD%95%E6%89%B9%E9%87%8F%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E6%97%A0%E7%94%A8%E5%88%86%E6%94%AF/</guid>
+      <description>&lt;p&gt;在使用git管理自己的项目时，不免会遇到想要删除多个本地分支的情况，这时，我们可以采用git brand -D 来进行逐个删除，那有没有更好的办法，让我来一次性删除多个无用分支呢？答案是肯定的，我们可以通过执行命令&amp;hellip;
+Cut out summary from your post content here.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>26054 open /var/lib/nginx/tmp/client_body/0000000005  failed (13 Permission denied)</title>
+      <link>https://www.boboidea.com/posts/nginx_permission_denied/</link>
+      <pubDate>Tue, 07 Nov 2017 18:12:22 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/nginx_permission_denied/</guid>
+      <description>&lt;p&gt;ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了标题中的错误！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>事务和ACID原则</title>
+      <link>https://www.boboidea.com/posts/%E4%BA%8B%E5%8A%A1%E5%92%8Cacid%E5%8E%9F%E5%88%99/</link>
+      <pubDate>Mon, 23 Oct 2017 18:05:56 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E4%BA%8B%E5%8A%A1%E5%92%8Cacid%E5%8E%9F%E5%88%99/</guid>
+      <description>&lt;p&gt;MySQL事务和事务的ACID原则简介及简单生活案例！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>MySQL并发控制</title>
+      <link>https://www.boboidea.com/posts/mysql%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Sun, 22 Oct 2017 18:09:01 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/mysql%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6/</guid>
+      <description>&lt;p&gt;关于MySQL并发控制中读写锁与锁粒度的形象举例！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

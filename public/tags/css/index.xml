@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>css on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/css/</link>
+    <description>Recent content in css on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sat, 04 Apr 2020 22:19:22 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20200404哀悼日css实现全网置灰</title>
+      <link>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</link>
+      <pubDate>Sat, 04 Apr 2020 22:19:22 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</guid>
+      <description>&lt;p&gt;20200404哀悼日，我这个小网站也做了一下全网置灰，以表达对逝者的缅怀之情。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用css固定背景图片 background-attachment</title>
+      <link>https://www.boboidea.com/posts/%E4%BD%BF%E7%94%A8css%E5%9B%BA%E5%AE%9A%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87_background-attachment/</link>
+      <pubDate>Fri, 27 Jul 2018 18:29:15 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E4%BD%BF%E7%94%A8css%E5%9B%BA%E5%AE%9A%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87_background-attachment/</guid>
+      <description>&lt;p&gt;最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动。这里使用到了background-attachment这个css属性。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

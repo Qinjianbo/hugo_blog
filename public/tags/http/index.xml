@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HTTP on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/http/</link>
+    <description>Recent content in HTTP on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Thu, 06 Dec 2018 17:25:59 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTTP学习之HTTPS</title>
+      <link>https://www.boboidea.com/posts/http%E5%AD%A6%E4%B9%A0%E4%B9%8Bhttps/</link>
+      <pubDate>Thu, 06 Dec 2018 17:25:59 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/http%E5%AD%A6%E4%B9%A0%E4%B9%8Bhttps/</guid>
+      <description>&lt;p&gt;HTTPS = HTTP + 加密 + 认证 + 完整性保护&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

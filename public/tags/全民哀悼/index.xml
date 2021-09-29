@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>全民哀悼 on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/%E5%85%A8%E6%B0%91%E5%93%80%E6%82%BC/</link>
+    <description>Recent content in 全民哀悼 on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sat, 04 Apr 2020 22:19:22 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/%E5%85%A8%E6%B0%91%E5%93%80%E6%82%BC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20200404哀悼日css实现全网置灰</title>
+      <link>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</link>
+      <pubDate>Sat, 04 Apr 2020 22:19:22 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/20200404%E5%93%80%E6%82%BC%E6%97%A5-css%E5%AE%9E%E7%8E%B0%E5%85%A8%E7%BD%91%E7%BD%AE%E7%81%B0/</guid>
+      <description>&lt;p&gt;20200404哀悼日，我这个小网站也做了一下全网置灰，以表达对逝者的缅怀之情。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

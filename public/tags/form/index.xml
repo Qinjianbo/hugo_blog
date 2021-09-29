@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>form on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/form/</link>
+    <description>Recent content in form on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Tue, 15 May 2018 10:03:49 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/form/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Form表单自动提交问题及解决办法</title>
+      <link>https://www.boboidea.com/posts/form%E8%A1%A8%E5%8D%95%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</link>
+      <pubDate>Tue, 15 May 2018 10:03:49 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/form%E8%A1%A8%E5%8D%95%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</guid>
+      <description>&lt;p&gt;今天收到一个任务，任务内容是这样：有一个搜索输入框，在搜索输入框内输入内容后，回车，发现页面自动刷新了，要求回车后进行搜索而不是刷新页面。开始以为是vue的问题，后来查了查原来是form表单的一种提交机制，解决办法有两种！&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

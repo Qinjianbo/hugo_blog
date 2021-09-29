@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>密码修改 on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/%E5%AF%86%E7%A0%81%E4%BF%AE%E6%94%B9/</link>
+    <description>Recent content in 密码修改 on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Fri, 15 Jun 2018 17:52:25 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/%E5%AF%86%E7%A0%81%E4%BF%AE%E6%94%B9/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何修改mysql的root用户密码</title>
+      <link>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9mysql%E7%9A%84root%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81/</link>
+      <pubDate>Fri, 15 Jun 2018 17:52:25 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/%E5%A6%82%E4%BD%95%E4%BF%AE%E6%94%B9mysql%E7%9A%84root%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81/</guid>
+      <description>&lt;p&gt;新装的mysql，用root用户就是登录不了，无奈只能更改mysql的root用户密码了，我使用的是方案B的方式，方案A不知道为什么用不了。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

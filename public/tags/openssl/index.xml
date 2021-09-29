@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>openssl on BoBo`s Blog`</title>
+    <link>https://www.boboidea.com/tags/openssl/</link>
+    <description>Recent content in openssl on BoBo`s Blog`</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans</language>
+    <lastBuildDate>Sun, 03 May 2020 22:13:14 +0800</lastBuildDate><atom:link href="https://www.boboidea.com/tags/openssl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MAC dyld Library not loaded /usr/local/opt/openssl/lib/libssl</title>
+      <link>https://www.boboidea.com/posts/err_mac_dyid/</link>
+      <pubDate>Sun, 03 May 2020 22:13:14 +0800</pubDate>
+      
+      <guid>https://www.boboidea.com/posts/err_mac_dyid/</guid>
+      <description>&lt;p&gt;在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
