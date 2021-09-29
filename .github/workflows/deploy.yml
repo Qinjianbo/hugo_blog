@@ -27,6 +27,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          pwd
-          echo $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
+          pwd
+          ./deploy.sh
