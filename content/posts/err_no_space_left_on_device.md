@@ -1,5 +1,5 @@
 ---
-title: Err_no_space_left_on_device
+title: No space left on device
 date: 2018-04-03T18:45:13+08:00
 lastmod: 2021-09-28T18:45:13+08:00
 author: 胡巴
