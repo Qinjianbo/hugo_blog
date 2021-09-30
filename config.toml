@@ -6,7 +6,7 @@ theme = "dream"
 
 googleAnalytics = "G-839GW747XX"
 
-# disqusShortname = ""
+disqusShortname = "BoBo"
 
 enableRobotsTXT = true
 hasCJKLanguage = true
@@ -37,7 +37,7 @@ hasCJKLanguage = true
 
   footerBottomText = '<a href="https://beian.miit.gov.cn/" target="_blank">辽ICP备16004582号-1</a>'
 
-  # rss = true
+  rss = true
 
   # utterancesRepo = ""
 
