@@ -6,7 +6,7 @@ theme = "dream"
 
 googleAnalytics = "G-839GW747XX"
 
-disqusShortname = "BoBo"
+# disqusShortname = "BoBo"
 
 enableRobotsTXT = true
 hasCJKLanguage = true
