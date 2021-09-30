@@ -41,9 +41,9 @@ hasCJKLanguage = true
 
   # utterancesRepo = ""
 
-  # valine = true
-  # LEANCLOUD_APP_ID = ""
-  # LEANCLOUD_APP_KEY = ""
+  valine = true
+  LEANCLOUD_APP_ID = "tBxtGLtTerNO4L5lf9vuKztP-gzGzoHsz"
+  LEANCLOUD_APP_KEY = "OQgHycWy8d5Cv8OkLL0YildP"
   # VALINE_LANGUAGE = ""
 
   email = "bobo@boboidea.com"
