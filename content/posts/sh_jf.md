@@ -5,7 +5,7 @@ lastmod: 2021-09-28T11:09:15+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: /img/cover.jpg
+cover: /img/posts/sh_jf.png
 # images:
 #   - /img/cover.jpg
 categories:
