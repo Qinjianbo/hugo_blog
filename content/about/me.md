@@ -28,6 +28,10 @@ draft: false
 - [个人博客网站](https://www.boboidea.com/)
 - [csdn博客主页](http://blog.csdn.net/qin_jian_bo)
 
+### 公众号
+
+![alt 无限递归](/img/gongzhonghao.jpeg "无限递归")
+
 ### 待学习的东西
 
 - docker
