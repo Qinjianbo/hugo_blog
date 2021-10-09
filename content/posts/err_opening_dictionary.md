@@ -5,7 +5,7 @@ lastmod: 2021-09-28T21:54:11+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: /img/cover.jpg
+cover: /img/posts/flameshot.png
 # images:
 #   - /img/cover.jpg
 categories:
@@ -21,15 +21,15 @@ draft: false
 
 <!--more-->
 
-报错：error opening dictionary /usr/share/appdata 如何解决？
+> 报错：error opening dictionary /usr/share/appdata 如何解决？
 
-打开命令行终端，然后执行：
+> 打开命令行终端，然后执行：
 
 ```
 killall snap-store
 ```
 
-然后再重新打开，报错就消失了
+> 然后再重新打开flameshot，问题就解决了。
 
 <!--declare-declare-->
 
