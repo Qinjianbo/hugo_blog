@@ -25,7 +25,7 @@ The remaining content of your post.
 
 <!--qr_code-->
 
-### 欢迎关注公众号: 无限递归
+### 公众号: 无限递归
 
 ![alt 搜索公众号:无限递归](/img/gongzhonghao.jpeg "无限递归")
 
