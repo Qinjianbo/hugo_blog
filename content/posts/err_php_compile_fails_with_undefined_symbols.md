@@ -21,13 +21,13 @@ PHP compile fails with undefined symbols for architecture x86_64
 
 <!--more-->
 
-今日在编译安装PHP时，遇见这么一个错：
+> 今日在编译安装PHP时，遇见这么一个错：
 
 ```
 PHP compile fails with undefined symbols for architecture x86_64
 ```
 
-然后在stackoverflow 上找到个答案试了下，果真可以了，记录一下，以备后面可以使用。
+> 然后在stackoverflow 上找到个答案试了下，果真可以了，记录一下，以备后面可以使用。
 
 ```
 brew install libiconv (libiconv will install in /usr/local/opt/libiconv/)
@@ -38,7 +38,7 @@ Here is the reason:
 Mac os has its own libiconv.dylib in dir/usr/lib/libiconv.dylib, which do not contains _libiconv  _libiconv_close . founctions. Update to a new libiconv version and reference to it will solve the case
 ```
 
-参考地址：https://stackoverflow.com/questions/40167324/php-compile-fails-with-undefined-symbols-for-architecture-x86-64-libiconv-on-ma
+> 参考链接：https://stackoverflow.com/questions/40167324/php-compile-fails-with-undefined-symbols-for-architecture-x86-64-libiconv-on-ma
 
 <!--declare-declare-->
 

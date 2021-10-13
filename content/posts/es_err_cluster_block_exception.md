@@ -22,24 +22,25 @@ draft: false
 
  # cluster_block_exception
 
-事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。
+> 事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。
 
-原因分析：
+### 原因分析
 
-因为自己的读取策略是先读取ES，排序由ES进行！~若ES执行结果出错，则从数据库读取列表，排序默认。
+> 因为自己的读取策略是先读取ES，排序由ES进行！~若ES执行结果出错，则从数据库读取列表，排序默认。
 
-而当前的状况是列表排序是按照ES 的排序进行的，但是新文章没有列出来。
+> 而当前的状况是列表排序是按照ES 的排序进行的，但是新文章没有列出来。
 
-结论：
+#### 结论
 
-ES更新索引失败！
+> ES更新索引失败！
 
-验证：
+### 验证
 
-进入自己的ES项目，查看索引更新日志。果然，报错了，索引更新失败。
+> 进入自己的ES项目，查看索引更新日志。果然，报错了，索引更新失败。
 
-报错信息：
+> 报错信息：
 
+```
     [2018-04-03 01:19:07] product.ERROR: {"error":{"root_cause":[{"type":"cluster_block_exception","reason":"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"}],"type":"cluster_block_exception","reason":"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"},"status":403} {"exception":"[object] (Elasticsearch\\Common\\Exceptions\\Forbidden403Exception(code: 403): {\"error\":{\"root_cause\":[{\"type\":\"cluster_block_exception\",\"reason\":\"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];\"}],\"type\":\"cluster_block_exception\",\"reason\":\"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];\"},\"status\":403} at /var/www/html/search/vendor/elasticsearch/elasticsearch/src/Elasticsearch/Connections/Connection.php:600)
     [stacktrace]
     #0 /var/www/html/search/vendor/elasticsearch/elasticsearch/src/Elasticsearch/Connections/Connection.php(273): Elasticsearch\\Connections\\Connection->process4xxError(Array, Array, Array)
@@ -69,15 +70,19 @@ ES更新索引失败！
     #24 /var/www/html/search/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
     #25 {main}
     "}
+```
 
-主要原因是这个：
+> 主要原因是这个：
 
+```
     {"error":{"root_cause":[{"type":"cluster_block_exception","reason":"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"}],"type":"cluster_block_exception","reason":"blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];"},"status":403}
+```
 
-通过在网络中查询，得出大概原因是ES新节点的数据目录data存储空间不足，导致从master主节点接收同步数据的时候失败，此时ES集群为了保护数据，会自动把索引分片index置为只读read-only。看到这里我想到确实是昨天自己服务器磁盘被写满了，应该是那时索引没有了存储空间导致的。
+> 通过在网络中查询，得出大概原因是ES新节点的数据目录data存储空间不足，导致从master主节点接收同步数据的时候失败，此时ES集群为了保护数据，会自动把索引分片index置为只读read-only。看到这里我想到确实是昨天自己服务器磁盘被写满了，应该是那时索引没有了存储空间导致的。
 
-我们看下现在的索引设置：
+> 我们看下现在的索引设置：
 
+```
     curl -XGET localhost:9200/_settings?pretty
 
     {
@@ -133,25 +138,32 @@ ES更新索引失败！
         }
       }
     }
+```
 
-可以看到里面有个索引 blog_v1_product 有一个
+> 可以看到里面有个索引 blog_v1_product 有一个
 
+```
     "blocks" : {
       "read_only_allow_delete" : "true"
     },
+```
 
-正是这个东西导致的！！！
+> 正是这个`read_only_allow_delete`导致的！！！
 
-解决方法：
+### 解决方法
 
-1. 要给data数据足够的存储空间，可以更改data数据的存储路径，如果改这个，要记得从起ES。如果释放完你磁盘的空间，数据的存储空间还是够的就不用改存储路径了。
-2. 然后要做的就是把索引的设置read_only_allow_delete 变成false。
+> 1. 要给data数据足够的存储空间，可以更改data数据的存储路径，如果改这个，要记得从起ES。如果释放完你磁盘的空间，数据的存储空间还是够的就不用改存储路径了。
+> 2. 然后要做的就是把索引的设置`read_only_allow_delete` 变成false。
 
+```
      curl -XPUT localhost:9200/blog_v1_product/_settings?pretty -H "content-type:application/json" -d '{ "index": {    "blocks": {"read_only_allow_delete":"false"} } }'
 
         {
            "acknowledged" : true
         }
+```
+
+> 经过上面的处理后，索引就能再次正常更新了。
 
 <!--declare-declare-->
 

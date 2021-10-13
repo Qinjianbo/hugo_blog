@@ -14,18 +14,18 @@ tags:
   - YCM
   - vim
 # nolastmod: true
-draft: true
+draft: false
 ---
 
 今天在brew upgrate 后，vim升级了版本，再打开vim编辑文件时报错YCM core library not detected; you need to compile YCM before using it
 
 <!--more-->
 
-今天在brew upgrate 后，vim升级了版本，再打开vim编辑文件时报错YCM core library not detected; you need to compile YCM before using it，那么如何解决这个问题呢？
+> 今天在brew upgrate 后，vim升级了版本，再打开vim编辑文件时报错YCM core library not detected; you need to compile YCM before using it
 
-解决方案：我是这么解决的
+> 解决方案：
 
-在控制台执行下面的命令：
+> 在控制台执行下面的命令：
 
 ```shell
 cd
@@ -33,7 +33,7 @@ cd cd .vim/plugged/YouCompleteMe
 ./install.py
 ```
 
-等待上面的install完成，再用vim编辑东西就不会报错了
+> 等待上面的install完成，再用vim编辑东西就不会报错了
 
 <!--declare-declare-->
 
