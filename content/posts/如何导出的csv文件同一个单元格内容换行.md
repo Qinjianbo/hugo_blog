@@ -20,18 +20,22 @@ draft: false
 
 <!--more-->
 
-要想使导出的csv文件的同一个单元格的内容换行，可以使用下面这正方式：
+> 要想使导出的csv文件的同一个单元格的内容换行，可以使用下面这正方式：
 
-    <?php
-    $array = ['aaa', 'bbb', "\"aaa\nbbb\""]; // 注意这里第三个元素的拼接方式
-    file_put_contents('test.csv', implode(',', $array));
+```
+<?php
+$array = ['aaa', 'bbb', "\"aaa\nbbb\""]; // 注意这里第三个元素的拼接方式
+file_put_contents('test.csv', implode(',', $array));
+```
 
-导出的csv使用记事本带开内容如下：
+> 导出的csv使用记事本带开内容如下：
 
-    aaa,bbb,"aaa
-    bbb"
+```
+aaa,bbb,"aaa
+bbb"
+```
 
-这样就可以实现换行功能了。
+> 这样就可以实现换行功能了。
 
 <!--declare-declare-->
 

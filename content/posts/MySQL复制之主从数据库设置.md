@@ -21,7 +21,7 @@ draft: false
 
 <!--more-->
 
-1.开启主库的bin_log
+开启主库的bin_log
 
 编辑my.cnf文件，在里面添加如下信息：
 

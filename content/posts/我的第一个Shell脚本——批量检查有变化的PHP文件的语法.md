@@ -20,6 +20,9 @@ php -l 检查php文件的语法正确性，但是php -l 总是要一个一个文
 
 <!--more-->
 
+### 初版
+
+```
  #!/bin/bash
     PHP_VERSION=`php -v |awk '{print $1,$2}'|head -1`
     echo -e "当前系统PHP版本：${PHP_VERSION} \n"
@@ -45,50 +48,52 @@ php -l 检查php文件的语法正确性，但是php -l 总是要一个一个文
     else
         echo '所有变更的PHP文件语法均正确'
     fi
-
+```
 
 ### 拓展内容
 - 字符串包含字符串判断：https://www.cnblogs.com/AndyStudy/p/6064834.html
 - 如何取多行中的第一行：https://zhidao.baidu.com/question/1801341523241054747.html
 
-改进版：
+### 改进版：
 
-    #!/bin/bash
-    PHP_VERSION=`php -v |awk '{print $1,$2}'|head -1`
-    echo -e "当前系统PHP版本：${PHP_VERSION} \n"
-    err_flag=0
+```
+#!/bin/bash
+PHP_VERSION=`php -v |awk '{print $1,$2}'|head -1`
+echo -e "当前系统PHP版本：${PHP_VERSION} \n"
+err_flag=0
+for file in `git status`
+do
+    result=$(echo $file | grep "php")
+    if [[ "$result" != "" ]]
+    then
+        error=$(php -l $result)
+        hasErr=$(echo $error | grep "Parse error")
+        if [[ $hasErr != "" ]]
+        then
+            err_flag=1
+        fi
+    fi
+done
+
+echo -e "\n"
+if [[ $err_flag == 1 ]]
+then
+    echo '请修复以上PHP文件语法错误'
+else
+    echo '所有变更的PHP文件语法均正确'
+    echo -e "\n"
+    echo 'formating...'
     for file in `git status`
     do
-        result=$(echo $file | grep "php")
+        result=$(echo $file |grep "php")
         if [[ "$result" != "" ]]
         then
-            error=$(php -l $result)
-            hasErr=$(echo $error | grep "Parse error")
-            if [[ $hasErr != "" ]]
-            then
-                err_flag=1
-            fi
+            php-cs-fixer fix $result
         fi
     done
-
-    echo -e "\n"
-    if [[ $err_flag == 1 ]]
-    then
-        echo '请修复以上PHP文件语法错误'
-    else
-        echo '所有变更的PHP文件语法均正确'
-        echo -e "\n"
-        echo 'formating...'
-        for file in `git status`
-        do
-            result=$(echo $file |grep "php")
-            if [[ "$result" != "" ]]
-            then
-                php-cs-fixer fix $result
-            fi
-        done
-        echo 'formatted...'
-    fi
+    echo 'formatted...'
+fi
+```
 
 <!--declare-declare-->
 

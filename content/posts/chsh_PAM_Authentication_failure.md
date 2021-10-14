@@ -22,37 +22,37 @@ draft: false
 
 <!--more-->
 
-今天在装oh-my-zsh的时候，使用下面的命令进行root用户的默认shell切换后：
+> 今天在装oh-my-zsh的时候，使用下面的命令进行root用户的默认shell切换后：
 
 ```
 sudo chsh -s $(which zsh)
 ```
 
-再执行：
+> 再执行：
 
 ```
 sudo su
 ```
 
-发现报错：
+> 发现报错：
 
 ```
 Cannot execute zsh: No such file or directory
 ```
 
-然后尝试再次执行最上面的命令：
+> 然后尝试再次执行最上面的命令：
 
 ```
 sudo chsh -s $(which zsh)
 ```
 
-这时发现报错：
+> 这时发现报错：
 
 ```
 chsh: PAM: Authentication failure
 ```
 
-最后解决方法：
+> 最后解决方法：
 
 ```
 sudo vim /etc/passwd
@@ -62,9 +62,9 @@ root:x:0:0:root:/root:zsh
 root:x:0:0:root:/root:/usr/bin/zsh
 ```
 
-然后问题就都解决了
+> 然后问题就都解决了
 
-参考文章：https://blog.nofile.cc/555.html
+> 参考文章：https://blog.nofile.cc/555.html
 
 <!--declare-declare-->
 

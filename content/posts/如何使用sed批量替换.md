@@ -21,9 +21,11 @@ draft: false
 
 <!--more-->
 
-执行命令：
+> 执行命令：
 
-      sed -i "s/Liugj\\\Arch/ShopApiOld/g" `grep -rl 'Liugj\\\Arch' src/`
+```
+sed -i "s/Liugj\\\Arch/ShopApiOld/g" `grep -rl 'Liugj\\\Arch' src/`
+```
 
 <!--declare-declare-->
 

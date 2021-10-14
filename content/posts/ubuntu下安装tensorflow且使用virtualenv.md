@@ -24,6 +24,7 @@ draft: false
 
     sudo apt-get install python-pip python-dev python-virtualenv # for Python 2.7
     sudo apt-get install python3-pip python3-dev python-virtualenv # for Python 3.n
+    
 还是根据python版本选择一个进行执行，来创建一个virtualenv虚拟环境
 
     virtualenv --system-site-packages targetDirectory # for Python 2.7

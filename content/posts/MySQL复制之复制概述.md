@@ -21,7 +21,7 @@ draft: false
 
 <!--more-->
 
-复制的概述：
+### 复制的概述：
 
 1. 复制是干啥滴？
 
@@ -41,7 +41,7 @@ draft: false
 
     向后兼容，新版MySQL可以作为旧版MySQL的从库。
 
-复制解决的问题是什么：
+### 复制解决的问题是什么：
 
 1. 数据分布
 2. 负载均衡
@@ -49,7 +49,7 @@ draft: false
 4. 可用性和故障切换
 5. MySql升级测试
 
-复制是如何工作的：拢共分三步
+### 复制是如何工作的：拢共分三步
 
 1. 主库开启二进制日志记录 -- record binary log
 2. 从库将主库的binary log复制到自己的中继日志 -- copy binary log to relay log
