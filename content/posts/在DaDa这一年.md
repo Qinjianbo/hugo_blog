@@ -5,7 +5,7 @@ lastmod: 2021-09-28T17:11:44+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: /img/cover.jpg
+cover: /img/posts/hzw13.jpeg
 # images:
 #   - /img/cover.jpg
 categories:
@@ -124,6 +124,17 @@ draft: false
 > 伟哥、军哥、海哥、丽姐、小樊、庭勇、喆哥、浩哥、阳光、千源、文彪、娜娜、峰哥、何宽、丹姐、涛哥、元林、莹华、舒苗、京平以及其他未提及名字的小伙伴们。
 
 > 至此，我的Da人一生就此结束...祝我们好运!Good luck!
+
+![](/img/posts/dada_huoban.jpeg)
+
+## DaDa停服
+------------------------------------------------------------------------2021-12-17补充-----------------------------------------------------------------------------
+
+> 2021-12-07 DaDa英语官方公告：正式停服
+
+> DaDa亡了，但DaDa未亡！还有很多Da人正在以其他的方式奋斗着...
+
+![](/img/posts/dada_tingfu.jpeg)
 
 <!--declare-declare-->
 
