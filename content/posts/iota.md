@@ -9,10 +9,9 @@ cover: /img/posts/hzw89.jpeg
 # images:
 #   - /img/cover.jpg
 categories:
-  - category1
+  - golang
 tags:
-  - tag1
-  - tag2
+  - iota
 # nolastmod: true
 draft: false
 ---
