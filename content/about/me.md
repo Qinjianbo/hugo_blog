@@ -28,7 +28,7 @@ draft: false
 
 ### 公众号
 
-![alt 无限递归](/img/gongzhonghao.jpeg "无限递归")
+![alt 无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
 
 ### 待学习的东西
 

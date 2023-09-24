@@ -43,4 +43,4 @@ PHP中的mkdir写的0777创建出来的并不是0777
 
 <!--declare-declare-->
 
-Copyright &copy; 2017 - 2018 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】
+Copyright &copy; 2017 - 2023 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】
