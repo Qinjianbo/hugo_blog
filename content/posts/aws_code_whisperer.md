@@ -5,7 +5,7 @@ lastmod: 2023-09-24T13:27:06+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/aws_code_whisperer/00068-1425983429.0-masterpiece%2C%20best%20quality%2C%20solo%2C_a%20girl%20fly%20in%20the%20sky%2C%20there%20is%20a%20gold%20cycle%20above%20her%20head%2C%20she%20has%20%28wings%29%2C%20upper%20body%2C%20magic.jpg
 # images:
 #   - /img/cover.jpg
 categories:
