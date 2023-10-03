@@ -5,7 +5,7 @@ lastmod: 2022-02-17T14:08:06+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw85.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/golang%E4%B8%ADdefer%E4%BD%BF%E7%94%A8.jpg
 # images:
 #   - /img/cover.jpg
 categories:
@@ -16,7 +16,9 @@ tags:
 draft: false
 ---
 
-golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。什么是真正return？golang中的return不是原子的，它可以分为三个部分执行：1.给返回值进行赋值 2.按照后进先出的顺序执行defer表达式 3.函数返回
+> golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。
+
+> 什么是真正return？golang中的return不是原子的，它可以分为三个部分执行：1.给返回值进行赋值 2.按照后进先出的顺序执行defer表达式 3.函数返回
 
 <!--more-->
 

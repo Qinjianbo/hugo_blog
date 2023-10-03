@@ -5,7 +5,7 @@ lastmod: 2022-02-17T16:14:39+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw83.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/golang_%E5%A5%87%E5%81%B6%E4%BA%A4%E6%9B%BF%E6%89%93%E5%8D%B0.jpg
 # images:
 #   - /img/cover.jpg
 categories:
