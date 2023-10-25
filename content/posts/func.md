@@ -5,7 +5,7 @@ lastmod: 2022-02-10T10:59:02+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw100.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/匿名函数和闭包的区别及用法.jpg
 # images:
 #   - /img/cover.jpg
 categories:
