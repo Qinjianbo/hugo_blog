@@ -5,7 +5,7 @@ lastmod: 2022-02-11T11:05:49+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw87.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/golang中结构体嵌套时需要注意的点.jpg
 # images:
 #   - /img/cover.jpg
 categories:
