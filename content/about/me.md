@@ -37,8 +37,10 @@ draft: false
 - flink
 - flutter
 - golang源码
-- redis底层
+- redis底层[done]
 - 消息中间价原理
 - zabbix
 - opentracing
-- grafana
+- grafana[50%]
+- clickhouse[ing]
+- Stable Diffusion[ing]

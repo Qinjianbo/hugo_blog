@@ -20,7 +20,7 @@ draft: false
 
 - MySQL
 - Redis
-- 具有简单分表经验
+- Clickhouse
 
 #### 消息中间件
 
