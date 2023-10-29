@@ -5,7 +5,7 @@ lastmod: 2021-09-28T21:35:01+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw8.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/missing xcrun at.jpg
 # images:
 #   - /img/cover.jpg
 categories:

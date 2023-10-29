@@ -5,7 +5,7 @@ lastmod: 2021-09-28T21:51:25+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Ubuntu下如何连接GlobalProtect的vpn.jpg
 # images:
 #   - /img/cover.jpg
 categories:

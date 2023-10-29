@@ -5,7 +5,7 @@ lastmod: 2021-09-29T10:15:53+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/cluster_block_exception.jpg
 # images:
 #   - /img/cover.jpg
 categories:

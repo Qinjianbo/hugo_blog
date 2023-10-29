@@ -5,7 +5,7 @@ lastmod: 2021-09-29T10:03:49+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Form表单自动提交问题及解决办法.jpg
 # images:
 #   - /img/cover.jpg
 categories:

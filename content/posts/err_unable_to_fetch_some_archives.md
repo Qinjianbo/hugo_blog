@@ -5,7 +5,7 @@ lastmod: 2021-09-28T22:19:43+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Unable to fetch some archives.jpg
 # images:
 #   - /img/cover.jpg
 categories:

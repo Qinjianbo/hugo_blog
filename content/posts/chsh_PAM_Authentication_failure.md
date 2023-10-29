@@ -5,7 +5,7 @@ lastmod: 2021-09-28T22:06:13+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw22.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/chsh PAM Authentication failure.jpg
 # images:
 #   - /img/cover.jpg
 categories:
