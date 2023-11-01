@@ -198,6 +198,25 @@ WebUI上的批量大小将在内部由GIF帧数替代：1个批量生成1个完�
 
 我们目前正在开发一种方法，以在不久的将来支持WebUI上的批量大小。
 
+### 基础使用效果展示
+
+| AnimateDiff | Extension | img2img |
+| --- | --- | --- |
+| ![image](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/255306527-5105afe8-d497-4ab1-b5c4-37540e9601f8.gif) |![00013-10788741199826055000](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/265566645-43b9cf34-dbd1-4120-b220-ea8cb7882272.gif) | ![00018-727621716](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/268478907-d04bb573-c8ca-4ae6-a2d9-81f8012bec3a.gif) |
+
+### Motion LoRA 效果展示
+
+| No LoRA | PanDown | PanLeft |
+| --- | --- | --- |
+| ![00094-1401397431](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/270544169-d8d2b860-c781-4dd0-8c0a-0eb26970130b.gif) | ![00095-3197605735](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/270544211-aed2243f-5494-4fe3-a10a-96c57f6f2906.gif) | ![00093-2722547708](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/270544237-c32e9aaf-54f2-4f40-879b-e800c7c7848c.gif) |
+
+### Prompt Travel 效果展示
+
+![00201-2296305953](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/275484065-881f317c-f1d2-4635-b84b-b4c4881650f6.gif)
+
+The prompt is similar to [above](#prompt-travel).
+
+
 <!--qr_code-->
 
 ## 捐赠
