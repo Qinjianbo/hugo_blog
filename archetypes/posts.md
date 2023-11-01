@@ -25,6 +25,14 @@ The remaining content of your post.
 
 <!--qr_code-->
 
+## 捐赠
+
+感谢老板请我喝杯咖啡！Thank you for buying me a coffee!
+
+| WeChat | AliPay | PayPal |
+| --- | --- | --- |
+| ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
+
 ### 公众号: 无限递归
 
 ![alt 搜索公众号:无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
