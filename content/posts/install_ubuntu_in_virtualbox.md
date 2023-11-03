@@ -5,7 +5,7 @@ lastmod: 2021-09-28T12:12:31+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw19.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/windows下使用vitualbox进行ubuntu安装.jpg
 # images:
 #   - /img/cover.jpg
 categories:

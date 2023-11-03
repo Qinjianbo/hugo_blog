@@ -5,7 +5,7 @@ lastmod: 2021-09-28T11:09:15+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw20.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/上海个人积分办理流程.jpg
 # images:
 #   - /img/cover.jpg
 categories:

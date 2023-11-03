@@ -5,7 +5,7 @@ lastmod: 2021-11-22T18:18:16+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw2.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/我自己的一些所悟所感.jpg
 # images:
 #   - /img/cover.jpg
 categories:

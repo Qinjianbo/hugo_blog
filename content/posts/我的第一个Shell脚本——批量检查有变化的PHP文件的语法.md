@@ -5,7 +5,7 @@ lastmod: 2021-09-29T10:19:40+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/我的第一个Shell脚本——批量检查有变化的PHP文件的语法.jpg
 # images:
 #   - /img/cover.jpg
 categories:

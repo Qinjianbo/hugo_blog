@@ -5,7 +5,7 @@ lastmod: 2021-10-15T15:59:39+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/hzw12.jpeg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Redis布隆过滤器Redis Bloom Filter.jpg
 # images:
 #   - /img/cover.jpg
 categories:

@@ -5,7 +5,7 @@ lastmod: 2021-09-28T18:25:10+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Tf_err_no_module_named_matplotlib Pyplot.jpg
 # images:
 #   - /img/cover.jpg
 categories:

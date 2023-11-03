@@ -5,7 +5,7 @@ lastmod: 2021-09-28T17:48:04+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/MySQL复制之主从数据库设置.jpg
 # images:
 #   - /img/cover.jpg
 categories:

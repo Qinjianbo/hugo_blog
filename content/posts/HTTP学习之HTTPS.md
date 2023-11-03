@@ -5,7 +5,7 @@ lastmod: 2021-09-28T17:25:59+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/HTTP学习之HTTPS.jpg
 # images:
 #   - /img/cover.jpg
 categories:

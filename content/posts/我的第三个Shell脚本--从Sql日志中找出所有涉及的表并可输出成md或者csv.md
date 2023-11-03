@@ -5,7 +5,7 @@ lastmod: 2021-09-29T10:22:28+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/我的第三个Shell脚本 从Sql日志中找出所有涉及的表并可输出成md或者csv.jpg
 # images:
 #   - /img/cover.jpg
 categories:
