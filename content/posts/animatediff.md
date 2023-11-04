@@ -52,6 +52,8 @@ draft: false
 
 ### ```AnimateDiff``` 在 ```Stable Diffustion``` 中的参数与意义？
 
+![animatediff界面](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/animatediff/animatediff%E7%95%8C%E9%9D%A2.PNG)
+
 1. **Save format** - 输出的格式。至少选择一个："GIF"|"MP4"|"WEBP"|"PNG"。如果您想要信息文本，选择"TXT"，它将与生成的GIF保存在相同的目录中。信息文本也可以通过 ```stable-diffusion-webui/params.txt``` 以及各种格式的输出访问。
 
     您可以使用 ```gifsicle```（需要安装 ```gifsicle```，详细信息请参阅[#91](https://github.com/continue-revolution/sd-webui-animatediff/pull/91)）和/或 ```调色板``` 来优化GIF（详细信息请参阅[#104](https://github.com/continue-revolution/sd-webui-animatediff/pull/104)）。前往设置 ```/AnimateDiff``` 以启用它们。
