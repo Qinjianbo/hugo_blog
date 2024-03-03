@@ -52,4 +52,4 @@ E:\webui\sd-webui-aki-v4.2>pip install insightface-0.7.3-cp310-cp310-win_amd64.w
 
 <!--declare-declare-->
 
-Copyright &copy; 2017 - 2023 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】
+Copyright &copy; 2017 - 2024 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】

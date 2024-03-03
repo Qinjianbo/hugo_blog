@@ -29,18 +29,3 @@ draft: false
 ### 公众号
 
 ![alt 无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
-
-### 待学习的东西
-
-- docker
-- k8s
-- flink
-- flutter
-- golang源码
-- redis底层[done]
-- 消息中间价原理
-- zabbix
-- opentracing
-- grafana[50%]
-- clickhouse[ing]
-- Stable Diffusion[ing]
