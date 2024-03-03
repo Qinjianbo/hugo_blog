@@ -50,7 +50,9 @@ draft: true
    - 打开命令行界面。
    - 使用以下命令进行转换：
      ```
-     ffmpeg -i input.gif output.mp4
+     ffmpeg -i input.gif -c:v libx264 -pix_fmt yuv420p output.mp4
+     
+     这里，-c:v libx264 指定了视频编码器，-pix_fmt yuv420p 指定了像素格式，这是许多播放器和设备的通用格式。
      ```
      这条命令会读取名为`input.gif`的文件，并将其转换为名为`output.mp4`的MP4文件。
 选择哪种方法取决于你的具体需求和个人偏好。在线工具通常是最简单的选择，尤其是如果你不经常需要进行这种转换。如果你需要更高级的控制或者经常进行视频转换，使用视频编辑软件或命令行工具可能更合适。
