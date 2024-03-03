@@ -15,7 +15,7 @@ tags:
   - gif
   - ffmpeg
 # nolastmod: true
-draft: true
+draft: false
 ---
 
 本篇文章主要讲述如何将gif图片转换成视频。
