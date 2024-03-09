@@ -5,7 +5,7 @@ myarticlelastmod
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/这里替换成标题.jpg
+myarticlecover
 # images:
 #   - /img/cover.jpg
 categories:
@@ -22,9 +22,6 @@ draft: false
 <!--more-->
 
 文章具体内容放到这里
-要求：
-1. 要根据标题生成合理内容
-2. 关键段落之间要有一行空行
 
 <!--qr_code-->
 
