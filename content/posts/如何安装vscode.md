@@ -1,7 +1,7 @@
 ---
 title: "如何安装VSCode"
-date: {{ .Date }}
-lastmod: {{ .Date }}
+date: 2024-12-28T18:18:23+08:00
+lastmod: 2024-12-28T18:18:23+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg

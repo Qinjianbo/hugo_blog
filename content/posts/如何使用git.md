@@ -1,7 +1,7 @@
 ---
 title: "如何使用Git"
-date: 2024-01-09T10:30:00+08:00
-lastmod: 2024-01-09T10:30:00+08:00
+date: 2024-12-28T18:18:23+08:00
+lastmod: 2024-12-28T18:18:23+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/git-cover.jpg
