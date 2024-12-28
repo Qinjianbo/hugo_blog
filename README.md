@@ -24,3 +24,16 @@ hugo new content posts/文章标题.md
 archetypes/posts.md
 ```
 
+## Git 操作命令
+
+```bash
+# 添加新文章到暂存区
+git add content/posts/文章标题.md
+
+# 提交更改
+git commit -m "添加新文章：文章标题"
+
+# 推送到远程仓库
+git push origin master
+```
+
