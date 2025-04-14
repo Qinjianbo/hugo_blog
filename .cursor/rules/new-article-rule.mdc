@@ -1,0 +1,22 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 新文章格式
+
+> 文章格式见：archetypes\posts.md
+
+# 文章正文撰写要求
+
+> 使用 osp 格式，可以借助osp_marketing_tools
+
+> 时间要用系统时间
+
+> 封面图url：https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article%20(数字).jpg，数字可以在database\article_num.txt中读取到
+
+> 每次生成一篇新文章后，需要将database\article_num.txt中的数字加1，因为刚刚已经在文章中使用了之前的数字。
+
+# 文章撰写完成后
+
+> 执行git命令，将刚刚撰写的文章进行提交并推送至远程
