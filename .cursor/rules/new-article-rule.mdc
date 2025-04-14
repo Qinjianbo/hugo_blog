@@ -19,4 +19,10 @@ alwaysApply: true
 
 # 文章撰写完成后
 
-> 执行git命令，将刚刚撰写的文章进行提交并推送至远程
+> 进入到文章根路径
+
+> 执行 `git add` 命令
+
+> 执行 `git commit` 命令
+
+> 执行 `git push origin master` 命令，将文章推送到远程
