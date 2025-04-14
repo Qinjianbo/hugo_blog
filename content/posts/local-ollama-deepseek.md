@@ -4,7 +4,7 @@ date: 2025-04-14T23:35:46+08:00
 lastmod: 2025-04-14T23:35:46+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article23.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (23).jpg
 categories:
   - AI工具
 tags:

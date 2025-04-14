@@ -13,7 +13,7 @@ alwaysApply: true
 
 > 时间要用系统时间
 
-> 封面图url：https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article%20(数字).jpg，数字可以在database\article_num.txt中读取到
+> 封面图url：https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (数字).jpg，数字可以在database\article_num.txt中读取到，只替换数字，空格和括号留着，格式就是这样
 
 > 每次生成一篇新文章后，需要将database\article_num.txt中的数字加1，因为刚刚已经在文章中使用了之前的数字。
 
