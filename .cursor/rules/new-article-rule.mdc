@@ -26,3 +26,5 @@ alwaysApply: true
 > 执行 `git commit` 命令
 
 > 执行 `git push origin master` 命令，将文章推送到远程
+
+> 执行 `deploy.bat` 脚本，将文章发布到服务器上
