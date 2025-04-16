@@ -4,7 +4,7 @@ date: 2025-04-15T23:45:44+08:00
 lastmod: 2025-04-15T23:45:44+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article24.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (24).jpg
 categories:
   - 技术教程
 tags:
@@ -77,7 +77,7 @@ F:\msys2\usr\bin
 ```
 
 2. 或者在批处理文件中设置：
-```batch
+```script
 set MSYS2_PATH=F:\msys2
 set PATH=%MSYS2_PATH%\usr\bin;%PATH%
 ```
@@ -174,7 +174,7 @@ rsync -avz --chmod=Du=rwx,Dg=rx,Do=rx,Fu=rw,Fg=r,Fo=r source/ user@host:/target/
 ### 1. 批处理文件示例
 
 创建deploy.bat：
-```batch
+```script
 @echo off
 set USER=username
 set HOST=remote_host
