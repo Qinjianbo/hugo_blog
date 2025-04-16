@@ -4,7 +4,7 @@ date: 2024-12-28T18:18:23+08:00
 lastmod: 2024-12-28T18:18:23+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/git-cover.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article%20(7).jpg
 categories:
   - 技术教程
 tags:
