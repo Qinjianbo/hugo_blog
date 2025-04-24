@@ -1,8 +1,8 @@
 ---
 title: "Python文件整理脚本开发过程总结"
 subtitle: "一次完整的Python脚本开发和文档编写过程"
-date: 2024-04-24T19:05:32+08:00
-lastmod: 2024-04-24T19:05:32+08:00
+date: 2025-04-24T19:07:29+08:00
+lastmod: 2025-04-24T19:07:29+08:00
 draft: false
 author: "Chao"
 authorLink: "https://github.com/realchao"
