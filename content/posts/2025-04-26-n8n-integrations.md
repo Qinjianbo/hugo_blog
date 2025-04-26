@@ -4,7 +4,7 @@ date: 2025-04-26T22:14:02+08:00
 lastmod: 2025-04-26T22:14:02+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article 35.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (35).jpg
 categories:
   - 自动化
   - 低代码
