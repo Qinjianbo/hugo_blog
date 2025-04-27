@@ -130,4 +130,4 @@ Cursor 0.49.x 版本带来了许多令人兴奋的更新，从规则生成到终
 
 <!--declare-declare-->
 
-Copyright &copy; 2017 - 2024 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】 
+Copyright &copy; 2017 - 2025 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】 
