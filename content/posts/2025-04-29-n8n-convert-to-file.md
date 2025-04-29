@@ -7,7 +7,7 @@ categories: ["技术教程"]
 tags: ["自动化", "n8n", "工作流", "数据转换"]
 slug: "n8n-convert-to-file"
 summary: "详细介绍n8n的Convert to File节点功能，包括支持的文件格式、配置选项以及实际应用场景，帮助您更好地处理文件转换任务。"
-featuredImage: "https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (39).jpg"
+featuredImage: "https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (40).jpg"
 draft: false
 ---
 
