@@ -10,7 +10,7 @@ alwaysApply: false
 
 ## 文章正文撰写要求
 
-使用 osp_marketing_tools 获取格式要求
+使用 osp_marketing_tools 工具获取格式要求
 
 ## 时间使用要求
 使用时间要用系统时间，通过 time 工具获取

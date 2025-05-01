@@ -4,7 +4,7 @@ date: 2025-05-01T11:44:40+08:00
 lastmod: 2025-05-01T11:44:40+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article41.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (41).jpg
 categories:
   - 自动化工具
 tags:
