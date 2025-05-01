@@ -1,30 +1,21 @@
 ---
 description: 
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
-# 新文章格式
+# 文章生成规范
 
-> 文章格式见：archetypes\posts.md
+## 文章结构参考：
+[posts.md](mdc:archetypes/posts.md)
 
-# 文章正文撰写要求
+## 文章正文撰写要求
 
-> 使用 osp 格式，可以借助osp_marketing_tools
+使用 osp_marketing_tools 获取格式要求
 
-> 时间要用系统时间
+## 时间使用要求
+使用时间要用系统时间，通过 time 工具获取
 
-> 封面图url：https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (数字).jpg，数字可以在database\article_num.txt中读取到，只替换数字，空格和()留着，格式就是这样
-
-> 每次生成一篇新文章后，需要将database\article_num.txt中的数字加1，因为刚刚已经在文章中使用了之前的数字。
-
-# 文章撰写完成后
-
-> 进入到文章根路径
-
-> 执行 `git add` 命令
-
-> 执行 `git commit` 命令
-
-> 执行 `git push origin master` 命令，将文章推送到远程
-
-> 执行 `deploy.bat` 脚本，将文章发布到服务器上
+## 图片规范
+- 封面图：使用 https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (编号).jpg 格式
+- 编号：从 database/article_num.txt 获取并递增
+- 更新编号到新编号

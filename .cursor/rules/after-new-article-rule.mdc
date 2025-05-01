@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 文章发布规范
+
+## 目录规范
+- 进入项目根目录
+
+## git 提交规范
+- 执行 `git add` 命令
+- 执行 `git commit` 命令
+- 执行 `git push origin master` 命令，将文章推送到远程
+
+## 文章发布规范
+
+- 执行 `deploy.bat` 脚本，将文章发布到服务器上
