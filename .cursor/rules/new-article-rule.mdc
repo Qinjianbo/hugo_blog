@@ -6,6 +6,7 @@ alwaysApply: false
 # 文章生成规范
 
 ## 文章结构参考：
+**一定要按照这个参考结构来写文章，不要改变文章结构**
 [posts.md](mdc:archetypes/posts.md)
 
 ## 文章正文撰写要求
@@ -16,6 +17,7 @@ alwaysApply: false
 使用时间要用系统时间，通过 time 工具获取
 
 ## 图片规范
-- 封面图：使用 https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (编号).jpg 格式
+- 封面图：使用 https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E4%B8%8A%E6%90%9C%E9%9B%86%E7%9A%84%E7%BE%8E%E5%9B%BE%E8%89%B2%E5%9B%BE_1-1000/{编号}.jpg
 - 编号：从 database/article_num.txt 获取并递增
+
 - 更新编号到新编号
