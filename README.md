@@ -37,3 +37,5 @@ git commit -m "添加新文章：文章标题"
 git push origin master
 ```
 
+# n8n 启动命令
+docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n -v I:/working/hugo_blog/content/posts:/home/article/md -v I:/working/hugo_blog/database:/home/article/database docker.n8n.io/n8nio/n8n
