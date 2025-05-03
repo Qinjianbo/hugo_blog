@@ -38,4 +38,12 @@ git push origin master
 ```
 
 # n8n 启动命令
-docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n -v I:/working/hugo_blog/content/posts:/home/article/md -v I:/working/hugo_blog/database:/home/article/database docker.n8n.io/n8nio/n8n
+
+docker run -it --rm --name n8n -p 5678:5678 -e TZ=Asia/Shanghai -v n8n_data:/home/node/.n8n -v I:/working:/home/working docker.n8n.io/n8nio/n8n
+
+## n8n 内 git 设置安全目录
+git config --global --add safe.directory /home/working/hugo_blog
+
+# git 自动处理换行符
+
+git config --global core.autocrlf input
