@@ -39,7 +39,11 @@ git push origin master
 
 # n8n 启动命令
 
-docker run -it --rm --name n8n -p 5678:5678 -e TZ=Asia/Shanghai -v n8n_data:/home/node/.n8n -v I:/working:/home/working docker.n8n.io/n8nio/n8n
+docker run -it --rm --name n8n -p 5678:5678 -e N8N_RUNNERS_ENABLED=true -e  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e TZ=Asia/Shanghai -v n8n_data:/home/node/.n8n -v I:/working:/home/working docker.n8n.io/n8nio/n8n
+
+n8n user-management:reset
+
+密码: Localhost5678
 
 ## n8n 内 git 设置安全目录
 git config --global --add safe.directory /home/working/hugo_blog
