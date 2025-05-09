@@ -4,7 +4,7 @@ date: 2025-05-09T22:38:16+08:00
 lastmod: 2025-05-09T22:38:16+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E4%B8%8A%E6%90%9C%E9%9B%86%E7%9A%84%E7%BE%8E%E5%9B%BE%E8%89%B2%E5%9B%BE_1-1000/14.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E4%B8%8A%E6%90%9C%E9%9B%86%E7%9A%84%E7%BE%8E%E5%9B%BE%E8%89%B2%E5%9B%BE_1-1000/15.jpg
 categories:
   - 自动化
   - 开发工具
@@ -57,6 +57,42 @@ draft: false
 - **Parse Last Diff Line & Code**：解析 diff，提取原始与新代码。
 - **AI Agent**：调用 AI 进行代码智能审查。
 - **Post Discussions**：将评审结果自动写回 GitLab。
+
+## 使用详解
+
+### 1. 环境准备
+
+- **N8N 安装**：可通过 Docker、npm 或官方桌面版安装 N8N。推荐使用 Docker 部署，便于后续集成。
+- **GitLab 配置**：确保你有 GitLab 项目管理员权限，可配置 Webhook。
+- **AI 服务准备**：如需调用 DeepSeek、LangChain 等 AI 服务，需提前注册并获取 API Key。
+
+### 2. 工作流导入与配置
+
+- 在 N8N 后台新建工作流，导入本文提供的 JSON 配置（或根据实际需求手动搭建节点）。
+- 配置各节点参数：
+  - **Webhook 节点**：设置为 POST，复制生成的 Webhook URL。
+  - **Get Changes 节点**：填写你的 GitLab API Token，确保有权限访问 MR 详情。
+  - **AI Agent 节点**：配置 AI 服务的 API Key 和提示词，可根据团队风格自定义。
+
+### 3. GitLab Webhook 设置
+
+- 进入 GitLab 项目设置 → Webhooks。
+- 粘贴 N8N Webhook 节点生成的 URL。
+- 选择触发事件（如 Merge Request、Note/Comment 等），保存。
+
+### 4. 实际使用流程
+
+1. 团队成员提交 Merge Request 或评论时，GitLab 自动触发 Webhook。
+2. N8N 接收到事件后，自动拉取 MR 变更内容，拆分并过滤无关文件。
+3. AI 节点对每个变更文件进行智能评审，输出详细建议和评分。
+4. 评审结果自动回写到 MR 讨论区，开发者可直接查看并响应。
+
+### 5. 常见问题与优化建议
+
+- **API Token 权限不足**：请确保 GitLab Token 具备读取 MR 和代码的权限。
+- **AI 评审风格调整**：可自定义 AI Agent 的系统提示词，适配不同团队风格。
+- **节点报错排查**：可在 N8N 日志中查看详细报错信息，逐步排查。
+- **扩展性**：可增加通知、自动合并、定制化报告等节点，打造更完整的 CI/CD 流程。
 
 ## 亮点与优势
 
