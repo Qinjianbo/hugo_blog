@@ -1,0 +1,317 @@
+{
+  "name": "获取steam支付成功订单 copy",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1060,
+        -240
+      ],
+      "id": "533e1dbd-a47e-48bf-ab67-af3e9f03e836",
+      "name": "将success的数据合并到一起"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nvar totalOrder = $input.all().length\nvar totalMoney = 0\nfor (const item of $input.all()) {\n  for (const item1 of item.json.items) {\n    totalMoney += item1.amount\n  }\n}\n\nreturn {\n  json: {\n    money: totalMoney/100,\n    count: totalOrder,\n    currentDate: $('格式化时间').first().json.currentDate\n  }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        -240
+      ],
+      "id": "acdd45d9-a6db-45c2-b81d-1600586692de",
+      "name": "计算总金额和总单数"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "{your_feishu_robot_address}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "msg_type",
+              "value": "text"
+            },
+            {
+              "name": "content[text]",
+              "value": "=vgame2-steam充值：\n日期：{{ $json.currentDate }}\n单数：{{ $json.count }}单\n金额：{{ $json.money }}元"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1500,
+        -240
+      ],
+      "id": "00784d5f-9e68-4e6a-824c-fdf0dd2dfe79",
+      "name": "发送飞书通知"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8381c381-0f9f-45d5-bc9e-3a859e899374",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        840,
+        40
+      ],
+      "id": "36c73e43-3d4d-48fd-9320-8f07735e69ea",
+      "name": "订单状态判断"
+    },
+    {
+      "parameters": {
+        "batchSize": 100,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        640,
+        -40
+      ],
+      "id": "1f38c47e-bd9c-4f22-aded-f8a8f847b319",
+      "name": "遍历所有订单"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "response.params.orders",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -40
+      ],
+      "id": "49cdf65e-5de2-4d7c-8cb0-30dde0180600",
+      "name": "解析出订单信息"
+    },
+    {
+      "parameters": {
+        "url": "=https://partner.steam-api.com/ISteamMicroTxn/GetReport/v5/?key={your_steam_web_key}&appid={your_steam_appid}&type=GAMESALES&time={{ $json.currentDate }}T00:00:00Z",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        -40
+      ],
+      "id": "e3c72175-32f9-496d-9fa4-bb9ad61f5e93",
+      "name": "发送订单请求"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff5ce090-c2e8-4fb0-8e6e-60bc51713c02",
+              "name": "currentDate",
+              "value": "={{ $json.currentDate.toDateTime().format('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        20,
+        -40
+      ],
+      "id": "d94458c2-9071-4556-b61a-4d4c807fc6a9",
+      "name": "格式化时间"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -40
+      ],
+      "id": "d2fa49ed-311b-4b87-ab71-827c68310df8",
+      "name": "获取系统时间"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -340,
+        -40
+      ],
+      "id": "7f978794-7d41-4f84-b287-e687c1a8d601",
+      "name": "定时触发"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "将success的数据合并到一起": {
+      "main": [
+        [
+          {
+            "node": "计算总金额和总单数",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "计算总金额和总单数": {
+      "main": [
+        [
+          {
+            "node": "发送飞书通知",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "订单状态判断": {
+      "main": [
+        [
+          {
+            "node": "将success的数据合并到一起",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "遍历所有订单",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "遍历所有订单": {
+      "main": [
+        [],
+        [
+          {
+            "node": "订单状态判断",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析出订单信息": {
+      "main": [
+        [
+          {
+            "node": "遍历所有订单",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "发送订单请求": {
+      "main": [
+        [
+          {
+            "node": "解析出订单信息",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "格式化时间": {
+      "main": [
+        [
+          {
+            "node": "发送订单请求",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取系统时间": {
+      "main": [
+        [
+          {
+            "node": "格式化时间",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "定时触发": {
+      "main": [
+        [
+          {
+            "node": "获取系统时间",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "31417db4-81b5-494f-8169-b2cd8ac8080e",
+  "meta": {
+    "instanceId": "2f1ce8ea57c024a580bef98010b7171e5cb83da9fbd5c3219ab48aac1459d4be"
+  },
+  "id": "NaXtHsw5YTHYKwZu",
+  "tags": []
+}
