@@ -39,6 +39,8 @@ git push origin master
 
 # n8n 启动命令
 
+docker network create n8n-net
+
 docker run -it --rm --name n8n --network n8n-net -p 5678:5678 -e N8N_RUNNERS_ENABLED=true -e  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e TZ=Asia/Shanghai -v n8n_data:/home/node/.n8n -v I:/working:/home/working docker.n8n.io/n8nio/n8n
 
 n8n user-management:reset
