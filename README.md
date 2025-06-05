@@ -60,3 +60,5 @@ git config --global core.autocrlf input
 # browserless
 
 docker run -it --rm --name browserless --network n8n-net -p 3000:3000 -e "TOKEN=6R0W53R135510" ghcr.io/browserless/chromium
+
+结合图片和文档撰写一篇n8n如何安装社区节点的文章，在步骤中需要插入图片的位置留出占位`![图片介绍]()`便于后续插入图片。
