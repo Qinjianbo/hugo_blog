@@ -1,0 +1,185 @@
+{
+  "name": "puppeteer",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        100
+      ],
+      "id": "cd3defb1-efeb-4ea6-9888-4e2a5cbf2ed9",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://www.baidu.com/",
+        "options": {
+          "browserWSEndpoint": "ws://host.docker.internal:9222/devtools/browser/97ba111b-e325-420d-8eec-e1dc35617b4e"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -220
+      ],
+      "id": "c4ae27eb-1870-486b-a791-fd650b7451be",
+      "name": "获取百度首页内容"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/home/working/baidu_pdf_data.pdf",
+        "dataPropertyName": "baidu_pdf_data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -20
+      ],
+      "id": "ffc9be87-8502-4a9d-87d9-9c0a137864d6",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/home/working/baidu_home_screenshoot.png",
+        "dataPropertyName": "baidu_home_screenshoot",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        180,
+        180
+      ],
+      "id": "8b16ae51-b947-4e2e-a75a-9f10071c4a14",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "url": "https://www.baidu.com/",
+        "operation": "getPDF",
+        "dataPropertyName": "baidu_pdf_data",
+        "margin": {},
+        "options": {
+          "browserWSEndpoint": "ws://host.docker.internal:9222/devtools/browser/97ba111b-e325-420d-8eec-e1dc35617b4e"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -20
+      ],
+      "id": "0ade8bcf-4af7-428b-a963-e4caa2272cb2",
+      "name": "获取百度首页pdf"
+    },
+    {
+      "parameters": {
+        "url": "https://www.baidu.com/",
+        "operation": "getScreenshot",
+        "dataPropertyName": "baidu_home_screenshoot",
+        "fullPage": true,
+        "options": {
+          "browserWSEndpoint": "ws://host.docker.internal:9222/devtools/browser/97ba111b-e325-420d-8eec-e1dc35617b4e"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        180
+      ],
+      "id": "90f8af85-f620-46d6-be59-f1ac9de08b39",
+      "name": "获取百度首页快照"
+    },
+    {
+      "parameters": {
+        "operation": "runCustomScript",
+        "scriptCode": "await $page.goto('https://www.baidu.com', {waitUntil: 'networkidle2'})\n\n// 获取 Performance Timing 指标\nconst perfTiming = await $page.evaluate(() => {\n  const timing = performance.timing;\n  return {\n      navigationStart: timing.navigationStart,\n      domContentLoaded: timing.domContentLoadedEventEnd,\n      loadEventEnd: timing.loadEventEnd,\n      responseEnd: timing.responseEnd,\n      fetchStart: timing.fetchStart,\n      domInteractive: timing.domInteractive,\n      // 计算常用耗时\n      domContentLoadedTime: timing.domContentLoadedEventEnd - timing.navigationStart,\n      loadTime: timing.loadEventEnd - timing.navigationStart,\n      responseTime: timing.responseEnd - timing.fetchStart,\n      domInteractiveTime: timing.domInteractive - timing.navigationStart,\n    };\n})\n\n// 获取所有资源请求信息\nconst resources = await $page.evaluate(() =>\n  performance.getEntriesByType('resource').map(r => ({\n    name: r.name,\n    type: r.initiatorType,\n    duration: r.duration,\n    size: r.transferSize || 0,\n  }))\n);\n\n// 输出性能数据\nconsole.log('百度首页性能指标：');\nconsole.log(perfTiming);\n\nconsole.log('\\n资源请求统计：');\nconsole.log(`总资源数：${resources.length}`);\nconst totalSize = resources.reduce((sum, r) => sum + r.size, 0);\nconsole.log(`总资源大小：${(totalSize / 1024).toFixed(2)} KB`);\n\n// 可选：输出前 5 个耗时最长的资源\nconst top5 = resources.sort((a, b) => b.duration - a.duration).slice(0, 5);\nconsole.log('\\n耗时最长的 5 个资源：');\ntop5.forEach((r, i) => {\n  console.log(`${i + 1}. ${r.name} - ${r.duration.toFixed(2)} ms, ${(r.size / 1024).toFixed(2)} KB`);\n});\n\nreturn [{\"perfTiming\": perfTiming, \"totalSize\": totalSize, \"top5\": top5}]",
+        "options": {
+          "browserWSEndpoint": "ws://host.docker.internal:9222/devtools/browser/97ba111b-e325-420d-8eec-e1dc35617b4e"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        400
+      ],
+      "id": "93a0e51b-4e81-43d2-85d1-2ecc32ab7193",
+      "name": "一个简单的网页性能监控"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "获取百度首页内容",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "获取百度首页pdf",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "获取百度首页快照",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "一个简单的网页性能监控",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取百度首页内容": {
+      "main": [
+        []
+      ]
+    },
+    "获取百度首页pdf": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取百度首页快照": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1c14707f-b91a-42df-b145-980e0531d42c",
+  "meta": {
+    "instanceId": "b14ed51f9f211762690683f6004123aed80c77b063f7f2ed706fbafa83517554"
+  },
+  "id": "YzW239GQlBAhjeTz",
+  "tags": []
+}
