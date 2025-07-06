@@ -63,6 +63,10 @@ docker run -it --rm --name browserless --network n8n-net -p 3000:3000 -e "TOKEN=
 
 结合图片和文档撰写一篇n8n如何安装社区节点的文章，在步骤中需要插入图片的位置留出占位`![图片介绍]()`便于后续插入图片。
 
+# chrome debugging
+
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --remote-debugging-address=0.0.0.0 --user-data-dir="C:\chrome-remote-profile"
+
 ## 五、往期推荐
 
 1. [n8n实战之初试牛刀：第一个简单工作流](https://mp.weixin.qq.com/s/NPRjJOlL38w4U9JsBztbtw)
