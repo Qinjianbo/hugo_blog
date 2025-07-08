@@ -23,7 +23,7 @@ Cut out summary from your post content here.
 
 The remaining content of your post.
 
-<!--qr_code-->
+<!--qr_code
 
 ## 捐赠
 
@@ -32,6 +32,8 @@ The remaining content of your post.
 | WeChat | AliPay | PayPal |
 | --- | --- | --- |
 | ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
+
+-->
 
 ### 公众号: 无限递归
 
