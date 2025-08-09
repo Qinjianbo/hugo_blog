@@ -1,0 +1,91 @@
+{
+  "name": "puppeteer自动填写表单demo",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        140
+      ],
+      "id": "f6ffb718-918c-4fda-88e8-fa3e4487ec83",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61fecaee-1fe4-4ffa-94f7-275666588ea3",
+              "name": "endpoint",
+              "value": "ws://host.docker.internal:9222/devtools/browser/b64823a6-8987-4663-bf37-3157dfb32d38",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        140
+      ],
+      "id": "92912bfe-def3-4b96-9ce9-52a35d402a57",
+      "name": "endpoint"
+    },
+    {
+      "parameters": {
+        "operation": "runCustomScript",
+        "scriptCode": "// Navigate to an IP lookup service\nawait $page.goto('https://www.baidu.com');\n\nawait $page.type('input[name=\"wd\"]', 'puppeteer');\n\nawait $page.click('input[id=\"su\"]');\n\nawait new Promise(resolve => setTimeout(resolve, 5000)); // 等待5秒，非必要，此处加这个是为了让演示更清晰\n\nreturn [{success: true}];",
+        "options": {
+          "browserWSEndpoint": "={{ $json.endpoint }}"
+        }
+      },
+      "type": "n8n-nodes-puppeteer.puppeteer",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        140
+      ],
+      "id": "7d97c983-0c67-4c58-9bda-55c9d397d760",
+      "name": "Puppeteer"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "endpoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "endpoint": {
+      "main": [
+        [
+          {
+            "node": "Puppeteer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b089d970-c324-4235-8289-d52e6b7d0653",
+  "meta": {
+    "instanceId": "b14ed51f9f211762690683f6004123aed80c77b063f7f2ed706fbafa83517554"
+  },
+  "id": "zYtJfGHLzonYVLE4",
+  "tags": []
+}

@@ -1,0 +1,136 @@
+## 2025-08-09
+
+- 新增文章：`content/posts/如何使用ffmpeg进行录屏.md`
+- 更新封面编号：`database/article_num.txt` -> 23
+
+---
+title: 如何使用ffmpeg进行录屏
+date: 2025-08-09T15:12:46+08:00
+lastmod: 2025-08-09T15:12:46+08:00
+author: 胡巴
+avatar: /img/avatar.jpeg
+# authorlink: https://author.site
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E4%B8%8A%E6%90%9C%E9%9B%86%E7%9A%84%E7%BE%8E%E5%9B%BE%E8%89%B2%E5%9B%BE_1-1000/23.jpg
+# images:
+#   - /img/cover.jpg
+categories:
+  - ffmpeg
+tags:
+  - ffmpeg
+  - 录屏
+  - Windows
+  - macOS
+  - Linux
+# nolastmod: true
+draft: false
+---
+
+用 FFmpeg 进行高质量录屏（含系统声/麦克风）的小抄与常见问题速查。
+
+<!--more-->
+
+## 准备
+
+- 安装 FFmpeg，并确认可用：
+  ```bash
+  ffmpeg -version
+  ```
+
+## Windows（gdigrab + dshow）
+
+1) 列出可用音频设备（系统声/麦克风）：
+```bash
+ffmpeg -list_devices true -f dshow -i dummy
+```
+
+2) 录整屏 + 麦克风（示例）：
+```bash
+ffmpeg -f gdigrab -framerate 30 -i desktop \
+  -f dshow -i audio="麦克风 (YOUR_MIC_DEVICE)" \
+  -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p \
+  -c:a aac -b:a 160k out.mp4
+```
+
+3) 录系统声（通常需要虚拟声卡，如 VB-CABLE）：
+```bash
+ffmpeg -f gdigrab -framerate 30 -i desktop \
+  -f dshow -i audio="CABLE Output (VB-Audio Virtual Cable)" \
+  -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p \
+  -c:a aac -b:a 160k out.mp4
+```
+
+4) 录指定区域/显示器：
+```bash
+ffmpeg -f gdigrab -framerate 30 \
+  -offset_x 0 -offset_y 0 -video_size 1920x1080 -show_region 1 -i desktop \
+  -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p out.mp4
+```
+
+## macOS（avfoundation）
+
+1) 列出设备：
+```bash
+ffmpeg -f avfoundation -list_devices true -i ""
+```
+
+2) 录屏（根据上一步的索引或名称替换）：
+```bash
+ffmpeg -f avfoundation -framerate 30 -pix_fmt yuv420p \
+  -i "capture screen 0:Built-in Microphone" \
+  -c:v libx264 -preset veryfast -crf 23 -c:a aac -b:a 160k out.mp4
+```
+
+提示：如需仅录屏无声，可将音频设备留空，例如 `-i "capture screen 0:"`。
+
+## Linux（X11）
+
+1) 录整屏 + PulseAudio 默认输入：
+```bash
+ffmpeg -f x11grab -framerate 30 -video_size 1920x1080 -i :0.0+0,0 \
+  -f pulse -i default \
+  -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p \
+  -c:a aac -b:a 160k out.mp4
+```
+
+2) 录窗口（用 `xdotool` 拿到窗口坐标与尺寸，替换到 `-i :0.0+X,Y -video_size WxH`）。
+
+提示：Wayland 下原生抓屏建议用 `wf-recorder` 或通过桌面门户（PipeWire）方案；FFmpeg 直接抓屏可能受限。
+
+## 常用参数速查
+
+- `-framerate 30/60`：帧率；60 更流畅更吃资源。
+- `-c:v libx264 -preset veryfast -crf 18~28`：x264 速度/质量权衡；数值越小越清晰、文件越大。
+- `-pix_fmt yuv420p`：提升播放器兼容性（尤其是 Safari/移动端）。
+- `-c:a aac -b:a 128k~192k`：音频编码与码率。
+- 输出容器：`out.mp4`（主流通用），或 `out.mkv`（长录制更稳）。
+
+## 开始与停止
+
+- 开始：执行命令后即录制。
+- 停止：在终端按 `q` 退出，并正常封装输出文件。
+
+## 常见问题
+
+- 无法录到系统声（Windows）：安装 VB-CABLE 或启用声卡“立体声混音”，并在 `-i audio="..."` 中选择正确设备。
+- 画面卡顿/丢帧：降低帧率到 30、提高 `-preset` 到 `veryfast/superfast`、改用 SSD 输出目录。
+- 颜色异常：确保 `-pix_fmt yuv420p`。
+- 文件过大：提高 `-crf` 数值（如 26），或改用 `-c:v h265`（需目标端支持）。
+
+<!--qr_code-->
+
+## 捐赠
+
+感谢老板请我喝杯咖啡！Thank you for buying me a coffee!
+
+| WeChat | AliPay | PayPal |
+| --- | --- | --- |
+| ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
+
+### 公众号: 无限递归
+
+![alt 搜索公众号:无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
+
+<!--declare-declare-->
+
+Copyright © 2017 - 2025 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】
+
