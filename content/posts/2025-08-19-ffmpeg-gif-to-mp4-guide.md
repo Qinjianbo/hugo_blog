@@ -4,7 +4,7 @@ date: 2025-08-19T14:12:33+08:00
 lastmod: 2025-08-19T14:12:33+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/哔哩哔哩上搜集的美图色图_1-1000/27.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/哔哩哔哩上搜集的美图色图_1-1000/29.jpg
 categories:
   - 技术教程
   - 视频处理
