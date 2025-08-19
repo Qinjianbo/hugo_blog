@@ -5,3 +5,4 @@ deploy.sh
 deploy.bat
 content/default/*
 themes/*
+static/img/png/
