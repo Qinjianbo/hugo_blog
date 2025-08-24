@@ -5,7 +5,7 @@ lastmod: {{ .Date }}
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/哔哩哔哩上搜集的美图色图_1-1000/{编号}.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/{编号}.jpg
 # images:
 #   - /img/cover.jpg
 categories:

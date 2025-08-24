@@ -4,7 +4,7 @@ date: 2025-05-06T17:20:27+08:00
 lastmod: 2025-05-06T17:20:27+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
-cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9%E4%B8%8A%E6%90%9C%E9%9B%86%E7%9A%84%E7%BE%8E%E5%9B%BE%E8%89%B2%E5%9B%BE_1-1000/12.jpg
+cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/12.jpg
 categories:
   - 自动化工具
   - n8n教程
