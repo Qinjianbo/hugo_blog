@@ -89,7 +89,13 @@ AI Coding不仅仅是一个Claude镜像工具，更是为独立开发者和技�
 如果你还在为选择AI编程工具而犹豫，AI Coding绝对值得一试。毕竟，当10,000+开发者都在使用，99.9%的服务稳定性，以及仅为官方28%的价格，还有什么理由拒绝呢？
 
 # 立即体验： 
-[点击此链接](https://aicoding.sh/i/SQfrhTnW)，注册即送3000积分，更有购买加v返现活动[**返购买价格的5%,仅通过此链接购买有效**]，加v信号：**wanghuiwoshinideyou**，时效有限，快来体验!
+[点击此链接](https://aicoding.sh/i/SQfrhTnW)，注册即送3000积分，**购买套餐可加微信获实付金额5%返现，仅本链接跳转购买可得**，时效有限，快来体验!
+
+加微时备注aicoding的uid，验证后以红包形式返现！
+
+返现微信号：**wanghuiwoshinideyou**
+
+![返现微信二维码](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/%E5%BE%AE%E4%BF%A1%E4%BA%8C%E7%BB%B4%E7%A0%81.jpg "返现微信号")
 
 <!--qr_code-->
 
