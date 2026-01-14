@@ -2,7 +2,11 @@ baseurl = "https://www.boboidea.com/"
 languageCode = "zh-Hans"
 defaultContentLanguage = "zh"
 title = "BoBo`s Blog`"
-theme = "dream"
+theme = "PaperMod"
+
+[module]
+  [[module.imports]]
+    path = "github.com/adityatelange/hugo-PaperMod"
 
 googleAnalytics = "G-839GW747XX"
 
@@ -14,6 +18,21 @@ hasCJKLanguage = true
 # copyright = '<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。'
 
 [params]
+  # PaperMod settings
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+
+  [params.cover]
+    hiddenInList = true
+    hiddenInSingle = false
+
+  # dream legacy settings (kept for reference)
   background = "#f7f7f7"
   backgroundImage = "/img/background.jpeg"
   linkColor = "seagreen"
@@ -70,7 +89,7 @@ hasCJKLanguage = true
    enableSearch = true
 
   # options
-    showSummaryCoverInPost = true
+    showSummaryCoverInPost = false
   # hasTwitterEmbed = true
   # reversePostAndAside = true
   # shareInAside = true
