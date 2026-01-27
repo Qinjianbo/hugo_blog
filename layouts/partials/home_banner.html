@@ -1,0 +1,31 @@
+{{/* Homepage banner image link; uses params.homeBanner */}}
+{{- $banner := . -}}
+<section class="home-banner" aria-label="homepage banner">
+  <a class="home-banner__link"
+     href="{{ $banner.url }}"
+     {{- if $banner.newTab }} target="_blank" rel="noopener noreferrer"{{- end }}>
+    <img class="home-banner__image"
+         src="{{ $banner.image | relURL }}"
+         alt="{{ $banner.alt | default `站点推广横幅` }}">
+  </a>
+</section>
+
+<style>
+  .home-banner {
+    margin: 1.5rem 0 2rem;
+  }
+  .home-banner__link {
+    display: block;
+  }
+  .home-banner__image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.25);
+  }
+  @media (min-width: 960px) {
+    .home-banner__image {
+      max-height: 260px;
+      object-fit: cover;
+    }
+  }
+</style>

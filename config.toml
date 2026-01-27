@@ -1,24 +1,55 @@
-baseurl = "https://www.boboidea.com/"
+baseURL = "https://www.boboidea.com/"
 languageCode = "zh-Hans"
 defaultContentLanguage = "zh"
-title = "BoBo`s Blog`"
+title = "BoBo`s Blog"
 theme = "PaperMod"
-
-[module]
-  [[module.imports]]
-    path = "github.com/adityatelange/hugo-PaperMod"
-
+hasCJKLanguage = true
+enableRobotsTXT = false
+pygmentsUseClasses = true
 googleAnalytics = "G-839GW747XX"
 
-# disqusShortname = "BoBo"
+[pagination]
+  pagerSize = 10
 
-enableRobotsTXT = false
-hasCJKLanguage = true
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
 
-# copyright = '<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。'
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[languages]
+  [languages.zh]
+    languageName = "简体中文"
+    weight = 1
+    languageCode = "zh-Hans"
+    contentDir = "content"
+    title = "BoBo`s Blog"
+
+  [languages.en]
+    languageName = "English"
+    weight = 2
+    languageCode = "en"
+    contentDir = "content/en"
+    title = "BoBo's Blog"
+    [languages.en.params]
+      description = "BoBo's Blog – tech notes and tutorials"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    style = "gruvbox"
 
 [params]
-  # PaperMod settings
+  env = "production"
+  author = "huba"
+  description = "胡巴的博客空间"
   defaultTheme = "auto"
   ShowReadingTime = true
   ShowShareButtons = true
@@ -27,84 +58,124 @@ hasCJKLanguage = true
   ShowCodeCopyButtons = true
   ShowWordCount = true
   ShowRssButtonInSectionTermList = true
+  ShowToc = true
+  comments = true
+  mainSections = ["posts"]
+  images = ["/img/avatar.jpeg"]
+  siteStartYear = 2017
+
+  [params.assets]
+    favicon = "/favicon.ico"
+    disableHLJS = true
 
   [params.cover]
     hiddenInList = true
     hiddenInSingle = false
 
-  # dream legacy settings (kept for reference)
-  background = "#f7f7f7"
-  backgroundImage = "/img/background.jpeg"
-  linkColor = "seagreen"
+  [params.ads]
+    client = "ca-pub-9980006545865573"
 
-  # dark mode
-  # defaultDark = true
-  backgroundDark = "black"
-  backgroundImageDark = "/img/background-dark.jpeg"
-  darkLinkColor = "darkseagreen"
-  # darkNav = true
-  # dark404 = true
+  [params.homeBanner]
+    image = "/img/banner.webp"                         # 静态目录下的横幅图片路径，如 /img/banner.jpg
+    url = "https://subsub.cn/i/BAZVCP6VTW"                           # 点击跳转链接
+    alt = "促销广告"                     # 图片替代文本
+    newTab = true                      # 是否新开标签页
 
-  author = "huba"
-  description = "胡巴的博客空间"
-  avatar = "/img/avatar.jpeg"
-  headerTitle = "BoBo`s Blog"
-  motto = "每天进步一点点，能多一点是一点"
-  maxTags = 13
-  # categoriesLimitInHeader = 6 # deprecated
-  # headerBottomText = "" # deprecated
+  [params.homeInfoParams]
+    Title = "BoBo`s Blog"
+    Content = "每天进步一点点，能多一点是一点"
 
-  footerBottomText = '<a href="https://beian.miit.gov.cn/" target="_blank">辽ICP备16004582号-1</a>'
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.3
+    minMatchCharLength = 2
+    keys = ["title", "permalink", "summary", "content"]
 
-  rss = true
+  [params.footer]
+    text = "<a href=\"https://beian.miit.gov.cn/\" target=\"_blank\">辽ICP备16004582号-1</a>"
 
-  # utterancesRepo = ""
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/Qinjianbo"
 
-  valine = true
-  LEANCLOUD_APP_ID = "tBxtGLtTerNO4L5lf9vuKztP-gzGzoHsz"
-  LEANCLOUD_APP_KEY = "OQgHycWy8d5Cv8OkLL0YildP"
-  # VALINE_LANGUAGE = ""
+  [[params.socialIcons]]
+    name = "KoFi"
+    url = "https://ko-fi.com/huba"
 
-  email = "bobo@boboidea.com"
-  # twitter = ""
-  # facebook = ""
-  # instagram = ""
-  # mastodon = ""
-  # linkedin = ""
-  github = "Qinjianbo"
-  # stackoverflow = ""
-  # codepen = ""
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:qinjianbo521@gmail.com"
 
-   siteStartYear = 2017
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
 
-   favicon = "/favicon.ico"
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 1
 
-   highlightjs = true
-   # highlightjsCDN = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"
-   highlightjsExtraLanguages = ["ocaml"]
-   highlightjsTheme = "gruvbox-light"
-   highlightjsThemeDark = "gruvbox-dark"
+  [[menu.main]]
+    name = "归档"
+    url = "/archives/"
+    weight = 2
 
-  # search
-   enableSearch = true
+  [[menu.main]]
+    name = "标签"
+    url = "/tags/"
+    weight = 3
 
-  # options
-    showSummaryCoverInPost = false
-  # hasTwitterEmbed = true
-  # reversePostAndAside = true
-  # shareInAside = true
-   fixedNav = true
-  # collapsibleTags = true
-  # collapseBySummary = true
+  [[menu.main]]
+    name = "搜索"
+    url = "/search/"
+    weight = 4
 
-   [params.advanced]
-  #   customCSS = ["css/custom.css"]
-  #   customJSBefore = []
-      customJS = ["js/bd_push.js"]
+  [[menu.main]]
+    name = "关于"
+    url = "/about/me/"
+    weight = 5
 
-  [outputs]
-   home = ["html", "RSS", "JSON"]
+[languages.en.menu]
+  [[languages.en.menu.main]]
+    name = "Home"
+    url = "/en/"
+    weight = 1
 
-  # [params.experimental]
-     # jsDate = true
-     # jsDateFormat = "yyyy年MM月dd日"
+  [[languages.en.menu.main]]
+    name = "Archives"
+    url = "/en/archives/"
+    weight = 2
+
+  [[languages.en.menu.main]]
+    name = "Tags"
+    url = "/en/tags/"
+    weight = 3
+
+  [[languages.en.menu.main]]
+    name = "Search"
+    url = "/en/search/"
+    weight = 4
+
+  [[languages.en.menu.main]]
+    name = "About"
+    url = "/en/about/"
+    weight = 5
+
+# Custom scripts
+[params.advanced]
+  customJS = ["js/bd_push.js"]
+
+# Comment service: Valine
+[params.valine]
+  enable = true
+  placeholder = "留言交流~"
+  avatar = "mp"
+  recordIP = true
+
+[params.leancloud]
+  appId = "tBxtGLtTerNO4L5lf9vuKztP-gzGzoHsz"
+  appKey = "OQgHycWy8d5Cv8OkLL0YildP"

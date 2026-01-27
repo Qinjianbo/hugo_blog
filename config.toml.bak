@@ -1,0 +1,108 @@
+baseurl = "https://www.boboidea.com/"
+languageCode = "zh-Hans"
+defaultContentLanguage = "zh"
+title = "BoBo`s Blog`"
+theme = "PaperMod"
+
+[module]
+
+googleAnalytics = "G-839GW747XX"
+
+# disqusShortname = "BoBo"
+
+enableRobotsTXT = false
+hasCJKLanguage = true
+
+# copyright = '<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。'
+
+[params]
+  # PaperMod settings
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+
+  [params.cover]
+    hiddenInList = true
+    hiddenInSingle = false
+
+  # dream legacy settings (kept for reference)
+  background = "#f7f7f7"
+  backgroundImage = "/img/background.jpeg"
+  linkColor = "seagreen"
+
+  # dark mode
+  # defaultDark = true
+  backgroundDark = "black"
+  backgroundImageDark = "/img/background-dark.jpeg"
+  darkLinkColor = "darkseagreen"
+  # darkNav = true
+  # dark404 = true
+
+  author = "huba"
+  description = "胡巴的博客空间"
+  avatar = "/img/avatar.jpeg"
+  headerTitle = "BoBo`s Blog"
+  motto = "每天进步一点点，能多一点是一点"
+  maxTags = 13
+  # categoriesLimitInHeader = 6 # deprecated
+  # headerBottomText = "" # deprecated
+
+  footerBottomText = '<a href="https://beian.miit.gov.cn/" target="_blank">辽ICP备16004582号-1</a>'
+
+  rss = true
+
+  # utterancesRepo = ""
+
+  valine = true
+  LEANCLOUD_APP_ID = "tBxtGLtTerNO4L5lf9vuKztP-gzGzoHsz"
+  LEANCLOUD_APP_KEY = "OQgHycWy8d5Cv8OkLL0YildP"
+  # VALINE_LANGUAGE = ""
+
+  email = "bobo@boboidea.com"
+  # twitter = ""
+  # facebook = ""
+  # instagram = ""
+  # mastodon = ""
+  # linkedin = ""
+  github = "Qinjianbo"
+  # stackoverflow = ""
+  # codepen = ""
+
+   siteStartYear = 2017
+
+   favicon = "/favicon.ico"
+
+   highlightjs = true
+   # highlightjsCDN = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js"
+   highlightjsExtraLanguages = ["ocaml"]
+   highlightjsTheme = "gruvbox-light"
+   highlightjsThemeDark = "gruvbox-dark"
+
+  # search
+   enableSearch = true
+
+  # options
+    showSummaryCoverInPost = false
+  # hasTwitterEmbed = true
+  # reversePostAndAside = true
+  # shareInAside = true
+   fixedNav = true
+  # collapsibleTags = true
+  # collapseBySummary = true
+
+   [params.advanced]
+  #   customCSS = ["css/custom.css"]
+  #   customJSBefore = []
+      customJS = ["js/bd_push.js"]
+
+  [outputs]
+   home = ["html", "RSS", "JSON"]
+
+  # [params.experimental]
+     # jsDate = true
+     # jsDateFormat = "yyyy年MM月dd日"

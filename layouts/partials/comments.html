@@ -1,0 +1,22 @@
+{{- $valine := site.Params.valine }}
+{{- $lean := site.Params.leancloud }}
+{{- if and $valine.enable $lean.appId $lean.appKey }}
+<div id="vcomments"></div>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: '#vcomments',
+    appId: '{{ $lean.appId }}',
+    appKey: '{{ $lean.appKey }}',
+    placeholder: '{{ $valine.placeholder | default "欢迎留言" }}',
+    avatar: '{{ $valine.avatar | default "mp" }}',
+    recordIP: {{ default true $valine.recordIP }},
+    visitor: true,
+    path: window.location.pathname,
+    lang: '{{ site.LanguageCode | default "zh-CN" }}',
+    {{- with $lean.serverURLs }}
+    serverURLs: '{{ . }}',
+    {{- end }}
+  });
+</script>
+{{- end }}

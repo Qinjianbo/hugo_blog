@@ -47,12 +47,3 @@ func main() {
 `Encode`方法用于将`url.Values`对象编码为一个URL编码的查询字符串。这对于生成URL查询参数非常有用。
 在处理HTTP请求、生成URL或处理表单数据时，了解如何将map转换为`url.Values`是非常有用的。
 <!--qr_code-->
-## 捐赠
-感谢老板请我喝杯咖啡！Thank you for buying me a coffee!
-| WeChat | AliPay | PayPal |
-| --- | --- | --- |
-| ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
-### 公众号: 无限递归
-![alt 搜索公众号:无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
-<!--declare-declare-->
-Copyright &copy; 2017 - 2025 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】

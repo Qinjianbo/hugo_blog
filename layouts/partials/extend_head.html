@@ -1,0 +1,14 @@
+{{- if or hugo.IsProduction (eq site.Params.env "production") }}
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.Params.ads.client }}" crossorigin="anonymous"></script>
+<!-- Baidu Analytics (legacy from Dream theme) -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?aea13b8a38780f1f66760cfeb0028fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+{{- end }}

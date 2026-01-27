@@ -55,18 +55,3 @@ ffmpeg -f image2 -pattern_type glob -i '*.png' -s 1920x1080 -c:v libx264 -q:v 1 
 这将创建一个1920x1080分辨率的视频，使用x264编码器，并且质量设置为最高。
 使用FFmpeg将png图片转换成视频是一个简单的过程，但这个工具的强大之处在于它提供了无数的自定义选项，让您可以根据需要创建几乎任何类型的视频输出。
 
-## 捐赠
-
-感谢老板请我喝杯咖啡！Thank you for buying me a coffee!
-
-| WeChat | AliPay | PayPal |
-| --- | --- | --- |
-| ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
-
-### 公众号: 无限递归
-
-![alt 搜索公众号:无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
-
-<!--declare-declare-->
-
-Copyright &copy; 2017 - 2025 boboidea.com All Rights Reserved 波波创意软件工作室 版权所有 【转载请注明出处】

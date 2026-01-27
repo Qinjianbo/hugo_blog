@@ -52,12 +52,3 @@ func main() {
 ### 总结
 在Go语言中，通过类型断言，我们可以检查`interface{}`字段的具体类型，从而进行更精确的操作。类型断言是Go语言类型系统中的一个强大工具，但应谨慎使用，以避免性能问题和类型安全问题。
 <!--qr_code-->
-## 捐赠
-感谢老板请我喝杯咖啡！Thank you for buying me a coffee!
-| WeChat | AliPay | PayPal |
-| --- | --- | --- |
-| ![wechatpay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/wechat_%E6%94%B6%E6%AC%BE%E7%A0%81.jpg) | ![alipay](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/pay/alipay.jpg) | [PayPal](https://paypal.me/JianboQin?country.x=C2&locale.x=zh_XC) |
-### 公众号: 无限递归
-![alt 搜索公众号:无限递归](https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/gongzhonghao.jpeg "无限递归")
-<!--declare-declare-->
-Copyright &copy; 2017 - 2025 boboidea.com All Rights Reserved 波波
