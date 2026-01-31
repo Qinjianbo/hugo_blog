@@ -1,7 +1,7 @@
 baseURL = "https://www.boboidea.com/"
 languageCode = "zh-Hans"
 defaultContentLanguage = "zh"
-title = "BoBo`s Blog"
+title = "胡巴的小站"
 theme = "PaperMod"
 hasCJKLanguage = true
 enableRobotsTXT = false
@@ -25,7 +25,7 @@ googleAnalytics = "G-839GW747XX"
     weight = 1
     languageCode = "zh-Hans"
     contentDir = "content"
-    title = "BoBo`s Blog"
+    title = "胡巴的小站"
 
   [languages.en]
     languageName = "English"
