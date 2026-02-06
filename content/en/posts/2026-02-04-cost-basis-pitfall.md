@@ -1,7 +1,7 @@
 ---
 title: "Cost Basis Pitfall: Sold Above Cost, Still Lost Money"
 date: 2026-02-04T09:00:00+08:00
-lastmod: 2026-02-04T09:00:00+08:00
+lastmod: 2026-02-06T12:30:00+08:00
 author: Huba
 avatar: /img/avatar.jpeg
 categories:
@@ -81,11 +81,11 @@ This is the **trading compass**. Every new buy (especially a chase-buy) changes 
 
 Your broker calculates PnL based on a specific cost-basis method plus fees. **The exact method depends on the broker**, but the key is this: use the wrong cost basis, and losses are likely.
 
-## 4. Cheat sheet: 3 rules that save real money
+## 4. Cheat sheet: 3 review points (experience notes only)
 
 1. **Do not use the nice-looking cost on the holdings page as your trade basis.** It is a scorecard, not a compass.
-2. **After each buy, calculate your true average cost:** `total invested / current shares`. Write it down and only use that number in trades.
-3. **Before adding, estimate the new average cost:** if it sits too close to the market price, the profit buffer is thin and you can easily give back earlier gains.
+2. **After each buy, calculate your true average cost:** `total invested / current shares` and keep it as a review reference.
+3. **Before adding, estimate the new average cost:** if it sits too close to the market price, the buffer becomes thin.
 
 PS: You do not need to do the math manually. You can give the trade history to AI. Just remember to include **fees and charges** so the result matches reality.
 

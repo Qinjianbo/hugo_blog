@@ -1,7 +1,7 @@
 ---
 title: "Why a 96 bp Error Can Move a 1,000 RMB Bond by 120 RMB"
 date: 2026-02-01T11:22:22+08:00
-lastmod: 2026-02-01T11:22:22+08:00
+lastmod: 2026-02-06T12:30:00+08:00
 author: Huba
 avatar: /img/avatar.jpeg
 categories:
@@ -99,10 +99,10 @@ Long bonds can be volatile. Higher duration means higher rate sensitivity. If yo
 
 ### Trap 3: over-focus on rate predictions
 
-Rate forecasting helps, but managing your risk structure matters more:
+Rate forecasting helps, but risk structure matters more. The following are **conceptual observations**, not advice:
 
-- Expect rates to rise: prefer shorter duration.
-- Expect rates to fall: long duration has more upside, but also more volatility.
+- When rates rise, shorter duration typically means smaller price impact.
+- When rates fall, longer duration typically has more upside but also more volatility.
 
 ## 5) Use cases / cautions / one-line summary
 

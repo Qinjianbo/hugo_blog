@@ -145,6 +145,16 @@ googleAnalytics = "G-839GW747XX"
     url = "/about/me/"
     weight = 5
 
+  [[menu.main]]
+    name = "隐私"
+    url = "/privacy/"
+    weight = 6
+
+  [[menu.main]]
+    name = "免责声明"
+    url = "/disclaimer/"
+    weight = 7
+
 [languages.en.menu]
   [[languages.en.menu.main]]
     name = "Home"
@@ -170,6 +180,16 @@ googleAnalytics = "G-839GW747XX"
     name = "About"
     url = "/en/about/"
     weight = 5
+
+  [[languages.en.menu.main]]
+    name = "Privacy"
+    url = "/en/privacy/"
+    weight = 6
+
+  [[languages.en.menu.main]]
+    name = "Disclaimer"
+    url = "/en/disclaimer/"
+    weight = 7
 
 # Custom scripts
 [params.advanced]

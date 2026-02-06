@@ -2,7 +2,7 @@
 
 title: 我的第一次挖矿历程：从0到成功，RTX 3060挖矿ETC全攻略
 date: 2025-08-13T00:00:00+08:00
-lastmod: 2025-08-13T00:00:00+08:00
+lastmod: 2026-02-06T12:30:00+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 # authorlink: https://author.site
@@ -18,7 +18,11 @@ tags:
   - 区块链
   - 加密货币
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "在加密货币挖矿的世界里，选择合适的币种、矿池和配置是成功的关键。本文将记录我使用RTX 3060 12GB显卡从零开始挖矿以太坊经典（ETC）的完整过程，包括遇到的问题、解决方案和最终的成功经验。"
 aiKeyPoints:
   - "前言"

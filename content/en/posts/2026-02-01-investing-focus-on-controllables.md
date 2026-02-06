@@ -1,7 +1,7 @@
 ---
 title: "Stop Predicting, Focus on What You Control: A Value Investing Checklist"
 date: 2026-02-01T10:59:45+08:00
-lastmod: 2026-02-01T10:59:45+08:00
+lastmod: 2026-02-06T12:30:00+08:00
 author: Huba
 avatar: /img/avatar.jpeg
 categories:
@@ -69,14 +69,14 @@ When the market chases a story and valuation is far beyond common sense (very hi
 
 ### Do not bet everything on one name
 
-Even if you feel confident, you may be wrong. Set hard rules to make a single mistake non-fatal:
+Even if you feel confident, you may be wrong. Set rules that match your risk tolerance so one mistake is not fatal:
 
-- Any single position should not exceed 30% of total capital (or use your max tolerable drawdown to back into a limit).
-- Diversify across 3 to 5 high-quality companies in different lanes within your competence.
+- Set a limit for any single position to avoid concentration risk.
+- Diversify within your circle of competence so risk is not tied to one lane.
 
 ### Always keep dry powder
 
-Hold 20% to 30% in cash or cash-equivalents (money funds, short-duration bonds) so you have choices in two situations:
+Hold a reasonable allocation in cash or cash-equivalents (money funds, short-duration bonds) so you have choices in two situations:
 
 - When markets drop and great companies go on sale: you can buy.
 - When panic hits: you can avoid forced selling at the bottom.
@@ -98,7 +98,7 @@ Write your sell rules so you avoid emotional decisions:
 
 1. **Intrinsic value drops**: moat erodes, business model worsens, or management loses credibility.
 2. **A better opportunity appears**: same quality, higher expected return.
-3. **Price far exceeds value**: for example, price above 150% of intrinsic value (choose your own threshold).
+3. **Price far exceeds value**: when price is well above your intrinsic value range, follow your pre-defined rule.
 
 ## 5) Turn the checklist into a daily process
 
