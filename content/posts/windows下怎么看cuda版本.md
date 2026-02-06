@@ -15,6 +15,16 @@ tags:
   - AI绘画
 # nolastmod: true
 draft: false
+aiSummary: "这篇文章主要讲解 windows 下如何查看 CUDA 的版本。"
+aiKeyPoints:
+  - "命令提示符 :"
+  - "NVIDIA系统信息工具 :"
+  - "设备管理器 :"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "这篇文章主要讲解 windows 下如何查看 CUDA 的版本。"
+  - q: "适合谁阅读？"
+    a: "适合关注“Windows下怎么看cuda版本”相关主题的读者。"
 ---
 
 这篇文章主要讲解 windows 下如何查看 CUDA 的版本。

@@ -16,6 +16,16 @@ tags:
   - Context  # 文章相关标签
 # nolastmod: true
 draft: false
+aiSummary: "在Go语言中， context 包提供了一种在API边界和进程之间传递请求范围的值、取消信号和截止时间的方法。本文将详细介绍Go语言中 context 的使用方法和最佳实践。"
+aiKeyPoints:
+  - "Context接口"
+  - "使用Context"
+  - "最佳实践"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "在Go语言中， context 包提供了一种在API边界和进程之间传递请求范围的值、取消信号和截止时间的方法。本文将详细介绍Go语言中 context 的使用方法和最佳实践。"
+  - q: "适合谁阅读？"
+    a: "适合关注“请讲解一下golang中的context”相关主题的读者。"
 ---
 在Go语言中，`context`包提供了一种在API边界和进程之间传递请求范围的值、取消信号和截止时间的方法。本文将详细介绍Go语言中`context`的使用方法和最佳实践。
 <!--more-->

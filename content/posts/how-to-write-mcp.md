@@ -14,6 +14,16 @@ tags:
   - LLM
   - 协议设计
 draft: false
+aiSummary: "MCP（Model Context Protocol）是一种用于规范和增强大语言模型行为的协议框架。本文将深入探讨如何设计和实现一个专业级别的MCP，帮助开发者更好地控制和优化AI模型的输出。"
+aiKeyPoints:
+  - "MCP的本质与重要性"
+  - "MCP的核心组成部分"
+  - "1. 身份定义（Identity Definition）"
+faq:
+  - q: "What is this article about?"
+    a: "MCP（Model Context Protocol）是一种用于规范和增强大语言模型行为的协议框架。本文将深入探讨如何设计和实现一个专业级别的MCP，帮助开发者更好地控制和优化AI模型的输出。"
+  - q: "Who is this for?"
+    a: "For readers interested in 如何编写自己的MCP(Model Context Protocol)."
 ---
 
 MCP（Model Context Protocol）是一种用于规范和增强大语言模型行为的协议框架。本文将深入探讨如何设计和实现一个专业级别的MCP，帮助开发者更好地控制和优化AI模型的输出。

@@ -14,6 +14,16 @@ tags:
   - elasticsearch
 # nolastmod: true
 draft: false
+aiSummary: "事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。 原因分析： 因为自己的读取策略是先读取ES，排序由ES进行！ 若ES执行结果出错，则从数据库读取列表，排序默认。"
+aiKeyPoints:
+  - "原因分析"
+  - "验证"
+  - "解决方法"
+faq:
+  - q: "What is this article about?"
+    a: "事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。 原因分析： 因为自己的读取策略是先读取ES，排序由ES进行！ 若ES执行结果出错，则从数据库读取列表，排序默认。"
+  - q: "Who is this for?"
+    a: "For readers interested in cluster_block_exception."
 ---
 
 事件：早上在看自己的文章列表时发现昨晚写的一篇新的博客没有列出来，但是文章的排序仍然正确。  原因分析：  因为自己的读取策略是先读取ES，排序由ES进行！~若ES执行结果出错，则从数据库读取列表，排序默认。

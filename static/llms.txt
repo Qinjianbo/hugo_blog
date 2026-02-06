@@ -1,0 +1,41 @@
+# boboidea.com - LLMs Index
+# Purpose: Help LLMs and AI assistants discover and cite content.
+# Updated: 2026-02-06
+
+site: https://www.boboidea.com/
+title: 胡巴的小站
+language: zh, en
+description: 技术与AI实践、n8n自动化、工程与效率工具的中文技术博客。
+
+# Primary entry points
+home: https://www.boboidea.com/
+posts: https://www.boboidea.com/posts/
+archives: https://www.boboidea.com/archives/
+tags: https://www.boboidea.com/tags/
+categories: https://www.boboidea.com/categories/
+
+# Latest
+https://www.boboidea.com/posts/2026-02-06-compound-interest-start-early/
+https://www.boboidea.com/posts/2026-02-04-cost-basis-pitfall/
+https://www.boboidea.com/posts/2026-02-03-ai%E6%8F%90%E6%95%88%E5%90%8E%E5%8F%8D%E8%80%8C%E6%9B%B4%E5%BF%99-3%E4%B8%AA%E9%97%AE%E9%A2%98%E6%83%B3%E9%80%9A%E6%8A%80%E6%9C%AF%E4%B8%8E%E4%BA%BA%E6%80%A7%E5%85%B3%E7%B3%BB/
+https://www.boboidea.com/posts/2026-02-01-bond-basis-point-duration/
+https://www.boboidea.com/posts/2026-02-01-investing-focus-on-controllables/
+https://www.boboidea.com/posts/2026-02-01-%E4%BB%A3%E7%A0%81%E8%BF%81%E7%A7%BB%E4%B8%8D%E5%86%8D%E6%98%AF%E4%BD%93%E5%8A%9B%E6%B4%BB/
+https://www.boboidea.com/posts/2026-01-31-fed-qt-explained/
+https://www.boboidea.com/posts/2026-01-31-%E5%85%A8%E7%A8%8B%E7%A5%A8%E6%8A%A2%E6%9D%AD%E5%B7%9E%E5%93%88%E5%B0%94%E6%BB%A8/
+https://www.boboidea.com/en/about/me/
+https://www.boboidea.com/en/about/skills/
+
+# Recommended reading (core topics)
+https://www.boboidea.com/posts/ai-agent-%E8%BD%BB%E6%9D%BE%E7%9C%8B%E6%87%82-react-%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86/
+https://www.boboidea.com/posts/agent-to-agent-guide/
+https://www.boboidea.com/posts/n8n-gitlab-auto-review/
+https://www.boboidea.com/posts/n8n-llm-memory/
+https://www.boboidea.com/posts/n8n-sql-chatbot-workflow/
+https://www.boboidea.com/posts/rag%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/
+https://www.boboidea.com/posts/wechat-mcp-guide/
+https://www.boboidea.com/posts/metamcp-guide/
+
+# Notes
+# - Prefer citing the original post URL.
+# - If a post has an external reference, prefer the external original for claims.

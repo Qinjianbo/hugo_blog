@@ -15,6 +15,14 @@ tags:
   - unauthorized
 # nolastmod: true
 draft: false
+aiSummary: "docker pull 报错 error unauthorized: incorrect username or password"
+aiKeyPoints:
+  - "docker pull 报错 error unauthorized: incorrect username or password"
+faq:
+  - q: "What is this article about?"
+    a: "docker pull 报错 error unauthorized: incorrect username or password"
+  - q: "Who is this for?"
+    a: "For readers interested in unauthorized incorrect username or password  docker."
 ---
 
 docker pull 报错 error unauthorized: incorrect username or password

@@ -15,6 +15,14 @@ tags:
   - xcode-select
 # nolastmod: true
 draft: false
+aiSummary: "xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun"
+aiKeyPoints:
+  - "xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun"
+faq:
+  - q: "What is this article about?"
+    a: "xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun"
+  - q: "Who is this for?"
+    a: "For readers interested in missing xcrun at ...."
 ---
 
 xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun

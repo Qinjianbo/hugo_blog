@@ -14,6 +14,16 @@ tags:
   - channel
 # nolastmod: true
 draft: false
+aiSummary: "golang中使用channel相关知识控制协程交替输出奇偶数。"
+aiKeyPoints:
+  - "使用两个channel实现"
+  - "使用一个channel实现"
+  - "公众号: 无限递归"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "golang中使用channel相关知识控制协程交替输出奇偶数。"
+  - q: "适合谁阅读？"
+    a: "适合关注“Golang使用channel进行奇偶数交替输出”相关主题的读者。"
 ---
 
 golang中使用channel相关知识控制协程交替输出奇偶数。

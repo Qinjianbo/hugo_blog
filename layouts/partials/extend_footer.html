@@ -1,6 +1,9 @@
 {{- $custom := site.Params.advanced.customJS }}
 {{- if $custom }}
   {{- range $custom }}
-  <script src="{{ . | relURL }}"></script>
+  {{- $src := . | relURL }}
+  <script src="{{ $src }}"
+          defer
+          {{- if (in $src "bd_push.js") }} async{{- end }}></script>
   {{- end }}
 {{- end }}

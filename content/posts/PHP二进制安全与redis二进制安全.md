@@ -15,6 +15,14 @@ tags:
   - 二进制安全
 # nolastmod: true
 draft: false
+aiSummary: "PHP二进制安全与redis二进制安全写的比较明白的文章链接记录"
+aiKeyPoints:
+  - "PHP二进制安全与redis二进制安全写的比较明白的文章链接记录"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "PHP二进制安全与redis二进制安全写的比较明白的文章链接记录"
+  - q: "适合谁阅读？"
+    a: "适合关注“PHP二进制安全与redis二进制安全”相关主题的读者。"
 ---
 
 PHP二进制安全与redis二进制安全写的比较明白的文章链接记录

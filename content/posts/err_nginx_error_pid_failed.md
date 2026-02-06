@@ -14,6 +14,15 @@ tags:
   - nginx
 # nolastmod: true
 draft: false
+aiSummary: "nginx: [error] open() \"/usr/local/var/run/nginx.pid\" failed 如何解决"
+aiKeyPoints:
+  - "问题"
+  - "解决方法"
+faq:
+  - q: "What is this article about?"
+    a: "nginx: [error] open() \"/usr/local/var/run/nginx.pid\" failed 如何解决"
+  - q: "Who is this for?"
+    a: "For readers interested in nginx [error] open() \"/usr/local/var/run/nginx.pid\" failed."
 ---
 
 nginx: [error] open() "/usr/local/var/run/nginx.pid" failed 如何解决

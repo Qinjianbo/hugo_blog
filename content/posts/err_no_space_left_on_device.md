@@ -15,6 +15,14 @@ tags:
   - df
 # nolastmod: true
 draft: false
+aiSummary: "今天访问自己的博客，发现文章排序不正确了，知道是读数据库了，没有走ES！ 然后就以为是ES出错了，后来登陆到服务器上面，想看看是怎么了，结果发现在按tab 进行命令提示时，总是报错 cannot create temp file for here-document: No space left on device。"
+aiKeyPoints:
+  - "今天访问自己的博客，发现文章排序不正确了，知道是读数据库了，没有走ES！ 然后就以为是ES出错了，后来登陆到服务器上面，想看看是怎么了，结果发现在按tab 进行命令提示时，总是报错 cannot create temp file for here-document: No space left on device"
+faq:
+  - q: "What is this article about?"
+    a: "今天访问自己的博客，发现文章排序不正确了，知道是读数据库了，没有走ES！ 然后就以为是ES出错了，后来登陆到服务器上面，想看看是怎么了，结果发现在按tab 进行命令提示时，总是报错 cannot create temp file for here-document: No space left on device。"
+  - q: "Who is this for?"
+    a: "For readers interested in No space left on device."
 ---
 
 今天访问自己的博客，发现文章排序不正确了，知道是读数据库了，没有走ES！~然后就以为是ES出错了，后来登陆到服务器上面，想看看是怎么了，结果发现在按tab 进行命令提示时，总是报错 cannot create temp file for here-document: No space left on device。

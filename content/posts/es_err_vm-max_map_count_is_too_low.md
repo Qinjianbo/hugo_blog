@@ -14,6 +14,14 @@ tags:
   - elasticsearch
 # nolastmod: true
 draft: false
+aiSummary: "[Elasticsearch] 启动报错：max virtual memory areas vm.max map count [65530] is too low, increase to at least [262144]"
+aiKeyPoints:
+  - "解决办法（有两种）"
+faq:
+  - q: "What is this article about?"
+    a: "[Elasticsearch] 启动报错：max virtual memory areas vm.max map count [65530] is too low, increase to at least [262144]"
+  - q: "Who is this for?"
+    a: "For readers interested in max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]."
 ---
 
 [Elasticsearch] 启动报错：max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]

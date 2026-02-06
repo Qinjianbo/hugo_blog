@@ -15,6 +15,14 @@ tags:
   - error
 # nolastmod: true
 draft: false
+aiSummary: "今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法"
+aiKeyPoints:
+  - "今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法"
+faq:
+  - q: "What is this article about?"
+    a: "今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法"
+  - q: "Who is this for?"
+    a: "For readers interested in 如何解决 error opening dictionary /usr/share/appdata."
 ---
 
 今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法

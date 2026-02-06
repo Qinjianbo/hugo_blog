@@ -16,6 +16,16 @@ tags:
   - AnimateDiff
 # nolastmod: true
 draft: false
+aiSummary: "这是一篇关于AnimateDiff的文章，文章主要从几个方面介绍 AnimateDiff ，包括什么是 AnimateDiff 、如何在Stable Diffustion WebUI 中使用 AnimateDiff 等。本篇文章的内容主要翻译自 。"
+aiKeyPoints:
+  - "AnimateDiff"
+  - "什么是 AnimateDiff ?"
+  - "怎么在 Stable Diffustion WebUI 中使用 AnimateDiff ?"
+faq:
+  - q: "What is this article about?"
+    a: "这是一篇关于AnimateDiff的文章，文章主要从几个方面介绍 AnimateDiff ，包括什么是 AnimateDiff 、如何在Stable Diffustion WebUI 中使用 AnimateDiff 等。本篇文章的内容主要翻译自 。"
+  - q: "Who is this for?"
+    a: "For readers interested in Animatediff 简介."
 ---
 
 这是一篇关于AnimateDiff的文章，文章主要从几个方面介绍 ```AnimateDiff```，包括什么是 ```AnimateDiff```、如何在Stable Diffustion WebUI 中使用 ```AnimateDiff``` 等。本篇文章的内容主要翻译自 [```AnimateDiff``` 的github项目](https://github.com/continue-revolution/sd-webui-animatediff)。

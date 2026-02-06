@@ -15,6 +15,16 @@ tags:
   - MetaMCP
   - 工具管理
 draft: false
+aiSummary: "随着AI工具的发展，各种MCP(Model Context Protocol)服务层出不穷。如何高效管理这些MCP成为了一个重要问题。本文将介绍MetaMCP这个强大的MCP管理工具，帮助你统一管理所有的MCP服务。"
+aiKeyPoints:
+  - "MetaMCP简介"
+  - "部署MetaMCP"
+  - "云端版本"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "随着AI工具的发展，各种MCP(Model Context Protocol)服务层出不穷。如何高效管理这些MCP成为了一个重要问题。本文将介绍MetaMCP这个强大的MCP管理工具，帮助你统一管理所有的MCP服务。"
+  - q: "适合谁阅读？"
+    a: "适合关注“MetaMCP：统一管理你的所有MCP”相关主题的读者。"
 ---
 
 随着AI工具的发展，各种MCP(Model Context Protocol)服务层出不穷。如何高效管理这些MCP成为了一个重要问题。本文将介绍MetaMCP这个强大的MCP管理工具，帮助你统一管理所有的MCP服务。

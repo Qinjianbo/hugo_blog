@@ -4,9 +4,29 @@
   <a class="home-banner__link"
      href="{{ $banner.url }}"
      {{- if $banner.newTab }} target="_blank" rel="noopener noreferrer"{{- end }}>
-    <img class="home-banner__image"
-         src="{{ $banner.image | relURL }}"
-         alt="{{ $banner.alt | default `站点推广横幅` }}">
+    {{- $imgPath := strings.TrimPrefix "/" $banner.image -}}
+    {{- $res := resources.Get $imgPath -}}
+    {{- if $res -}}
+      {{- $small := $res.Resize "672x webp" -}}
+      {{- $large := $res.Resize "1344x webp" -}}
+      <img class="home-banner__image"
+           src="{{ $small.RelPermalink }}"
+           srcset="{{ $small.RelPermalink }} 672w, {{ $large.RelPermalink }} 1344w"
+           sizes="(max-width: 960px) 100vw, 960px"
+           width="{{ $small.Width }}"
+           height="{{ $small.Height }}"
+           alt="{{ $banner.alt | default `站点推广横幅` }}"
+           loading="eager"
+           fetchpriority="high"
+           decoding="async">
+    {{- else -}}
+      <img class="home-banner__image"
+           src="{{ $banner.image | relURL }}"
+           alt="{{ $banner.alt | default `站点推广横幅` }}"
+           loading="eager"
+           fetchpriority="high"
+           decoding="async">
+    {{- end -}}
   </a>
 </section>
 

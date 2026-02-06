@@ -15,6 +15,16 @@ tags:
   - pip
 # nolastmod: true
 draft: false
+aiSummary: "ERROR: Could not install packages due to an OSError: [WinError 5] 拒绝访问。: 'E:\\webui\\sd-webui-aki-v4.2\\python\\Lib\\site-packages\\cv2\\cv2.pyd' Consider using the --user option or check the permissi"
+aiKeyPoints:
+  - "问题"
+  - "解决方案"
+  - "公众号: 无限递归"
+faq:
+  - q: "What is this article about?"
+    a: "ERROR: Could not install packages due to an OSError: [WinError 5] 拒绝访问。: 'E:\\webui\\sd-webui-aki-v4.2\\python\\Lib\\site-packages\\cv2\\cv2.pyd' Consider using the --user option or check the permissi"
+  - q: "Who is this for?"
+    a: "For readers interested in ERROR Could not install packages due to an OSError."
 ---
 
 ERROR: Could not install packages due to an OSError: [WinError 5] 拒绝访问。: 'E:\\webui\\sd-webui-aki-v4.2\\python\\Lib\\site-packages\\cv2\\cv2.pyd'

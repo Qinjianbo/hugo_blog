@@ -12,6 +12,16 @@ tags:
   - 编辑器
   - 开发环境
 draft: false
+aiSummary: "Visual Studio Code（简称VSCode）是微软推出的一款轻量级但功能强大的代码编辑器，深受开发者喜爱。本文将介绍如何在Windows系统上安装VSCode。"
+aiKeyPoints:
+  - "下载VSCode"
+  - "安装步骤"
+  - "初始配置"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "Visual Studio Code（简称VSCode）是微软推出的一款轻量级但功能强大的代码编辑器，深受开发者喜爱。本文将介绍如何在Windows系统上安装VSCode。"
+  - q: "适合谁阅读？"
+    a: "适合关注“如何安装VSCode”相关主题的读者。"
 ---
 
 Visual Studio Code（简称VSCode）是微软推出的一款轻量级但功能强大的代码编辑器，深受开发者喜爱。本文将介绍如何在Windows系统上安装VSCode。

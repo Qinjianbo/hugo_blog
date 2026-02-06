@@ -1,0 +1,10 @@
+{{- $aiSummary := .Params.aiSummary | default .Summary | plainify -}}
+{{- $aiPoints := .Params.aiKeyPoints -}}
+{{- if or $aiSummary $aiPoints }}
+  {{- if $aiSummary }}
+  <meta name="ai:summary" content="{{ $aiSummary }}">
+  {{- end }}
+  {{- if $aiPoints }}
+  <meta name="ai:keypoints" content="{{ delimit $aiPoints " | " }}">
+  {{- end }}
+{{- end }}

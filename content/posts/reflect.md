@@ -14,6 +14,14 @@ tags:
   - reflect
 # nolastmod: true
 draft: false
+aiSummary: "本篇文章记录golang中reflect的使用"
+aiKeyPoints:
+  - "公众号: 无限递归"
+faq:
+  - q: "What is this article about?"
+    a: "本篇文章记录golang中reflect的使用"
+  - q: "Who is this for?"
+    a: "For readers interested in golang中reflect的使用."
 ---
 
 本篇文章记录golang中reflect的使用

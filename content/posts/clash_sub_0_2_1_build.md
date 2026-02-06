@@ -15,6 +15,16 @@ tags:
   - google
 # nolastmod: true
 draft: false
+aiSummary: "从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]"
+aiKeyPoints:
+  - "一、背景与目标"
+  - "背景"
+  - "目标"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]"
+  - q: "适合谁阅读？"
+    a: "适合关注“从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]”相关主题的读者。"
 ---
 
 从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]

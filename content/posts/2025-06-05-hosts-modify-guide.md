@@ -15,6 +15,16 @@ tags:
   - 跨平台
 # nolastmod: true
 draft: false
+aiSummary: "在日常开发、测试或访问特定网站时，我们经常需要修改本地的 hosts 文件来实现域名解析的自定义。本文将介绍在 Windows、macOS 和 Linux 各平台下如何安全、有效地修改 hosts 文件。"
+aiKeyPoints:
+  - "什么是 hosts 文件？"
+  - "各平台 hosts 文件路径"
+  - "Windows 下如何修改 hosts"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "在日常开发、测试或访问特定网站时，我们经常需要修改本地的 hosts 文件来实现域名解析的自定义。本文将介绍在 Windows、macOS 和 Linux 各平台下如何安全、有效地修改 hosts 文件。"
+  - q: "适合谁阅读？"
+    a: "适合关注“各平台下如何修改 hosts”相关主题的读者。"
 ---
 
 在日常开发、测试或访问特定网站时，我们经常需要修改本地的 hosts 文件来实现域名解析的自定义。本文将介绍在 Windows、macOS 和 Linux 各平台下如何安全、有效地修改 hosts 文件。

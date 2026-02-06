@@ -14,6 +14,14 @@ tags:
   - iota
 # nolastmod: true
 draft: false
+aiSummary: "记录一下golang中的iota"
+aiKeyPoints:
+  - "公众号: 无限递归"
+faq:
+  - q: "What is this article about?"
+    a: "记录一下golang中的iota"
+  - q: "Who is this for?"
+    a: "For readers interested in golang中的iota."
 ---
 
 记录一下golang中的iota

@@ -16,6 +16,16 @@ tags:
   - ffmpeg
 # nolastmod: true
 draft: false
+aiSummary: "本篇文章主要讲述如何将gif图片转换成视频。"
+aiKeyPoints:
+  - "在线工具"
+  - "视频编辑软件"
+  - "命令行工具"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "本篇文章主要讲述如何将gif图片转换成视频。"
+  - q: "适合谁阅读？"
+    a: "适合关注“如何将gif转换成mp4”相关主题的读者。"
 ---
 
 本篇文章主要讲述如何将gif图片转换成视频。

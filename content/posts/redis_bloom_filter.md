@@ -15,6 +15,14 @@ tags:
   - bloomfilter
 # nolastmod: true
 draft: false
+aiSummary: "为了在线上使用Redis Bloom Filter，在本地测试一下存储不同量级的数据后，Redis Bloom Filter 占用内存大小以及查询速度。"
+aiKeyPoints:
+  - "公众号: 无限递归"
+faq:
+  - q: "What is this article about?"
+    a: "为了在线上使用Redis Bloom Filter，在本地测试一下存储不同量级的数据后，Redis Bloom Filter 占用内存大小以及查询速度。"
+  - q: "Who is this for?"
+    a: "For readers interested in Redis布隆过滤器|Redis Bloom Filter."
 ---
 
 为了在线上使用Redis Bloom Filter，在本地测试一下存储不同量级的数据后，Redis Bloom Filter 占用内存大小以及查询速度。

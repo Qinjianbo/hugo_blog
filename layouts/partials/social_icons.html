@@ -1,0 +1,20 @@
+<div class="social-icons" {{ with .align}}align="{{.}}" {{- end }}>
+    {{- range site.Params.socialIcons }}
+    <a href="{{ trim .url " " | safeURL }}" target="_blank" rel="noopener noreferrer me"
+        title="{{ (.title | default .name) | title }}">
+        {{ partial "svg.html" . }}
+    </a>
+    {{- end }}
+    {{- with site.Params.homeWechat }}
+    {{- if .image }}
+    <span class="social-wechat" role="button" tabindex="0" aria-label="{{ .title | default "WeChat" }}">
+        {{ partial "svg.html" (dict "name" "wechat") }}
+        <span class="social-wechat__panel" role="tooltip">
+            {{- with .title }}<span class="social-wechat__title">{{ . }}</span>{{- end }}
+            <img src="{{ .image | relURL }}" alt="{{ .alt | default "公众号二维码" }}" loading="lazy" />
+            {{- with .desc }}<span class="social-wechat__desc">{{ . }}</span>{{- end }}
+        </span>
+    </span>
+    {{- end }}
+    {{- end }}
+</div>

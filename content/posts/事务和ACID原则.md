@@ -16,6 +16,14 @@ tags:
   - mysql
 # nolastmod: true
 draft: false
+aiSummary: "MySQL事务和事务的ACID原则简介及简单生活案例！"
+aiKeyPoints:
+  - "什么是事务？"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "MySQL事务和事务的ACID原则简介及简单生活案例！"
+  - q: "适合谁阅读？"
+    a: "适合关注“事务和ACID原则”相关主题的读者。"
 ---
 
 MySQL事务和事务的ACID原则简介及简单生活案例！

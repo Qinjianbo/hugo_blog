@@ -1,0 +1,9 @@
+{{- $cfg := site.Params.homeWechat | default dict -}}
+{{- $image := $cfg.image | default "" -}}
+{{- if and .IsHome $image -}}
+<section class="home-wechat" aria-label="WeChat official account">
+  <div class="home-wechat__qr">
+    <img src="{{ $image | relURL }}" alt="{{ $cfg.alt | default "公众号二维码" }}" loading="lazy" />
+  </div>
+</section>
+{{- end }}

@@ -15,6 +15,14 @@ tags:
   - iconv
 # nolastmod: true
 draft: false
+aiSummary: "Please specify the install prefix of iconv with --with-iconv=<DIR"
+aiKeyPoints:
+  - "Please specify the install prefix of iconv with --with-iconv=<DIR"
+faq:
+  - q: "What is this article about?"
+    a: "Please specify the install prefix of iconv with --with-iconv=<DIR"
+  - q: "Who is this for?"
+    a: "For readers interested in Please specify the install prefix of iconv with --with-iconv=."
 ---
 
 Please specify the install prefix of iconv with --with-iconv=<DIR>

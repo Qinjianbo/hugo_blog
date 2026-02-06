@@ -1,0 +1,29 @@
+{{- $gaID := site.Config.Services.GoogleAnalytics.ID | default "" -}}
+{{- if and (or hugo.IsProduction (eq site.Params.env "production")) $gaID }}
+<script>
+  (function() {
+    var id = "{{ $gaID }}";
+    function loadGA() {
+      if (window.__gaLoaded) return;
+      window.__gaLoaded = true;
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", id);
+    }
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(loadGA, { timeout: 3000 });
+    } else {
+      setTimeout(loadGA, 2000);
+    }
+    window.addEventListener("load", function() {
+      setTimeout(loadGA, 0);
+    }, { once: true });
+  })();
+</script>
+{{- end }}

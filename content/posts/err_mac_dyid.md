@@ -16,6 +16,16 @@ tags:
   - openssl
 # nolastmod: true
 draft: false
+aiSummary: "在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
+aiKeyPoints:
+  - "在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl"
+  - "1"
+  - "0"
+faq:
+  - q: "What is this article about?"
+    a: "在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
+  - q: "Who is this for?"
+    a: "For readers interested in MAC dyld Library not loaded /usr/local/opt/openssl/lib/libssl."
 ---
 
 在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib

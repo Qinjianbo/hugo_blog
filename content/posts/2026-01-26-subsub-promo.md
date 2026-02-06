@@ -13,6 +13,16 @@ categories:
 draft: false
 description: "SubSub 代开 ChatGPT Plus，无需外卡，附 6 张 5 美元优惠券（有效期至 2026-01-30 00:00:00）。"
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/8.jpg
+aiSummary: "SubSub 代开 ChatGPT Plus，无需外卡，附 6 张 5 美元优惠券（有效期至 2026-01-30 00:00:00）。"
+aiKeyPoints:
+  - "邀请注册链接"
+  - "为什么选 SubSub"
+  - "下单三步"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "SubSub 代开 ChatGPT Plus，无需外卡，附 6 张 5 美元优惠券（有效期至 2026-01-30 00:00:00）。"
+  - q: "适合谁阅读？"
+    a: "适合关注“三步升级 ChatGPT Plus，限时 5 美元优惠券”相关主题的读者。"
 ---
 
 想用海外 AI 会员却没有外卡？用 SubSub 走官方通道，三步就能升级 ChatGPT Plus。本文附送 6 张 5 美元优惠券（有效期到 **2026-01-30 00:00:00**），记得先领后付。

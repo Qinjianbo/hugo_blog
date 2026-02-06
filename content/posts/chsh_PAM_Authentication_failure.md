@@ -16,6 +16,14 @@ tags:
   - oh-my-zsh
 # nolastmod: true
 draft: false
+aiSummary: "今天在装oh my zsh时遇到错误chsh: PAM: Authentication failure"
+aiKeyPoints:
+  - "今天在装oh my zsh时遇到错误chsh: PAM: Authentication failure"
+faq:
+  - q: "What is this article about?"
+    a: "今天在装oh my zsh时遇到错误chsh: PAM: Authentication failure"
+  - q: "Who is this for?"
+    a: "For readers interested in chsh PAM Authentication failure."
 ---
 
 今天在装oh my zsh时遇到错误chsh: PAM: Authentication failure

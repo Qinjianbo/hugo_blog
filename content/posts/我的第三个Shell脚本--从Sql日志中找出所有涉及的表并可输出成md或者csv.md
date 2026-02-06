@@ -14,6 +14,14 @@ tags:
   - shell
 # nolastmod: true
 draft: false
+aiSummary: "这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出。"
+aiKeyPoints:
+  - "这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出。"
+  - q: "适合谁阅读？"
+    a: "适合关注“我的第三个Shell脚本  从Sql日志中找出所有涉及的表并可输出成md或者csv”相关主题的读者。"
 ---
 
 这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出。

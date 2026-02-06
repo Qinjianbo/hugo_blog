@@ -1,0 +1,39 @@
+AI Index for boboidea.com
+Updated: 2026-02-06
+
+Purpose
+- Provide a concise index for AI systems to discover, summarize, and cite site content.
+
+Site
+- Name: 胡巴的小站
+- URL: https://www.boboidea.com/
+- Languages: zh, en
+- Focus: AI 实践、n8n 自动化、工程与效率工具
+
+Start Here
+- /posts/
+- /archives/
+- /categories/
+- /tags/
+
+Latest
+- https://www.boboidea.com/posts/2026-02-06-compound-interest-start-early/
+- https://www.boboidea.com/posts/2026-02-04-cost-basis-pitfall/
+- https://www.boboidea.com/posts/2026-02-03-ai%E6%8F%90%E6%95%88%E5%90%8E%E5%8F%8D%E8%80%8C%E6%9B%B4%E5%BF%99-3%E4%B8%AA%E9%97%AE%E9%A2%98%E6%83%B3%E9%80%9A%E6%8A%80%E6%9C%AF%E4%B8%8E%E4%BA%BA%E6%80%A7%E5%85%B3%E7%B3%BB/
+- https://www.boboidea.com/posts/2026-02-01-bond-basis-point-duration/
+- https://www.boboidea.com/posts/2026-02-01-investing-focus-on-controllables/
+- https://www.boboidea.com/posts/2026-02-01-%E4%BB%A3%E7%A0%81%E8%BF%81%E7%A7%BB%E4%B8%8D%E5%86%8D%E6%98%AF%E4%BD%93%E5%8A%9B%E6%B4%BB/
+- https://www.boboidea.com/posts/2026-01-31-fed-qt-explained/
+- https://www.boboidea.com/posts/2026-01-31-%E5%85%A8%E7%A8%8B%E7%A5%A8%E6%8A%A2%E6%9D%AD%E5%B7%9E%E5%93%88%E5%B0%94%E6%BB%A8/
+- https://www.boboidea.com/en/about/me/
+- https://www.boboidea.com/en/about/skills/
+
+Key Topics
+- AI Agent / ReAct
+- n8n 工作流自动化
+- RAG / 向量检索
+- MCP / 多代理协作
+- 工程效率与工具链
+
+Contact
+- Author: 胡巴

@@ -15,6 +15,15 @@ tags:
   - ffmpeg
 # nolastmod: true
 draft: false
+aiSummary: "这篇文章主要介绍如何使用ffmpeg将一组图片转换成gif图片。"
+aiKeyPoints:
+  - "将图片转换为 GIF"
+  - "将图片转换为 MP4"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "这篇文章主要介绍如何使用ffmpeg将一组图片转换成gif图片。"
+  - q: "适合谁阅读？"
+    a: "适合关注“如何使用ffmpeg将图片转换成gif”相关主题的读者。"
 ---
 
 这篇文章主要介绍如何使用ffmpeg将一组图片转换成gif图片。

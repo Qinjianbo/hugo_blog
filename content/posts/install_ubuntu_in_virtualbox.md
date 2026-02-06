@@ -16,6 +16,14 @@ tags:
   - 虚拟机
 # nolastmod: true
 draft: false
+aiSummary: "本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。"
+aiKeyPoints:
+  - "本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴"
+faq:
+  - q: "What is this article about?"
+    a: "本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。"
+  - q: "Who is this for?"
+    a: "For readers interested in windows下使用vitualbox进行ubuntu安装."
 ---
 
 本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。

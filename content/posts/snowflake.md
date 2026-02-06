@@ -15,6 +15,16 @@ tags:
   - 雪花算法
 # nolastmod: true
 draft: false
+aiSummary: "本文主要介绍分布式唯一ID生成算法--雪花算法。"
+aiKeyPoints:
+  - "分布式唯一ID的要求"
+  - "twitter雪花算法原理"
+  - "twitter雪花算法的优缺点"
+faq:
+  - q: "What is this article about?"
+    a: "本文主要介绍分布式唯一ID生成算法--雪花算法。"
+  - q: "Who is this for?"
+    a: "For readers interested in twitter雪花算法|snowflake."
 ---
 
 本文主要介绍分布式唯一ID生成算法--雪花算法。

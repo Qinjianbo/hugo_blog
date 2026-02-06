@@ -16,6 +16,14 @@ tags:
   - openconnect
 # nolastmod: true
 draft: false
+aiSummary: "公司的vpn是使用globalprotect来进行连接的，但是在ubuntu下没有globalprotect的客户端可以使用"
+aiKeyPoints:
+  - "公司的vpn是使用globalprotect来进行连接的，但是在ubuntu下没有globalprotect的客户端可以使用"
+faq:
+  - q: "What is this article about?"
+    a: "公司的vpn是使用globalprotect来进行连接的，但是在ubuntu下没有globalprotect的客户端可以使用"
+  - q: "Who is this for?"
+    a: "For readers interested in Ubuntu下如何连接GlobalProtect的vpn."
 ---
 
 公司的vpn是使用globalprotect来进行连接的，但是在ubuntu下没有globalprotect的客户端可以使用

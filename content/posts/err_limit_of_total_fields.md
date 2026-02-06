@@ -14,6 +14,14 @@ tags:
   - elasticsearch
 # nolastmod: true
 draft: false
+aiSummary: "更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded"
+aiKeyPoints:
+  - "更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded"
+faq:
+  - q: "What is this article about?"
+    a: "更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded"
+  - q: "Who is this for?"
+    a: "For readers interested in Limit of total fields [1000] in index [xxx] has been exceeded."
 ---
 
 更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded

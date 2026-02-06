@@ -1,6 +1,20 @@
 {{- if or hugo.IsProduction (eq site.Params.env "production") }}
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.Params.ads.client }}" crossorigin="anonymous"></script>
+  {{- partial "ai_meta.html" . }}
+{{- $banner := site.Params.homeBanner -}}
+{{- if and .IsHome $banner $banner.image }}
+  {{- $imgPath := strings.TrimPrefix "/" $banner.image -}}
+  {{- $res := resources.Get $imgPath -}}
+  {{- if $res -}}
+    {{- $small := $res.Resize "672x webp" -}}
+    {{- $large := $res.Resize "1344x webp" -}}
+    <link rel="preload" as="image"
+          href="{{ $small.RelPermalink }}"
+          imagesrcset="{{ $small.RelPermalink }} 672w, {{ $large.RelPermalink }} 1344w"
+          imagesizes="(max-width: 960px) 100vw, 960px">
+  {{- else -}}
+    <link rel="preload" as="image" href="{{ $banner.image | relURL }}">
+  {{- end -}}
+{{- end }}
 <!-- Baidu Analytics (legacy from Dream theme) -->
 <script>
   var _hmt = _hmt || [];

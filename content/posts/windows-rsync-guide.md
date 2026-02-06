@@ -14,6 +14,16 @@ tags:
   - SSH
   - 文件同步
 draft: false
+aiSummary: "在Linux系统中，rsync是一个非常强大的文件同步工具。但在Windows系统中使用rsync往往会遇到各种问题。本文将详细介绍如何在Windows系统中正确配置和使用rsync，以及解决常见的错误。"
+aiKeyPoints:
+  - "问题背景"
+  - "安装MSYS2"
+  - "1. 下载和安装"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "在Linux系统中，rsync是一个非常强大的文件同步工具。但在Windows系统中使用rsync往往会遇到各种问题。本文将详细介绍如何在Windows系统中正确配置和使用rsync，以及解决常见的错误。"
+  - q: "适合谁阅读？"
+    a: "适合关注“Windows系统下使用rsync的完整指南”相关主题的读者。"
 ---
 
 在Linux系统中，rsync是一个非常强大的文件同步工具。但在Windows系统中使用rsync往往会遇到各种问题。本文将详细介绍如何在Windows系统中正确配置和使用rsync，以及解决常见的错误。

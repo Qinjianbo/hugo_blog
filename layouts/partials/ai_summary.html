@@ -1,0 +1,38 @@
+{{- $aiSummary := .Params.aiSummary | default .Summary | plainify -}}
+{{- $aiPoints := .Params.aiKeyPoints -}}
+{{- if or $aiSummary $aiPoints }}
+<section class="ai-summary" aria-label="AI summary">
+  <div class="ai-summary__title">AI 摘要</div>
+  {{- if $aiSummary }}
+  <p class="ai-summary__text">{{ $aiSummary }}</p>
+  {{- end }}
+  {{- if $aiPoints }}
+  <ul class="ai-summary__list">
+    {{- range $aiPoints }}
+    <li>{{ . }}</li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</section>
+
+<style>
+  .ai-summary {
+    margin: 1.25rem 0 1.5rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--entry);
+  }
+  .ai-summary__title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .ai-summary__text {
+    margin: 0 0 0.6rem 0;
+  }
+  .ai-summary__list {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+</style>
+{{- end }}

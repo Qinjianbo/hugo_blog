@@ -14,6 +14,15 @@ tags:
   - tensorflow
 # nolastmod: true
 draft: false
+aiSummary: "TypeError: Expected binary or unicode string, got <tf.Tensor 'EncodeJpeg:0' shape=() dtype=string"
+aiKeyPoints:
+  - "TypeError: Expected binary or unicode string, got <tf"
+  - "Tensor 'EncodeJpeg:0' shape=() dtype=string"
+faq:
+  - q: "What is this article about?"
+    a: "TypeError: Expected binary or unicode string, got <tf.Tensor 'EncodeJpeg:0' shape=() dtype=string"
+  - q: "Who is this for?"
+    a: "For readers interested in TypeError Expected binary or unicode string."
 ---
 
 TypeError: Expected binary or unicode string, got <tf.Tensor 'EncodeJpeg:0' shape=() dtype=string>

@@ -18,6 +18,16 @@ tags:
   - 浏览器调试
 # nolastmod: true
 draft: false
+aiSummary: "在自动化测试、网页抓取、数据采集等场景中，Puppeteer凭借其强大的浏览器自动化能力成为开发者的利器。而n8n作为可视化自动化平台，通过Puppeteer节点可以无缝集成浏览器操作。但要让n8n的Puppeteer节点真正\"驱动\"本地Chrome浏览器，首先需要启动Chrome的远程调试模式。本文将手把手教你如何配置，并详细解读一个简单的n8n-puppeteer工作流。"
+aiKeyPoints:
+  - "一、Chrome调试模式启动指南"
+  - "获取Puppeteer所需的ws地址"
+  - "二、puppeteer.json工作流详解"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "在自动化测试、网页抓取、数据采集等场景中，Puppeteer凭借其强大的浏览器自动化能力成为开发者的利器。而n8n作为可视化自动化平台，通过Puppeteer节点可以无缝集成浏览器操作。但要让n8n的Puppeteer节点真正\"驱动\"本地Chrome浏览器，首先需要启动Chrome的远程调试模式。本文将手把手教你如何配置，并详细解读一个简单的n8n-puppeteer工作流。"
+  - q: "适合谁阅读？"
+    a: "适合关注“n8n自动化实战：Chrome调试模式与Puppeteer节点全解析”相关主题的读者。"
 ---
 
 # n8n自动化实战：Chrome调试模式与Puppeteer节点全解析

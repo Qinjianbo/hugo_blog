@@ -15,6 +15,14 @@ tags:
   - ubuntu
 # nolastmod: true
 draft: false
+aiSummary: "pecl install zookeeper error zookeeper support requires libzookeeper"
+aiKeyPoints:
+  - "pecl install zookeeper error zookeeper support requires libzookeeper"
+faq:
+  - q: "What is this article about?"
+    a: "pecl install zookeeper error zookeeper support requires libzookeeper"
+  - q: "Who is this for?"
+    a: "For readers interested in zookeeper support requires libzookeeper ubuntu."
 ---
 
 pecl install zookeeper error zookeeper support requires libzookeeper

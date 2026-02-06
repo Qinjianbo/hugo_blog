@@ -15,6 +15,16 @@ tags:
   - HTTP
 # nolastmod: true
 draft: false
+aiSummary: "HTTPS = HTTP + 加密 + 认证 + 完整性保护"
+aiKeyPoints:
+  - "第一重保护：加密"
+  - "第二重保护：认证"
+  - "第三重保护：完整性保护"
+faq:
+  - q: "What is this article about?"
+    a: "HTTPS = HTTP + 加密 + 认证 + 完整性保护"
+  - q: "Who is this for?"
+    a: "For readers interested in HTTP学习之HTTPS."
 ---
 
 HTTPS = HTTP + 加密 + 认证 + 完整性保护

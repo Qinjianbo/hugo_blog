@@ -15,6 +15,14 @@ tags:
   - php
 # nolastmod: true
 draft: false
+aiSummary: "PHP中的mkdir写的0777创建出来的并不是0777"
+aiKeyPoints:
+  - "PHP中的mkdir写的0777创建出来的并不是0777"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "PHP中的mkdir写的0777创建出来的并不是0777"
+  - q: "适合谁阅读？"
+    a: "适合关注“PHP中的mkdir如何创建0777权限的文件夹”相关主题的读者。"
 ---
 
 PHP中的mkdir写的0777创建出来的并不是0777

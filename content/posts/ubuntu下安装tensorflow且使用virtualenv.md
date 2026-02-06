@@ -14,6 +14,15 @@ tags:
   - tensorflow
 # nolastmod: true
 draft: false
+aiSummary: "早就知道有tensorflow这么一个东西，一直想玩一下，今天就对其在ubuntu上进行了安装，顺便记录一下安装过程，本来写了个安装脚本，但是忘记保存了。。。安装过程参考官网教程！"
+aiKeyPoints:
+  - "早就知道有tensorflow这么一个东西，一直想玩一下，今天就对其在ubuntu上进行了安装，顺便记录一下安装过程，本来写了个安装脚本，但是忘记保存了"
+  - "安装过程参考官网教程！"
+faq:
+  - q: "What is this article about?"
+    a: "早就知道有tensorflow这么一个东西，一直想玩一下，今天就对其在ubuntu上进行了安装，顺便记录一下安装过程，本来写了个安装脚本，但是忘记保存了。。。安装过程参考官网教程！"
+  - q: "Who is this for?"
+    a: "For readers interested in Ubuntu下安装tensorflow且使用virtualenv."
 ---
 
 早就知道有tensorflow这么一个东西，一直想玩一下，今天就对其在ubuntu上进行了安装，顺便记录一下安装过程，本来写了个安装脚本，但是忘记保存了。。。安装过程参考官网教程！

@@ -11,6 +11,16 @@ tags:
   - n8n
   - 自动化
   - 工作流
+aiSummary: "在n8n工作流中，Extract From File节点是一个强大的数据提取工具，它可以从各种二进制格式的文件中提取数据并转换为JSON格式。本文将详细介绍这个节点的功能和使用方法。"
+aiKeyPoints:
+  - "节点概述"
+  - "支持的操作"
+  - "1. 从CSV提取"
+faq:
+  - q: "What is this article about?"
+    a: "在n8n工作流中，Extract From File节点是一个强大的数据提取工具，它可以从各种二进制格式的文件中提取数据并转换为JSON格式。本文将详细介绍这个节点的功能和使用方法。"
+  - q: "Who is this for?"
+    a: "For readers interested in N8n Extract From File 节点详解."
 ---
 
 在n8n工作流中，Extract From File节点是一个强大的数据提取工具，它可以从各种二进制格式的文件中提取数据并转换为JSON格式。本文将详细介绍这个节点的功能和使用方法。

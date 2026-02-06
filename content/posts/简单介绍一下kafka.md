@@ -16,6 +16,16 @@ tags:
   - 消息队列  # 文章相关标签
 # nolastmod: true
 draft: false
+aiSummary: "Kafka是一个由Apache软件基金会开发的开源流处理平台，它具有高吞吐量、可扩展性和容错性。本文将为您提供Kafka的简要介绍。"
+aiKeyPoints:
+  - "Kafka的核心概念"
+  - "Kafka的特点"
+  - "Kafka的使用场景"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "Kafka是一个由Apache软件基金会开发的开源流处理平台，它具有高吞吐量、可扩展性和容错性。本文将为您提供Kafka的简要介绍。"
+  - q: "适合谁阅读？"
+    a: "适合关注“简单介绍一下kafka”相关主题的读者。"
 ---
 Kafka是一个由Apache软件基金会开发的开源流处理平台，它具有高吞吐量、可扩展性和容错性。本文将为您提供Kafka的简要介绍。
 <!--more-->

@@ -14,6 +14,16 @@ tags:
   - Plan-and-Execute
 # nolastmod: true
 draft: false
+aiSummary: "AI Agent 的浪潮已经到来，但你真的理解它是什么，以及它背后是如何工作的吗？本文将带你从概念到原理，再到亲手实现，彻底搞懂 AI Agent 的核心。"
+aiKeyPoints:
+  - "大模型只是“大脑”，Agent 才是“完全体”"
+  - "如何让大模型有感知能力？"
+  - "AI Agent 能做什么？看这两个例子就懂了"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "AI Agent 的浪潮已经到来，但你真的理解它是什么，以及它背后是如何工作的吗？本文将带你从概念到原理，再到亲手实现，彻底搞懂 AI Agent 的核心。"
+  - q: "适合谁阅读？"
+    a: "适合关注“AI Agent 入门：轻松看懂 ReAct 核心原理”相关主题的读者。"
 ---
 
 # AI Agent 入门：轻松看懂 ReAct 核心原理

@@ -15,6 +15,14 @@ tags:
   - zsh
 # nolastmod: true
 draft: false
+aiSummary: "今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！"
+aiKeyPoints:
+  - "今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！"
+faq:
+  - q: "What is this article about?"
+    a: "今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！"
+  - q: "Who is this for?"
+    a: "For readers interested in Ubuntu安装oh My Zsh并将zsh设置成默认shell."
 ---
 
 今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！

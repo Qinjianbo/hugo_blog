@@ -12,6 +12,16 @@ tags:
   - 开发
   - golang
   - 全栈
+aiSummary: "摘要： 朋友让我帮忙做中型全栈项目，我虽主攻后端，但想到AI如今强大，早闻 Claude Code 业内顶尖，索性借此机会实测一番，看它究竟有多强。 AI编程 ClaudeCode Golang Vue Flutter 全栈开发 程序员转型 未来已来"
+aiKeyPoints:
+  - "首先考考你：全栈项目需要啥？"
+  - "从一句话需求开始"
+  - "真实开发 —— 它一个人干了三个人的活"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "摘要： 朋友让我帮忙做中型全栈项目，我虽主攻后端，但想到AI如今强大，早闻 Claude Code 业内顶尖，索性借此机会实测一番，看它究竟有多强。 AI编程 ClaudeCode Golang Vue Flutter 全栈开发 程序员转型 未来已来"
+  - q: "适合谁阅读？"
+    a: "适合关注“用 Claude Code 从零开始撸一个中型全栈项目”相关主题的读者。"
 ---
 
 # 实测：能否用 Claude Code 从零开始撸一个中型全栈项目

@@ -18,6 +18,16 @@ tags:
   - 自动化
   
 draft: false
+aiSummary: "价值主张 本文详细介绍了 n8n 的 Activation Trigger 节点的功能、使用场景、官方弃用说明及其替代方案，帮助自动化工作流开发者快速理解并迁移到新节点。"
+aiKeyPoints:
+  - "一、什么是 n8n Activation Trigger 节点？"
+  - "二、官方弃用说明与替代方案"
+  - "三、迁移建议"
+faq:
+  - q: "What is this article about?"
+    a: "价值主张 本文详细介绍了 n8n 的 Activation Trigger 节点的功能、使用场景、官方弃用说明及其替代方案，帮助自动化工作流开发者快速理解并迁移到新节点。"
+  - q: "Who is this for?"
+    a: "For readers interested in n8n Activation Trigger节点详解与替代方案."
 ---
 
 > **价值主张**

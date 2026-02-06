@@ -85,6 +85,12 @@ googleAnalytics = "G-839GW747XX"
     Title = "BoBo`s Blog"
     Content = "每天进步一点点，能多一点是一点"
 
+  [params.homeWechat]
+    image = "/img/gongzhonghao.jpeg"
+    title = "关注公众号"
+    desc = "扫码关注，第一时间获取更新。"
+    alt = "公众号二维码"
+
   [params.fuseOpts]
     isCaseSensitive = false
     shouldSort = true

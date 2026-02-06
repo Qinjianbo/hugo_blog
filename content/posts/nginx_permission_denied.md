@@ -15,6 +15,16 @@ tags:
   - permission
 # nolastmod: true
 draft: false
+aiSummary: "ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了错误信息： 26054 open() \"/var/lib/nginx/tmp/client body/0000000005\" failed (13: Permission denied)"
+aiKeyPoints:
+  - "问题出现场景"
+  - "问题排查"
+  - "错误分析"
+faq:
+  - q: "What is this article about?"
+    a: "ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了错误信息： 26054 open() \"/var/lib/nginx/tmp/client body/0000000005\" failed (13: Permission denied)"
+  - q: "Who is this for?"
+    a: "For readers interested in 26054 open /var/lib/nginx/tmp/client_body/0000000005  failed (13 Permission denied)."
 ---
 
 ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了错误信息：*26054 open() "/var/lib/nginx/tmp/client_body/0000000005" failed (13: Permission denied)

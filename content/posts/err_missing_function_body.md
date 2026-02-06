@@ -15,6 +15,14 @@ tags:
   - syntax_err
 # nolastmod: true
 draft: false
+aiSummary: "missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误"
+aiKeyPoints:
+  - "missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误"
+faq:
+  - q: "What is this article about?"
+    a: "missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误"
+  - q: "Who is this for?"
+    a: "For readers interested in missing function body;syntax error unexpected semicolon or newline before."
 ---
 
 missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误

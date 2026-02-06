@@ -11,6 +11,16 @@ tags:
   - n8n
   - 自动化
   - 工作流
+aiSummary: "在n8n工作流中，Convert to File节点是一个非常实用的工具，它可以将输入数据转换为各种文件格式。本文将详细介绍这个节点的功能和使用方法。"
+aiKeyPoints:
+  - "节点概述"
+  - "支持的操作"
+  - "1. 转换为CSV"
+faq:
+  - q: "What is this article about?"
+    a: "在n8n工作流中，Convert to File节点是一个非常实用的工具，它可以将输入数据转换为各种文件格式。本文将详细介绍这个节点的功能和使用方法。"
+  - q: "Who is this for?"
+    a: "For readers interested in N8n Convert To File 节点详解."
 ---
 
 在n8n工作流中，Convert to File节点是一个非常实用的工具，它可以将输入数据转换为各种文件格式。本文将详细介绍这个节点的功能和使用方法。

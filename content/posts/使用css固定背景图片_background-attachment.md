@@ -14,6 +14,15 @@ tags:
   - css
 # nolastmod: true
 draft: false
+aiSummary: "最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动。这里使用到了background-attachment这个css属性。"
+aiKeyPoints:
+  - "最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动"
+  - "这里使用到了background-attachment这个css属性"
+faq:
+  - q: "What is this article about?"
+    a: "最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动。这里使用到了background-attachment这个css属性。"
+  - q: "Who is this for?"
+    a: "For readers interested in 使用css固定背景图片 background-attachment."
 ---
 
 最近在优化自己的博客样式时，需要做一件事情，就是在博客首页添加一张背景图片，然后让该背景图不进行滚动，固定住，只有上面的文字进行滚动。这里使用到了background-attachment这个css属性。

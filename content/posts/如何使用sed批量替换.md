@@ -15,6 +15,14 @@ tags:
   - 批量替换
 # nolastmod: true
 draft: false
+aiSummary: "如何使用sed批量替换？"
+aiKeyPoints:
+  - "如何使用sed批量替换？"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "如何使用sed批量替换？"
+  - q: "适合谁阅读？"
+    a: "适合关注“如何使用sed批量替换?”相关主题的读者。"
 ---
 
 如何使用sed批量替换？

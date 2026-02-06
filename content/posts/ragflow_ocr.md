@@ -12,6 +12,16 @@ tags:
   - OCR
   - 文本识别
   - 布局识别
+aiSummary: "RAGFlow 的 OCR（光学字符识别）系统是其文档理解的核心组件，基于深度学习模型实现了高精度的文本检测和识别。该系统位于 deepdoc/vision 模块中，采用了分离式的文本检测和文本识别架构。"
+aiKeyPoints:
+  - "概述"
+  - "系统架构"
+  - "核心组件"
+faq:
+  - q: "What is this article about?"
+    a: "RAGFlow 的 OCR（光学字符识别）系统是其文档理解的核心组件，基于深度学习模型实现了高精度的文本检测和识别。该系统位于 deepdoc/vision 模块中，采用了分离式的文本检测和文本识别架构。"
+  - q: "Who is this for?"
+    a: "For readers interested in RAGFlow OCR实现机制."
 ---
 
 # RAGFlow OCR实现机制

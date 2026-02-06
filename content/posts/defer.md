@@ -14,6 +14,14 @@ tags:
   - defer
 # nolastmod: true
 draft: false
+aiSummary: "golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。"
+aiKeyPoints:
+  - "公众号: 无限递归"
+faq:
+  - q: "What is this article about?"
+    a: "golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。"
+  - q: "Who is this for?"
+    a: "For readers interested in golang中defer的使用."
 ---
 
 > golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。

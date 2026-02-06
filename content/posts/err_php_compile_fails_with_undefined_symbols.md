@@ -15,6 +15,14 @@ tags:
   - x86_64
 # nolastmod: true
 draft: false
+aiSummary: "PHP compile fails with undefined symbols for architecture x86 64"
+aiKeyPoints:
+  - "PHP compile fails with undefined symbols for architecture x86 64"
+faq:
+  - q: "What is this article about?"
+    a: "PHP compile fails with undefined symbols for architecture x86 64"
+  - q: "Who is this for?"
+    a: "For readers interested in PHP compile fails with undefined symbols for architecture x86_64."
 ---
 
 PHP compile fails with undefined symbols for architecture x86_64

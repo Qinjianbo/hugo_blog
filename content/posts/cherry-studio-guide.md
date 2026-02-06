@@ -15,6 +15,16 @@ tags:
   - AI助手
   - 开发工具
 draft: false
+aiSummary: "Cherry Studio是一款功能强大的跨平台AI聊天助手客户端，支持多种大语言模型(LLM)服务商，为用户提供丰富的AI对话和工具集成体验。本文将全面介绍Cherry Studio的特点及使用方法。"
+aiKeyPoints:
+  - "核心特性"
+  - "1. 多样化LLM服务支持"
+  - "2. 智能助手与对话系统"
+faq:
+  - q: "这篇文章讲什么？"
+    a: "Cherry Studio是一款功能强大的跨平台AI聊天助手客户端，支持多种大语言模型(LLM)服务商，为用户提供丰富的AI对话和工具集成体验。本文将全面介绍Cherry Studio的特点及使用方法。"
+  - q: "适合谁阅读？"
+    a: "适合关注“Cherry Studio：跨平台AI聊天助手客户端全攻略”相关主题的读者。"
 ---
 
 Cherry Studio是一款功能强大的跨平台AI聊天助手客户端，支持多种大语言模型(LLM)服务商，为用户提供丰富的AI对话和工具集成体验。本文将全面介绍Cherry Studio的特点及使用方法。
