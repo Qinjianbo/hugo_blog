@@ -14,7 +14,11 @@ tags:
   - apt-get
   - fix-missing
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "Unable to fetch some archives, maybe run apt-get update or try with --fix-missing"
 aiKeyPoints:
   - "Unable to fetch some archives, maybe run apt-get update or try with --fix-missing"

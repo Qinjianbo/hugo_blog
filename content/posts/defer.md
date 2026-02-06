@@ -13,7 +13,11 @@ categories:
 tags:
   - defer
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "golang中defer好像一个栈一样，在其后声明的表达式会被先行压入“栈”中，然后按照先进后出的顺序在真正return之前进行执行。"
 aiKeyPoints:
   - "公众号: 无限递归"

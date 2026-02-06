@@ -14,7 +14,11 @@ tags:
   - php
   - 二进制安全
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "PHP二进制安全与redis二进制安全写的比较明白的文章链接记录"
 aiKeyPoints:
   - "PHP二进制安全与redis二进制安全写的比较明白的文章链接记录"

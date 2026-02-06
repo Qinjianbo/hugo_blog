@@ -14,7 +14,11 @@ tags:
   - mysql
   - 密码修改
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "新装的mysql，用root用户就是登录不了，无奈只能更改mysql的root用户密码了，我使用的是方案B的方式，方案A不知道为什么用不了。"
 aiKeyPoints:
   - "新装的mysql，用root用户就是登录不了，无奈只能更改mysql的root用户密码了，我使用的是方案B的方式，方案A不知道为什么用不了"

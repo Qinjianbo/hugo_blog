@@ -15,7 +15,11 @@ tags:
   - libssl
   - openssl
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib"
 aiKeyPoints:
   - "在执行nginx -t 时报错：dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl"

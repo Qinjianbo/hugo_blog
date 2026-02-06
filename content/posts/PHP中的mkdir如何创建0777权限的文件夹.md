@@ -14,7 +14,11 @@ tags:
   - mkdir
   - php
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "PHP中的mkdir写的0777创建出来的并不是0777"
 aiKeyPoints:
   - "PHP中的mkdir写的0777创建出来的并不是0777"

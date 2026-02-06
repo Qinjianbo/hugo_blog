@@ -13,7 +13,11 @@ categories:
 tags:
   - shell
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出。"
 aiKeyPoints:
   - "这是一个Shell脚本记录，该脚本通过使用linux下的命令：cat，grep，sed，awk，sort，uniq来对Sql日志进行分析，并自动生成可执行php文件，将结果以csv或md的形式进行输出"

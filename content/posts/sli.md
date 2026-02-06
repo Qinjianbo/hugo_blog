@@ -13,7 +13,11 @@ categories:
 tags:
   - slice
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "关于golang中slice使用时需要注意的问题，未扩容前底层数组未变，修改任意一个slice都有可能导致另一个指向同一个底层数组的slice的值的修改，所以使用过程中需要特别注意。"
 aiKeyPoints:
   - "公众号: 无限递归"

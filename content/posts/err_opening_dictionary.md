@@ -14,7 +14,11 @@ tags:
   - appdata
   - error
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法"
 aiKeyPoints:
   - "今天安装了一个flameshot,但是在打开时报错error opening dictionary /usr/share/appdata，在此记录解决方法"

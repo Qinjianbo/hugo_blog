@@ -14,7 +14,11 @@ tags:
   - YCM
   - vim
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "今天在brew upgrate 后，vim升级了版本，再打开vim编辑文件时报错YCM core library not detected; you need to compile YCM before using it"
 aiKeyPoints:
   - "今天在brew upgrate 后，vim升级了版本，再打开vim编辑文件时报错YCM core library not detected; you need to compile YCM before using it"

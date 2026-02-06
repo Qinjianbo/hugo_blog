@@ -13,7 +13,11 @@ categories:
 tags:
   - shell
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "php -l 检查php文件的语法正确性，但是php -l 总是要一个一个文件的检查，感觉好麻烦，正好还没写过shell脚本，于是借着这个机会学习一下。"
 aiKeyPoints:
   - "初版"

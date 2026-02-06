@@ -14,7 +14,11 @@ tags:
   - golang
   - syntax_err
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误"
 aiKeyPoints:
   - "missing function body;syntax error: unexpected semicolon or newline before {,今天在学习golang时报了这个错误"

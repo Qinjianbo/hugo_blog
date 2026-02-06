@@ -13,7 +13,11 @@ categories:
 tags:
   - elasticsearch
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded"
 aiKeyPoints:
   - "更新ES报错Limit of total fields [1000] in index [xxx] has been exceeded"

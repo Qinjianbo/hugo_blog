@@ -13,7 +13,11 @@ categories:
 tags:
   - reflect
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "本篇文章记录golang中reflect的使用"
 aiKeyPoints:
   - "公众号: 无限递归"

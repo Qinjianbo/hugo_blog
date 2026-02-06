@@ -15,7 +15,11 @@ tags:
   - 文件管理
   - 磁盘清理
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "在Windows操作系统中，随着时间的推移，您的硬盘可能会被大量不必要的文件所占据。学会如何快速查找大文件的位置对于释放磁盘空间和管理存储非常有用。本文将介绍几种在Windows下查找大文件的方法。"
 aiKeyPoints:
   - "使用文件资源管理器"

@@ -13,7 +13,11 @@ categories:
 tags:
   - nginx
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "nginx: [error] open() \"/usr/local/var/run/nginx.pid\" failed 如何解决"
 aiKeyPoints:
   - "问题"

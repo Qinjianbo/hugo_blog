@@ -14,7 +14,11 @@ tags:
   - sed
   - 批量替换
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "如何使用sed批量替换？"
 aiKeyPoints:
   - "如何使用sed批量替换？"

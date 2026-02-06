@@ -14,7 +14,11 @@ tags:
   - 匿名函数
   - 闭包
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "golang中的匿名函数和闭包的区别和用法。匿名函数可以作为函数的入参实现“表现延时”，闭包则可以作为函数返回值来作为函数内部与外部沟通的桥梁,使外部访问函数内部的局部变量。"
 aiKeyPoints:
   - "公众号: 无限递归"

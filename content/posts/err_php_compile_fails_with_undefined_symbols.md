@@ -14,7 +14,11 @@ tags:
   - php
   - x86_64
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "PHP compile fails with undefined symbols for architecture x86 64"
 aiKeyPoints:
   - "PHP compile fails with undefined symbols for architecture x86 64"

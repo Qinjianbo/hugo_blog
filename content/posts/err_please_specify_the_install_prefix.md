@@ -14,7 +14,11 @@ tags:
   - 编译PHP
   - iconv
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "Please specify the install prefix of iconv with --with-iconv=<DIR"
 aiKeyPoints:
   - "Please specify the install prefix of iconv with --with-iconv=<DIR"

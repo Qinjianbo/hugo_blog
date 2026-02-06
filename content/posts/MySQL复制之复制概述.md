@@ -14,7 +14,11 @@ tags:
   - mysql
   - 主从复制
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "记录mysql学习过程中对复制概念的学习。"
 aiKeyPoints:
   - "复制的概述："

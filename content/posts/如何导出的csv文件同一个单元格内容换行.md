@@ -13,7 +13,11 @@ categories:
 tags:
   - csv
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "导出csv时，使同一个单元格的内容换行的方法。"
 aiKeyPoints:
   - "导出csv时，使同一个单元格的内容换行的方法"

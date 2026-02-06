@@ -13,7 +13,11 @@ categories:
 tags:
   - iota
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "记录一下golang中的iota"
 aiKeyPoints:
   - "公众号: 无限递归"

@@ -13,7 +13,11 @@ categories:
 tags:
   - struct
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "golang中结构体嵌套时，如果使用了指针类型的嵌套，则需要注意在拿内部结构体属性时，内部结构体一定时要被实例化后的，不能是nil，否则会导致空指针异常。"
 aiKeyPoints:
   - "公众号: 无限递归"

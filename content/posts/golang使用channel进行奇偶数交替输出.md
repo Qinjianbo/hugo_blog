@@ -13,7 +13,11 @@ categories:
 tags:
   - channel
 # nolastmod: true
-draft: false
+draft: true
+build:
+  render: never
+  list: never
+  publishResources: false
 aiSummary: "golang中使用channel相关知识控制协程交替输出奇偶数。"
 aiKeyPoints:
   - "使用两个channel实现"
