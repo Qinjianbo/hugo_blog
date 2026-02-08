@@ -7,8 +7,7 @@
     {{- end }}
   {{- end }}
   {{- if gt (len $items) 0 }}
-<script type="application/ld+json">
-{{- dict "@context" "https://schema.org" "@type" "FAQPage" "mainEntity" $items | jsonify | safeJS -}}
-</script>
+{{- $json := dict "@context" "https://schema.org" "@type" "FAQPage" "mainEntity" $items | jsonify | safeJS -}}
+{{- printf "<script type=\"application/ld+json\">%s</script>" $json | safeHTML -}}
   {{- end }}
 {{- end }}
