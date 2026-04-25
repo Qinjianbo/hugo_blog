@@ -24,6 +24,26 @@ hugo new content posts/文章标题.md
 archetypes/posts.md
 ```
 
+## 部署
+
+`deploy.sh` 不再包含任何服务器登录信息，部署前需要先设置环境变量：
+
+```bash
+export REMOTE_USER="your-user"
+export REMOTE_HOST="your-server-host"
+export REMOTE_PATH="/path/to/deploy-dir"
+
+# 可选
+export SSH_PORT="22"
+export BUILD_DIR="public"
+```
+
+然后执行：
+
+```bash
+./deploy.sh
+```
+
 ## Git 操作命令
 
 ```bash
