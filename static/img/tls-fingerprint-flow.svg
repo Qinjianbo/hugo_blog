@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">TLS 指纹识别流程</title>
+  <desc id="desc">浏览器在 TLS ClientHello 中暴露版本、加密套件、扩展、ALPN 等特征，服务端据此计算 JA3/JA4 指纹并结合行为风控评分。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eef6f3"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#0f172a" flood-opacity=".12"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2 L10 6 L2 10 Z" fill="#2563eb"/>
+    </marker>
+    <style>
+      .title{font:700 38px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#0f172a}
+      .subtitle{font:400 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#475569}
+      .box-title{font:700 22px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#0f172a}
+      .text{font:400 17px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#334155}
+      .mono{font:600 16px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#1e293b}
+      .badge{font:700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#ffffff}
+      .card{fill:#ffffff;stroke:#dbe4ee;stroke-width:2;filter:url(#shadow)}
+      .chip{fill:#eaf2ff;stroke:#bfdbfe;stroke-width:1.5}
+      .warn{fill:#fff7ed;stroke:#fed7aa;stroke-width:1.5}
+      .ok{fill:#ecfdf5;stroke:#bbf7d0;stroke-width:1.5}
+      .line{stroke:#2563eb;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1200" height="680" fill="url(#bg)"/>
+  <text x="70" y="72" class="title">TLS 指纹：HTTP Header 之外的客户端画像</text>
+  <text x="70" y="108" class="subtitle">不要只看 User-Agent，还要看 TLS 握手、HTTP/2、IP 信誉和真实行为链路。</text>
+
+  <rect x="70" y="170" width="280" height="300" rx="18" class="card"/>
+  <circle cx="122" cy="224" r="28" fill="#2563eb"/>
+  <text x="112" y="231" class="badge">1</text>
+  <text x="165" y="218" class="box-title">客户端发起 HTTPS</text>
+  <text x="165" y="250" class="text">浏览器、App、脚本或代理</text>
+  <rect x="104" y="292" width="212" height="42" rx="12" class="chip"/>
+  <text x="126" y="319" class="mono">User-Agent: Chrome</text>
+  <rect x="104" y="350" width="212" height="42" rx="12" class="warn"/>
+  <text x="126" y="377" class="mono">TLS 栈可能不像 Chrome</text>
+  <text x="104" y="430" class="text">Header 容易伪造，TLS 握手更能反映底层客户端。</text>
+
+  <path d="M370 320 C415 320 425 320 470 320" class="line"/>
+
+  <rect x="470" y="150" width="300" height="340" rx="18" class="card"/>
+  <circle cx="522" cy="204" r="28" fill="#2563eb"/>
+  <text x="512" y="211" class="badge">2</text>
+  <text x="565" y="198" class="box-title">ClientHello 特征</text>
+  <text x="565" y="230" class="text">TLS 握手中可观察的信息</text>
+  <rect x="505" y="275" width="230" height="36" rx="10" class="chip"/>
+  <text x="526" y="299" class="mono">TLS version</text>
+  <rect x="505" y="324" width="230" height="36" rx="10" class="chip"/>
+  <text x="526" y="348" class="mono">Cipher suites</text>
+  <rect x="505" y="373" width="230" height="36" rx="10" class="chip"/>
+  <text x="526" y="397" class="mono">Extensions / Groups</text>
+  <rect x="505" y="422" width="230" height="36" rx="10" class="chip"/>
+  <text x="526" y="446" class="mono">ALPN: h2/http1.1</text>
+
+  <path d="M790 320 C835 320 845 320 890 320" class="line"/>
+
+  <rect x="890" y="170" width="240" height="300" rx="18" class="card"/>
+  <circle cx="942" cy="224" r="28" fill="#2563eb"/>
+  <text x="932" y="231" class="badge">3</text>
+  <text x="985" y="218" class="box-title">计算与评分</text>
+  <text x="985" y="250" class="text">JA3 / JA4 + 行为风控</text>
+  <rect x="925" y="292" width="170" height="42" rx="12" class="ok"/>
+  <text x="952" y="319" class="mono">JA3 / JA4</text>
+  <rect x="925" y="350" width="170" height="42" rx="12" class="ok"/>
+  <text x="947" y="377" class="mono">风险分数</text>
+  <text x="925" y="430" class="text">高风险时限速、挑战、二次验证或人工审核。</text>
+
+  <rect x="120" y="545" width="960" height="70" rx="16" fill="#0f172a"/>
+  <text x="155" y="588" style="font:700 20px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#fff">核心原则：</text>
+  <text x="270" y="588" style="font:400 20px -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#dbeafe">TLS 指纹不是单点封禁依据，而是和行为、IP、账号、验证码一起组成风控评分。</text>
+</svg>
