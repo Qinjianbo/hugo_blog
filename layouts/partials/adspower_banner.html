@@ -1,0 +1,31 @@
+{{/* AdsPower affiliate banner; uses params.adspowerBanner */}}
+{{- $banner := . -}}
+<section class="adspower-banner" aria-label="AdsPower promotion">
+  <a class="adspower-banner__link"
+     href="{{ $banner.url }}"
+     {{- if $banner.newTab }} target="_blank" rel="noopener noreferrer"{{- end }}>
+    <img class="adspower-banner__image"
+         src="{{ $banner.image }}"
+         width="2520"
+         height="1320"
+         alt="{{ $banner.alt | default `AdsPower 推广横幅` }}"
+         loading="lazy"
+         decoding="async">
+  </a>
+</section>
+
+<style>
+  .adspower-banner {
+    margin: 2rem 0 1.5rem;
+  }
+  .adspower-banner__link {
+    display: block;
+  }
+  .adspower-banner__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.25);
+  }
+</style>

@@ -36,12 +36,24 @@
 
   {{- partial "ai_summary.html" . }}
 
+  {{- with site.Params.homeBanner }}
+    {{- if and (in site.Params.mainSections $.Type) .image .url }}
+    {{- partial "home_banner.html" . }}
+    {{- end }}
+  {{- end }}
+
   {{- if .Content }}
   <div class="post-content md-content">
     {{- if not (.Param "disableAnchoredHeadings") }}
     {{- partial "anchored_headings.html" .Content -}}
     {{- else }}{{ .Content }}{{ end }}
   </div>
+  {{- end }}
+
+  {{- with site.Params.adspowerBanner }}
+    {{- if and (in site.Params.mainSections $.Type) .image .url }}
+    {{- partial "adspower_banner.html" . }}
+    {{- end }}
   {{- end }}
 
   <footer class="post-footer">

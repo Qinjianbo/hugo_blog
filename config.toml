@@ -82,6 +82,12 @@ googleAnalytics = "G-839GW747XX"
     alt = "促销广告"                     # 图片替代文本
     newTab = true                      # 是否新开标签页
 
+  [params.adspowerBanner]
+    image = "https://app-global.adspower.net/static/jpg/reward_post_1_CN.DotqRIAo.jpg"
+    url = "https://www.adspower.net/share/XheVgH"
+    alt = "AdsPower 推荐奖励"
+    newTab = true
+
   [params.homeInfoParams]
     Title = "BoBo`s Blog"
     Content = "每天进步一点点，能多一点是一点"
