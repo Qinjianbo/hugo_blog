@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">ChatGPT Plus Bolivia Google Play subscription price diagram</title>
+  <desc id="desc">A simple cover image showing the ChatGPT Plus Bolivia Google Play route and the BOB 139.99 monthly price.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#12251f"/>
+      <stop offset="52%" stop-color="#172c35"/>
+      <stop offset="100%" stop-color="#24211b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#18a058"/>
+      <stop offset="50%" stop-color="#f2c94c"/>
+      <stop offset="100%" stop-color="#d94444"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="52" y="54" width="1096" height="522" rx="30" fill="#ffffff" opacity="0.06"/>
+  <rect x="86" y="88" width="1028" height="454" rx="26" fill="#0f1717" opacity="0.86" filter="url(#shadow)"/>
+  <rect x="86" y="88" width="1028" height="10" rx="5" fill="url(#accent)"/>
+
+  <g transform="translate(130 135)">
+    <text x="0" y="48" fill="#f6f7f2" font-family="Inter, Arial, sans-serif" font-size="48" font-weight="700">ChatGPT Plus</text>
+    <text x="0" y="92" fill="#d6ded8" font-family="Inter, Arial, sans-serif" font-size="26">Bolivia Google Play route</text>
+  </g>
+
+  <g transform="translate(145 270)">
+    <rect x="0" y="0" width="250" height="140" rx="18" fill="#142722" stroke="#2b6e51" stroke-width="2"/>
+    <text x="28" y="48" fill="#9ee6bd" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Step 1</text>
+    <text x="28" y="88" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Play Country</text>
+    <text x="28" y="119" fill="#b9c8bf" font-family="Inter, Arial, sans-serif" font-size="20">Bolivia profile</text>
+  </g>
+  <path d="M420 340 H500" stroke="#88948d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M500 340 l-18 -14 v28 z" fill="#88948d"/>
+  <g transform="translate(530 270)">
+    <rect x="0" y="0" width="250" height="140" rx="18" fill="#2a2514" stroke="#b28a20" stroke-width="2"/>
+    <text x="28" y="48" fill="#f2d675" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Step 2</text>
+    <text x="28" y="88" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Check Price</text>
+    <text x="28" y="119" fill="#d8cfb5" font-family="Inter, Arial, sans-serif" font-size="20">BOB 139.99 / mo</text>
+  </g>
+  <path d="M805 340 H885" stroke="#88948d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M885 340 l-18 -14 v28 z" fill="#88948d"/>
+  <g transform="translate(915 270)">
+    <rect x="0" y="0" width="150" height="140" rx="18" fill="#2b1717" stroke="#b94a4a" stroke-width="2"/>
+    <text x="28" y="48" fill="#ff9999" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700">Step 3</text>
+    <text x="28" y="88" fill="#ffffff" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Pay</text>
+    <text x="28" y="119" fill="#e2c1c1" font-family="Inter, Arial, sans-serif" font-size="20">Card risk</text>
+  </g>
+
+  <g transform="translate(138 465)">
+    <rect x="0" y="0" width="930" height="46" rx="23" fill="#ffffff" opacity="0.08"/>
+    <text x="26" y="31" fill="#d9e0db" font-family="Inter, Arial, sans-serif" font-size="21">Key check: currency must show BOB before confirmation. Final card charge may vary.</text>
+  </g>
+</svg>
