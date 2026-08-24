@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/ -->
+<html lang="zh-CN" dir="ltr" data-scheme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="完整拆解 Stripe 协议支付的技术实现：从浏览器 HAR 抓包逆向 Stripe Checkout Session 全流程，到纯 API 无浏览器实现 ConfirmationToken 创建、PaymentIntent 确认、3DS 验证挑战，再到 TLS 指纹对抗、代理池架构和反欺诈绕过。附 5 套不同技术栈的完整实现源码下载。">
+<title>Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现</title>
+
+
+<link rel="canonical" href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="preload" as="style" href="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/css2">
+<link rel="stylesheet" href="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/css2">
+
+
+<link rel="stylesheet" href="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/style.min.a2bf8a31dd38effd9e8b27128b1a2f407446a71dcf0b7d93eeb8c57bb6f9cc04.css"><meta property="og:title" content="Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现">
+<meta property="og:description" content="完整拆解 Stripe 协议支付的技术实现：从浏览器 HAR 抓包逆向 Stripe Checkout Session 全流程，到纯 API 无浏览器实现 ConfirmationToken 创建、PaymentIntent 确认、3DS 验证挑战，再到 TLS 指纹对抗、代理池架构和反欺诈绕过。附 5 套不同技术栈的完整实现源码下载。">
+<meta property="og:url" content="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/">
+<meta property="og:site_name" content="言零的博客 - 20260405">
+<meta property="og:type" content="article"><meta property="article:section" content="Posts"><meta property="article:tag" content="Stripe"><meta property="article:tag" content="协议支付"><meta property="article:tag" content="自动化"><meta property="article:tag" content="ConfirmationToken"><meta property="article:tag" content="PaymentIntent"><meta property="article:tag" content="TLS指纹"><meta property="article:tag" content="逆向工程"><meta property="article:tag" content="Checkout Session"><meta property="article:tag" content="支付安全"><meta property="article:tag" content="API"><meta property="article:published_time" content="2026-08-16T22:00:00+08:00"><meta property="article:modified_time" content="2026-08-16T22:00:00+08:00">
+<meta name="twitter:title" content="Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现">
+<meta name="twitter:description" content="完整拆解 Stripe 协议支付的技术实现：从浏览器 HAR 抓包逆向 Stripe Checkout Session 全流程，到纯 API 无浏览器实现 ConfirmationToken 创建、PaymentIntent 确认、3DS 验证挑战，再到 TLS 指纹对抗、代理池架构和反欺诈绕过。附 5 套不同技术栈的完整实现源码下载。">
+
+<script src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/hm.js"></script><script defer="" src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;SDZvDCIq-3er2UKht5fIrl2UvvIrJxi6hZVxBfIa&quot;}"></script>
+
+
+
+
+
+<script async="" src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M3JN483VK6', {
+    'anonymize_ip': true
+  });
+</script><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?459a34335680d2c2b91885b9497df7ff";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    <link rel="stylesheet" href="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/photoswipe.css"></head>
+    <body class="
+    article-page
+    " style="transition: background-color 0.3s;">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="https://blog.caowo.de/">言零的博客 - 20260405</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/posts/">
+                
+                <span>文章 / Posts</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/categories/">
+                
+                <span>分类 / Categories</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/tags/">
+                
+                <span>标签 / Tags</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/about/">
+                
+                <span>关于 / About</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/links/">
+                
+                <span>友链 / Links</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/search/">
+                
+                <span>🔍 搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="8" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="16" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+
+    
+    <div class="sidebar-ads-desktop">
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+    </div>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <line x1="5" y1="9" x2="19" y2="9"></line>
+  <line x1="5" y1="15" x2="19" y2="15"></line>
+  <line x1="11" y1="4" x2="7" y2="20"></line>
+  <line x1="17" y1="4" x2="13" y2="20"></line>
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ul>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E9%9B%B6%E6%96%B9%E6%B3%95%E8%AE%BA%E5%A6%82%E4%BD%95%E9%80%86%E5%90%91-stripe-%E6%94%AF%E4%BB%98%E5%8D%8F%E8%AE%AE">零、方法论：如何逆向 Stripe 支付协议</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#01-%E4%BB%80%E4%B9%88%E6%98%AF-har-%E6%96%87%E4%BB%B6">0.1 什么是 HAR 文件</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#02-har-%E5%88%86%E6%9E%90%E6%B5%81%E7%A8%8B">0.2 HAR 分析流程</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#03-%E7%BB%8F%E8%BF%87%E9%AA%8C%E8%AF%81%E7%9A%84-har-%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF">0.3 经过验证的 HAR 请求链路</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%80%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A%E5%8D%8F%E8%AE%AE%E6%94%AF%E4%BB%98">一、为什么要做"协议支付"</a></li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%BA%8Cstripe-checkout-session-%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F">二、Stripe Checkout Session 的两种模式</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#21-custom-%E6%A8%A1%E5%BC%8F-oaics_-%E5%89%8D%E7%BC%80">2.1 Custom 模式 (<code>oaics_</code> 前缀)</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#22-hosted-%E6%A8%A1%E5%BC%8F-cs_live_-%E5%89%8D%E7%BC%80">2.2 Hosted 模式 (<code>cs_live_</code> 前缀)</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#23-%E5%86%B3%E5%AE%9A%E6%80%A7%E5%8F%82%E6%95%B0checkout_ui_mode">2.3 决定性参数：<code>checkout_ui_mode</code></a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#24-_stripe_version-%E7%9A%84%E7%89%88%E6%9C%AC%E5%B7%AE%E5%BC%82">2.4 <code>_stripe_version</code> 的版本差异</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#25-%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%8C%E6%95%B4%E5%AD%97%E6%AE%B5%E5%AF%B9%E6%AF%94">2.5 两种模式的完整字段对比</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%89custom-%E6%A8%A1%E5%BC%8F%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3">三、Custom 模式协议流程详解</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#31-%E5%88%9B%E5%BB%BA-confirmationtoken">3.1 创建 ConfirmationToken</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#32-%E7%A1%AE%E8%AE%A4-checkout">3.2 确认 Checkout</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#33-elements-session--%E8%8E%B7%E5%8F%96%E6%94%AF%E4%BB%98%E9%85%8D%E7%BD%AE">3.3 Elements Session — 获取支付配置</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#34-%E7%A8%8E%E5%8A%A1%E5%9C%B0%E5%9D%80%E4%BC%98%E5%8C%96--us-%E5%85%8D%E7%A8%8E%E5%9C%B0%E5%9D%80%E6%B6%88%E9%99%A4-vat">3.4 税务地址优化 — US 免税地址消除 VAT</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#35-paymentintent-%E7%A1%AE%E8%AE%A4--stripe-%E4%BE%A7%E6%89%A3%E6%AC%BE">3.5 PaymentIntent 确认 — Stripe 侧扣款</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#36-cookie-%E9%9A%94%E7%A6%BB%E6%9E%B6%E6%9E%84">3.6 Cookie 隔离架构</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%9B%9Bhosted-%E6%A8%A1%E5%BC%8F%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3">四、Hosted 模式协议流程详解</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#41-payment-page-%E5%88%9D%E5%A7%8B%E5%8C%96">4.1 Payment Page 初始化</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#42-elements-sessionhosted-%E6%A8%A1%E5%BC%8F%E7%89%B9%E6%AE%8A%E5%AD%97%E6%AE%B5">4.2 Elements Session（Hosted 模式特殊字段）</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#43-hosted-%E6%A8%A1%E5%BC%8F%E7%9A%84-confirm-%E8%AF%B7%E6%B1%82">4.3 Hosted 模式的 Confirm 请求</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#44-approve-%E6%9C%BA%E5%88%B6%E4%B8%8E-sentinel-token">4.4 Approve 机制与 Sentinel Token</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%BA%943ds-%E9%AA%8C%E8%AF%81%E6%8C%91%E6%88%98">五、3DS 验证挑战</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#51-challenge-%E7%B1%BB%E5%9E%8B">5.1 Challenge 类型</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#52-verify_challenge-%E5%AE%8C%E6%95%B4%E8%AF%B7%E6%B1%82%E6%A0%BC%E5%BC%8F">5.2 verify_challenge 完整请求格式</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#53-hcaptcha-enterprise-%E7%9A%84%E7%89%B9%E6%AE%8A%E6%80%A7">5.3 hCaptcha Enterprise 的特殊性</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#54-%E6%97%B6%E6%95%88%E6%80%A7%E9%97%AE%E9%A2%98">5.4 时效性问题</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#55-3ds-vs-hcaptcha-%E7%9A%84%E5%8C%BA%E5%88%AB">5.5 3DS vs hCaptcha 的区别</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%85%ADtls-%E6%8C%87%E7%BA%B9%E5%AF%B9%E6%8A%97">六、TLS 指纹对抗</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#61-%E6%8C%87%E7%BA%B9%E4%BC%AA%E8%A3%85">6.1 指纹伪装</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#62-%E6%8C%87%E7%BA%B9%E8%BD%AE%E6%8D%A2%E7%AD%96%E7%95%A5">6.2 指纹轮换策略</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#63-tls-%E6%8C%87%E7%BA%B9%E4%B8%8E-user-agent-%E4%B8%80%E8%87%B4%E6%80%A7">6.3 TLS 指纹与 User-Agent 一致性</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#64-http-%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC">6.4 HTTP 协议版本</a></li>
+      </ul>
+    </li>
+    <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%83stripejs-%E6%8C%87%E7%BA%B9%E5%8F%82%E6%95%B0">七、Stripe.js 指纹参数</a>
+      <ul>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#71-mstripecom6--%E6%8C%87%E7%BA%B9%E6%B3%A8%E5%86%8C">7.1 m.stripe.com/6 — 指纹注册</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#72-rstripecomb--%E9%81%A5%E6%B5%8B%E4%B8%8A%E6%8A%A5">7.2 r.stripe.com/b — 遥测上报</a></li>
+        <li class=""><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#73-%E5%8A%A8%E6%80%81%E6%8F%90%E5%8F%96-stripejs-%E7%89%88%E6%9C%AC">7.3 动态提取 Stripe.js 版本</a></li>
+        <li class="active-class"><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#74-js_checksum-%E5%92%8C-rv_timestamp">7.4 js_checksum 和 rv_timestamp</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%85%AB%E4%BB%A3%E7%90%86%E6%B1%A0%E6%9E%B6%E6%9E%84">八、代理池架构</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#81-%E5%8F%8C%E4%BB%A3%E7%90%86%E6%B1%A0">8.1 双代理池</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#82-%E4%BB%A3%E7%90%86%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5">8.2 代理健康检查</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#83-%E5%87%BA%E5%8F%A3-ip-%E4%B8%80%E8%87%B4%E6%80%A7">8.3 出口 IP 一致性</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#84-%E4%BB%A3%E7%90%86%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9">8.4 代理类型选择</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#85-%E4%BB%A3%E7%90%86%E6%95%85%E9%9A%9C%E9%99%8D%E7%BA%A7">8.5 代理故障降级</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B9%9D%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1">九、状态机设计</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#91-decline-%E9%94%99%E8%AF%AF%E5%88%86%E7%B1%BB">9.1 Decline 错误分类</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#92-fast-path-%E4%BC%98%E5%8C%96">9.2 Fast-Path 优化</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#93-hosted-%E6%A8%A1%E5%BC%8F%E8%BD%AE%E8%AF%A2">9.3 Hosted 模式轮询</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%8D%81%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">十、安全边界与最佳实践</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#101-session-%E9%9A%94%E7%A6%BB">10.1 Session 隔离</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#102-dry-run-%E6%A8%A1%E5%BC%8F">10.2 Dry-Run 模式</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#103-%E4%B8%8D%E8%A6%81%E5%AD%98%E5%82%A8%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE">10.3 不要存储敏感数据</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#104-%E8%AF%B7%E6%B1%82%E8%8A%82%E5%A5%8F%E6%A8%A1%E6%8B%9F">10.4 请求节奏模拟</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#105-%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6">10.5 并发控制</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%8D%81%E4%B8%80%E5%AE%9E%E7%8E%B0%E5%AF%B9%E6%AF%94">十一、实现对比</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%8B%E8%BD%BD">下载</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E6%8E%A8%E8%8D%90%E8%99%9A%E6%8B%9F%E5%8D%A1%E5%B9%B3%E5%8F%B0">推荐：虚拟卡平台</a></li>
+  </ul>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    
+
+</aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/">
+            <img src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/blog-cover-default.jpg" alt="Featured image of post Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现" loading="lazy">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E6%9E%90/" style="background-color: hsl(129, 60%, 84%); color: hsl(129, 60%, 15%);">
+                技术分析
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8/" style="background-color: hsl(39, 60%, 84%); color: hsl(39, 60%, 15%);">
+                支付安全
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/">Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            完整拆解 Stripe 协议支付的技术实现：从浏览器 HAR 抓包逆向 Stripe Checkout Session 全流程，到纯 API 无浏览器实现 ConfirmationToken 创建、PaymentIntent 确认、3DS 验证挑战，再到 TLS 指纹对抗、代理池架构和反欺诈绕过。附 5 套不同技术栈的完整实现源码下载。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+  <circle cx="18" cy="18" r="4"></circle>
+  <path d="M15 3v4"></path>
+  <path d="M7 3v4"></path>
+  <path d="M3 11h16"></path>
+  <path d="M18 16.496v1.504l1 1"></path>
+</svg>
+                    <time class="article-time--published" datetime="2026-08-16T22:00:00+08:00">Sunday, August 16, 2026</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        13 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 6l6 6l-6 6"></path></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ul>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E9%9B%B6%E6%96%B9%E6%B3%95%E8%AE%BA%E5%A6%82%E4%BD%95%E9%80%86%E5%90%91-stripe-%E6%94%AF%E4%BB%98%E5%8D%8F%E8%AE%AE">零、方法论：如何逆向 Stripe 支付协议</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#01-%E4%BB%80%E4%B9%88%E6%98%AF-har-%E6%96%87%E4%BB%B6">0.1 什么是 HAR 文件</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#02-har-%E5%88%86%E6%9E%90%E6%B5%81%E7%A8%8B">0.2 HAR 分析流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#03-%E7%BB%8F%E8%BF%87%E9%AA%8C%E8%AF%81%E7%9A%84-har-%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF">0.3 经过验证的 HAR 请求链路</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%80%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A%E5%8D%8F%E8%AE%AE%E6%94%AF%E4%BB%98">一、为什么要做"协议支付"</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%BA%8Cstripe-checkout-session-%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F">二、Stripe Checkout Session 的两种模式</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#21-custom-%E6%A8%A1%E5%BC%8F-oaics_-%E5%89%8D%E7%BC%80">2.1 Custom 模式 (<code>oaics_</code> 前缀)</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#22-hosted-%E6%A8%A1%E5%BC%8F-cs_live_-%E5%89%8D%E7%BC%80">2.2 Hosted 模式 (<code>cs_live_</code> 前缀)</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#23-%E5%86%B3%E5%AE%9A%E6%80%A7%E5%8F%82%E6%95%B0checkout_ui_mode">2.3 决定性参数：<code>checkout_ui_mode</code></a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#24-_stripe_version-%E7%9A%84%E7%89%88%E6%9C%AC%E5%B7%AE%E5%BC%82">2.4 <code>_stripe_version</code> 的版本差异</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#25-%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%8C%E6%95%B4%E5%AD%97%E6%AE%B5%E5%AF%B9%E6%AF%94">2.5 两种模式的完整字段对比</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%89custom-%E6%A8%A1%E5%BC%8F%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3">三、Custom 模式协议流程详解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#31-%E5%88%9B%E5%BB%BA-confirmationtoken">3.1 创建 ConfirmationToken</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#32-%E7%A1%AE%E8%AE%A4-checkout">3.2 确认 Checkout</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#33-elements-session--%E8%8E%B7%E5%8F%96%E6%94%AF%E4%BB%98%E9%85%8D%E7%BD%AE">3.3 Elements Session — 获取支付配置</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#34-%E7%A8%8E%E5%8A%A1%E5%9C%B0%E5%9D%80%E4%BC%98%E5%8C%96--us-%E5%85%8D%E7%A8%8E%E5%9C%B0%E5%9D%80%E6%B6%88%E9%99%A4-vat">3.4 税务地址优化 — US 免税地址消除 VAT</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#35-paymentintent-%E7%A1%AE%E8%AE%A4--stripe-%E4%BE%A7%E6%89%A3%E6%AC%BE">3.5 PaymentIntent 确认 — Stripe 侧扣款</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#36-cookie-%E9%9A%94%E7%A6%BB%E6%9E%B6%E6%9E%84">3.6 Cookie 隔离架构</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%9B%9Bhosted-%E6%A8%A1%E5%BC%8F%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3">四、Hosted 模式协议流程详解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#41-payment-page-%E5%88%9D%E5%A7%8B%E5%8C%96">4.1 Payment Page 初始化</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#42-elements-sessionhosted-%E6%A8%A1%E5%BC%8F%E7%89%B9%E6%AE%8A%E5%AD%97%E6%AE%B5">4.2 Elements Session（Hosted 模式特殊字段）</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#43-hosted-%E6%A8%A1%E5%BC%8F%E7%9A%84-confirm-%E8%AF%B7%E6%B1%82">4.3 Hosted 模式的 Confirm 请求</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#44-approve-%E6%9C%BA%E5%88%B6%E4%B8%8E-sentinel-token">4.4 Approve 机制与 Sentinel Token</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%BA%943ds-%E9%AA%8C%E8%AF%81%E6%8C%91%E6%88%98">五、3DS 验证挑战</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#51-challenge-%E7%B1%BB%E5%9E%8B">5.1 Challenge 类型</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#52-verify_challenge-%E5%AE%8C%E6%95%B4%E8%AF%B7%E6%B1%82%E6%A0%BC%E5%BC%8F">5.2 verify_challenge 完整请求格式</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#53-hcaptcha-enterprise-%E7%9A%84%E7%89%B9%E6%AE%8A%E6%80%A7">5.3 hCaptcha Enterprise 的特殊性</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#54-%E6%97%B6%E6%95%88%E6%80%A7%E9%97%AE%E9%A2%98">5.4 时效性问题</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#55-3ds-vs-hcaptcha-%E7%9A%84%E5%8C%BA%E5%88%AB">5.5 3DS vs hCaptcha 的区别</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%85%ADtls-%E6%8C%87%E7%BA%B9%E5%AF%B9%E6%8A%97">六、TLS 指纹对抗</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#61-%E6%8C%87%E7%BA%B9%E4%BC%AA%E8%A3%85">6.1 指纹伪装</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#62-%E6%8C%87%E7%BA%B9%E8%BD%AE%E6%8D%A2%E7%AD%96%E7%95%A5">6.2 指纹轮换策略</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#63-tls-%E6%8C%87%E7%BA%B9%E4%B8%8E-user-agent-%E4%B8%80%E8%87%B4%E6%80%A7">6.3 TLS 指纹与 User-Agent 一致性</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#64-http-%E5%8D%8F%E8%AE%AE%E7%89%88%E6%9C%AC">6.4 HTTP 协议版本</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%83stripejs-%E6%8C%87%E7%BA%B9%E5%8F%82%E6%95%B0">七、Stripe.js 指纹参数</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#71-mstripecom6--%E6%8C%87%E7%BA%B9%E6%B3%A8%E5%86%8C">7.1 m.stripe.com/6 — 指纹注册</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#72-rstripecomb--%E9%81%A5%E6%B5%8B%E4%B8%8A%E6%8A%A5">7.2 r.stripe.com/b — 遥测上报</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#73-%E5%8A%A8%E6%80%81%E6%8F%90%E5%8F%96-stripejs-%E7%89%88%E6%9C%AC">7.3 动态提取 Stripe.js 版本</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#74-js_checksum-%E5%92%8C-rv_timestamp">7.4 js_checksum 和 rv_timestamp</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%85%AB%E4%BB%A3%E7%90%86%E6%B1%A0%E6%9E%B6%E6%9E%84">八、代理池架构</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#81-%E5%8F%8C%E4%BB%A3%E7%90%86%E6%B1%A0">8.1 双代理池</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#82-%E4%BB%A3%E7%90%86%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5">8.2 代理健康检查</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#83-%E5%87%BA%E5%8F%A3-ip-%E4%B8%80%E8%87%B4%E6%80%A7">8.3 出口 IP 一致性</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#84-%E4%BB%A3%E7%90%86%E7%B1%BB%E5%9E%8B%E9%80%89%E6%8B%A9">8.4 代理类型选择</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#85-%E4%BB%A3%E7%90%86%E6%95%85%E9%9A%9C%E9%99%8D%E7%BA%A7">8.5 代理故障降级</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B9%9D%E7%8A%B6%E6%80%81%E6%9C%BA%E8%AE%BE%E8%AE%A1">九、状态机设计</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#91-decline-%E9%94%99%E8%AF%AF%E5%88%86%E7%B1%BB">9.1 Decline 错误分类</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#92-fast-path-%E4%BC%98%E5%8C%96">9.2 Fast-Path 优化</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#93-hosted-%E6%A8%A1%E5%BC%8F%E8%BD%AE%E8%AF%A2">9.3 Hosted 模式轮询</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%8D%81%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">十、安全边界与最佳实践</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#101-session-%E9%9A%94%E7%A6%BB">10.1 Session 隔离</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#102-dry-run-%E6%A8%A1%E5%BC%8F">10.2 Dry-Run 模式</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#103-%E4%B8%8D%E8%A6%81%E5%AD%98%E5%82%A8%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE">10.3 不要存储敏感数据</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#104-%E8%AF%B7%E6%B1%82%E8%8A%82%E5%A5%8F%E6%A8%A1%E6%8B%9F">10.4 请求节奏模拟</a></li>
+        <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#105-%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6">10.5 并发控制</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E5%8D%81%E4%B8%80%E5%AE%9E%E7%8E%B0%E5%AF%B9%E6%AF%94">十一、实现对比</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E4%B8%8B%E8%BD%BD">下载</a></li>
+    <li><a href="https://blog.caowo.de/posts/stripe-protocol-payment-automation-deep-dive-2026/#%E6%8E%A8%E8%8D%90%E8%99%9A%E6%8B%9F%E5%8D%A1%E5%B9%B3%E5%8F%B0">推荐：虚拟卡平台</a></li>
+  </ul>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p></p><figure><img src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/wechat-qr.jpg" alt="微信二维码" width="200">
+</figure>
+
+<figure><img src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/qq-group-qr.jpg" alt="QQ群二维码" width="200">
+</figure>
+
+<strong>联系方式 &amp; 交流群</strong><p></p>
+<ul>
+<li><strong>QQ</strong>: 46333839</li>
+<li><strong>微信</strong>: GOV-HACK</li>
+</ul>
+<p>进微信群请联系博主，各位觉得文章对你有帮助的话可否打赏一些呀~</p>
+<hr>
+
+    <blockquote>
+        <p><strong>⚠️ 免责声明</strong>：本文仅供安全研究与技术学习。文中描述的技术手段仅用于分析 Stripe 支付协议的工作原理，帮助支付系统开发者理解安全边界。请勿将相关技术用于任何未授权的操作。</p>
+
+    </blockquote>
+<hr>
+<h2 id="前言">前言
+</h2><p>做过 SaaS 订阅的人都知道，Stripe 是全球最主流的支付处理商。几乎所有主流 AI 平台——从对话类到图像类——都用 Stripe 处理信用卡支付。</p>
+<p>但很少有人去研究 Stripe Checkout 背后的协议细节。大多数人的认知停留在"调一下 API、跳个 Checkout 页面、信用卡扣完款就行了"。</p>
+<p>实际上，Stripe 的 Checkout Session 协议远比你想象的复杂。从 <code>checkout_ui_mode</code> 的 <code>custom</code> 与 <code>hosted</code> 两种模式，到 <code>ConfirmationToken</code> 的创建机制，再到 <code>PaymentIntent</code> 的 <code>requires_action</code> 状态下 3DS 验证挑战的处理——每一步都有大量的协议细节、反欺诈检测和时序要求。</p>
+<p>今天我把这些全拆开。从 HAR 抓包出发，逐层剖析 Stripe 协议支付的完整链路，并提供 5 套不同技术栈的实现源码。</p>
+<hr>
+<h2 id="零方法论如何逆向-stripe-支付协议">零、方法论：如何逆向 Stripe 支付协议
+</h2><p>在开始之前，先讲方法论。所有协议支付的起点都是 <strong>HAR 抓包</strong>。</p>
+<h3 id="01-什么是-har-文件">0.1 什么是 HAR 文件
+</h3><p>HAR（HTTP Archive）是浏览器开发者工具导出的完整 HTTP 交互记录。包含每个请求的 URL、Headers、Body、Response，以及精确的时序信息。</p>
+<p>打开 Chrome DevTools → Network → 完成一次真实支付 → 右键 → Save all as HAR with content。</p>
+<p><strong>这个 HAR 文件就是你的 ground truth</strong>。所有协议支付的字段、值、顺序、编码方式，都以 HAR 为准。代码实现、第三方文档、安全审计报告——全部都可能过时或有误，只有 HAR 是当时浏览器真实发出的请求。</p>
+<h3 id="02-har-分析流程">0.2 HAR 分析流程
+</h3><ol>
+<li><strong>筛选关键域名</strong>：<code>api.stripe.com</code>、<code>m.stripe.com</code>、<code>checkout.stripe.com</code>、平台 API 域名</li>
+<li><strong>按时间排序</strong>：找出完整的请求链路</li>
+<li><strong>对比成功和失败</strong>：同一流程的成功 HAR 和失败 HAR，diff 出关键差异</li>
+<li><strong>提取稳定字段</strong>：跨多个 HAR 都一致的值可以硬编码</li>
+<li><strong>标记动态字段</strong>：每次不同的值（Session ID、Token、时间戳）需要运行时获取</li>
+</ol>
+<h3 id="03-经过验证的-har-请求链路">0.3 经过验证的 HAR 请求链路
+</h3><p>通过分析多个成功支付的 HAR 文件，提取出标准的浏览器 Checkout 请求序列：</p>
+<pre tabindex="0"><code>1. POST /api/v1/payments/checkout           → 创建 session (oaics_xxx)
+2. GET  stripe/v1/elements/sessions          → 获取 Elements 配置 (deferred_intent)
+3. POST /api/v1/payments/checkout/taxes      → 税务重算 (US免税地址可消除VAT)
+4. GET  stripe/v1/elements/sessions          → 更新后的 amount
+5. POST stripe/v1/confirmation_tokens        → 卡号 → ctoken_xxx
+6. POST /api/v1/payments/checkout/confirm    → 平台确认 → pi_xxx client_secret
+7. POST stripe/v1/payment_intents/{pi}/confirm → Stripe 侧扣款
+8. GET  /checkout/verify                      → redirect_status=succeeded
+</code></pre><p>每一步都有大量细节。下面逐一拆解。</p>
+<hr>
+<h2 id="一为什么要做协议支付">一、为什么要做"协议支付"
+</h2><p>先搞清楚一个概念：什么是协议支付（Protocol Payment）？</p>
+<p><strong>浏览器支付</strong>：用户打开 Stripe Checkout 页面 → 手动填写信用卡号 → 点击支付 → 完成。这是正常流程。</p>
+<p><strong>协议支付</strong>：用纯 HTTP API 请求模拟浏览器的完整操作链路，包括 Stripe 的内部 API（不是官方 SDK 暴露的那些），直接在协议层完成支付，不需要浏览器。</p>
+<p>为什么要这么做？</p>
+<ol>
+<li><strong>自动化需求</strong>：批量管理订阅时，手动操作不现实</li>
+<li><strong>性能需求</strong>：浏览器（Puppeteer/Playwright）启动慢、占内存大、不稳定；协议支付 &lt;5s 完成</li>
+<li><strong>环境隔离</strong>：服务端运行，不需要 GUI 环境</li>
+<li><strong>学习价值</strong>：深入理解支付系统的工作原理</li>
+</ol>
+<hr>
+<h2 id="二stripe-checkout-session-的两种模式">二、Stripe Checkout Session 的两种模式
+</h2><p>Stripe Checkout 有两种 <code>checkout_ui_mode</code>，这是整个协议支付的第一个分叉点：</p>
+<h3 id="21-custom-模式-oaics_-前缀">2.1 Custom 模式 (<code>oaics_</code> 前缀)
+</h3><pre tabindex="0"><code>POST /payments/checkout
+{
+  "checkout_ui_mode": "custom",
+  "currency": "PHP",
+  "plan_type": "plus"
+}
+→ {"checkout_session_id": "oaics_xxx", "stripe_publishable_key": "pk_live_..."}
+</code></pre><p>Custom 模式返回的 Session ID 以 <code>oaics_</code> 开头。这种模式下：</p>
+<ul>
+<li>前端需要自己挂载 Stripe Elements</li>
+<li>通过 Stripe.js 创建 <code>ConfirmationToken</code></li>
+<li>调用平台的 <code>confirm</code> 接口完成支付</li>
+<li><strong>直接</strong>在 Stripe API 上确认 PaymentIntent</li>
+</ul>
+<h3 id="22-hosted-模式-cs_live_-前缀">2.2 Hosted 模式 (<code>cs_live_</code> 前缀)
+</h3><pre tabindex="0"><code>POST /payments/checkout
+{
+  "checkout_ui_mode": "hosted",
+  "currency": "PHP",
+  "plan_type": "plus"
+}
+→ {"checkout_session_id": "cs_live_xxx", "url": "https://checkout.stripe.com/..."}
+</code></pre><p>Hosted 模式返回 <code>cs_live_</code> 前缀的 Session。这种模式下：</p>
+<ul>
+<li>Stripe 托管整个 Checkout 页面</li>
+<li>走 Stripe Payment Page 的内部协议</li>
+<li>流程更复杂，涉及 <code>ppage_</code> 初始化、<code>elements</code> Session、<code>inline_confirm</code></li>
+<li>需要额外处理平台侧的 <code>approve</code> 操作</li>
+</ul>
+<p>两种模式的选择取决于平台的 billing 配置和你的需求。一般来说：</p>
+<ul>
+<li>如果平台的计费货币与你的信用卡货币一致 → Custom 模式更简单</li>
+<li>如果存在货币不匹配（比如用美元卡付菲律宾比索订阅）→ 可能只有 Hosted 模式可用</li>
+</ul>
+<h3 id="23-决定性参数checkout_ui_mode">2.3 决定性参数：<code>checkout_ui_mode</code>
+</h3><p>通过大量测试验证，<strong>决定返回 <code>oaics_</code> 还是 <code>cs_live_</code> 的唯一参数就是 <code>checkout_ui_mode</code></strong>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// 返回 oaics_ 的请求
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"entry_point"</span><span class="p">:</span> <span class="s2">"all_plans_pricing_modal"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"plan_name"</span><span class="p">:</span> <span class="s2">"basic_plan"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"billing_details"</span><span class="p">:</span> <span class="p">{</span><span class="nt">"country"</span><span class="p">:</span> <span class="s2">"PH"</span><span class="p">,</span> <span class="nt">"currency"</span><span class="p">:</span> <span class="s2">"PHP"</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"checkout_ui_mode"</span><span class="p">:</span> <span class="s2">"custom"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 返回 cs_live_ 的请求
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"plan_name"</span><span class="p">:</span> <span class="s2">"basic_plan"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"billing_details"</span><span class="p">:</span> <span class="p">{</span><span class="nt">"country"</span><span class="p">:</span> <span class="s2">"PH"</span><span class="p">,</span> <span class="nt">"currency"</span><span class="p">:</span> <span class="s2">"PHP"</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"checkout_ui_mode"</span><span class="p">:</span> <span class="s2">"hosted"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"cancel_url"</span><span class="p">:</span> <span class="s2">"https://platform.example.com/#pricing"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"locale"</span><span class="p">:</span> <span class="s2">"zh-CN"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意差异：</p>
+<ul>
+<li><strong><code>entry_point</code></strong>：Custom 模式有，Hosted 模式没有</li>
+<li><strong><code>cancel_url</code></strong>：Hosted 模式需要（Stripe 托管页面的返回按钮用）</li>
+<li><strong><code>locale</code></strong>：Hosted 模式建议传（影响 Stripe 页面语言）</li>
+</ul>
+<p>Hosted 模式的响应多一个 <code>url</code> 字段——这是 Stripe 托管页面的完整 URL，可以直接在浏览器中打开。</p>
+<h3 id="24-_stripe_version-的版本差异">2.4 <code>_stripe_version</code> 的版本差异
+</h3><p>这是一个极其容易忽略的细节。两种模式使用<strong>不同的 <code>_stripe_version</code></strong>：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>模式</th>
+          <th><code>_stripe_version</code> 值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Custom (oaics_)</td>
+          <td><code>2025-03-31.basil</code></td>
+      </tr>
+      <tr>
+          <td>Hosted (cs_live_)</td>
+          <td><code>2025-03-31.basil; checkout_server_update_beta=v1; checkout_manual_approval_preview=v1</code></td>
+      </tr>
+  </tbody>
+</table></div>
+<p>Hosted 模式的版本串后面带了两个 beta flag。如果在 cs_live_ 请求中用了 Custom 的短版本串，Stripe 会返回字段缺失或行为不一致。</p>
+<h3 id="25-两种模式的完整字段对比">2.5 两种模式的完整字段对比
+</h3><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>Custom (oaics_)</th>
+          <th>Hosted (cs_live_)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>确认端点</td>
+          <td><code>payment_intents/{pi}/confirm</code></td>
+          <td><code>payment_pages/{cs_live}/confirm</code></td>
+      </tr>
+      <tr>
+          <td>顶层 <code>source</code></td>
+          <td><code>elements</code></td>
+          <td><code>checkout</code></td>
+      </tr>
+      <tr>
+          <td>顶层 <code>version</code></td>
+          <td><code>2021</code></td>
+          <td><code>custom</code></td>
+      </tr>
+      <tr>
+          <td><code>selection_flow</code></td>
+          <td><code>merchant_specified</code></td>
+          <td><code>automatic</code></td>
+      </tr>
+      <tr>
+          <td><code>elements_session_client</code></td>
+          <td>无</td>
+          <td>有（8 个子字段）</td>
+      </tr>
+      <tr>
+          <td><code>elements_options_client</code></td>
+          <td>无</td>
+          <td>有（2 个子字段）</td>
+      </tr>
+      <tr>
+          <td><code>link_brand</code></td>
+          <td>无</td>
+          <td><code>link</code></td>
+      </tr>
+      <tr>
+          <td><code>checkout_config_id</code></td>
+          <td>无</td>
+          <td>有（两层不同值）</td>
+      </tr>
+      <tr>
+          <td>hCaptcha 位置</td>
+          <td><code>pmd[radar_options][hcaptcha_token]</code></td>
+          <td><code>passive_captcha_token</code>（顶层）</td>
+      </tr>
+      <tr>
+          <td><code>init_checksum</code></td>
+          <td>无</td>
+          <td>有</td>
+      </tr>
+      <tr>
+          <td><code>js_checksum</code></td>
+          <td>无</td>
+          <td>有</td>
+      </tr>
+      <tr>
+          <td><code>rv_timestamp</code></td>
+          <td>无</td>
+          <td>有</td>
+      </tr>
+      <tr>
+          <td><code>expected_amount</code></td>
+          <td>无</td>
+          <td>有</td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong>这两套字段集完全不能混用</strong>。这也是很多人协议支付做不通的原因——用了 oaics_ 的字段去调 cs_live_ 的接口，反过来也一样。</p>
+<hr>
+<h2 id="三custom-模式协议流程详解">三、Custom 模式协议流程详解
+</h2><p>Custom 模式是最干净的协议支付路径。完整流程 8 步：</p>
+<pre tabindex="0"><code>┌──────────────────────────────────────┐
+│ 1. 刷新 Session（获取最新 Token）      │
+│ 2. 查询账号信息（确认当前订阅状态）     │
+│ 3. 获取定价信息（币种+金额）           │
+│ 4. 创建 Checkout Session              │
+│ 5. 更新税务信息（Billing 地址）        │
+│ 6. 创建 ConfirmationToken（卡号→Token）│
+│ 7. 确认支付（Confirm Checkout）        │
+│ 8. 确认 PaymentIntent（Stripe 侧）     │
+└──────────────────────────────────────┘
+</code></pre><h3 id="31-创建-confirmationtoken">3.1 创建 ConfirmationToken
+</h3><p>这是协议支付最核心的一步。浏览器里，Stripe.js 会在 iframe 中收集卡号，然后调用 Stripe 的内部 API 创建一个 <code>ConfirmationToken</code>（<code>ctoken_</code> 前缀）。</p>
+<p>协议支付需要直接模拟这个请求：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/confirmation_tokens
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Type: application/x-www-form-urlencoded
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">type=card
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[type]=card
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[card][number]=4242424242424242
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[card][exp_month]=12
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[card][exp_year]=2029
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[card][cvc]=123
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[billing_details][name]=John Doe
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[billing_details][address][country]=US
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;payment_method_data[billing_details][address][postal_code]=97201
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;key=pk_live_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">&amp;_stripe_version=2025-03-31.basil
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>几个关键细节：</p>
+<ol>
+<li><strong><code>key</code> 必须是平台的 Stripe Publishable Key</strong>，不是你自己的</li>
+<li><strong><code>_stripe_version</code> 必须匹配</strong>当前 Stripe.js 的 API 版本</li>
+<li><strong>需要传 Stripe.js 的指纹参数</strong>：<code>guid</code>、<code>muid</code>、<code>sid</code>、<code>time_on_page</code></li>
+<li><strong>Referer 必须是平台域名</strong>，Stripe 会校验</li>
+</ol>
+<h4 id="卡号格式细节">卡号格式细节
+</h4><p>HAR 验证发现，浏览器发送的卡号<strong>带空格</strong>（<code>4004 1641 0185 9397</code>），而不是纯数字。不过 Stripe 接受两种格式。</p>
+<h4 id="guidmuidsid-格式">guid/muid/sid 格式
+</h4><p>这三个指纹 ID 的格式比很多人以为的更复杂。HAR 验证的正确格式是 <strong>42 字符</strong>：</p>
+<pre tabindex="0"><code>guid = randomUUID() + randomHex(6)
+     = xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx + 6位hex
+     = 36字符UUID + 6字符 = 42字符
+</code></pre><p>例如：<code>a1b2c3d4-e5f6-4789-abcd-ef0123456789abc123</code></p>
+<p>有些实现用 32 位纯 hex 也能工作，但 HAR 中浏览器发送的是 42 字符格式。</p>
+<h4 id="attribution-元数据两层结构">Attribution 元数据（两层结构）
+</h4><p><code>confirmation_tokens</code> 请求中有一组 <code>client_attribution_metadata</code> 字段，这些是 Stripe 用来追踪支付集成来源的元数据：</p>
+<pre tabindex="0"><code>payment_user_agent = stripe.js/...
+client_session_id = &lt;UUID&gt;                           # 每 session 唯一
+merchant_integration_source = elements               # ← oaics_ 固定 "elements"
+merchant_integration_version = 2021
+merchant_integration_subtype = payment-element
+payment_intent_creation_flow = deferred
+payment_method_selection_flow = merchant_specified    # ← oaics_ 固定
+additional_elements = [expressCheckout, payment, address]
+</code></pre><p>这些字段在 <code>confirmation_tokens</code> 请求中出现两次——一次在 <code>payment_method_data</code> 内部，一次在顶层。<strong>两层的值大部分相同，但 <code>merchant_integration_source</code> 在 confirm 请求中变成 <code>l1</code></strong>。这个细节从 HAR 中才能发现。</p>
+<h4 id="请求头">请求头
+</h4><p>HAR 中 Stripe API 请求的完整请求头：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ...
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept: application/json
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Type: application/x-www-form-urlencoded
+</span></span></span><span class="line"><span class="cl"><span class="err">Origin: https://js.stripe.com
+</span></span></span><span class="line"><span class="cl"><span class="err">Referer: https://js.stripe.com/
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-CH-UA: "Not=A?Brand";v="99", "Chromium";v="151"
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-CH-UA-Mobile: ?0
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-CH-UA-Platform: "Windows"
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-Fetch-Site: same-site
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-Fetch-Mode: cors
+</span></span></span><span class="line"><span class="cl"><span class="err">Sec-Fetch-Dest: empty
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept-Language: en-US,en;q=0.9
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意 <code>Accept-Language</code> 必须存在。这是纯协议支付跑通的关键 bug 之一——缺少这个 header 会导致 Stripe 返回非预期的响应格式。</p>
+<p>返回值：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"ctoken_1xxx"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"card"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"payment_method_preview"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"card"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"brand"</span><span class="p">:</span> <span class="s2">"visa"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"last4"</span><span class="p">:</span> <span class="s2">"4242"</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="32-确认-checkout">3.2 确认 Checkout
+</h3><p>拿到 <code>ConfirmationToken</code> 后，调用平台的 confirm 接口：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST /api/v1/payments/checkout/confirm
+</span></span></span><span class="line"><span class="cl"><span class="err">{
+</span></span></span><span class="line"><span class="cl"><span class="err">  "checkout_session_id": "oaics_xxx",
+</span></span></span><span class="line"><span class="cl"><span class="err">  "confirmation_token": "ctoken_1xxx"
+</span></span></span><span class="line"><span class="cl"><span class="err">}
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这一步平台会拿着你的 token 去 Stripe 创建 PaymentIntent 并尝试扣款。</p>
+<p>如果一切顺利（卡余额充足、无 3DS 要求），PaymentIntent 直接变成 <code>succeeded</code>，订阅激活。</p>
+<p>如果遇到 3DS 验证，流程会更复杂——我们在第五节讲。</p>
+<h3 id="33-elements-session--获取支付配置">3.3 Elements Session — 获取支付配置
+</h3><p>在创建 ConfirmationToken 之前，需要先调用 Stripe 的 <code>elements/sessions</code> API 获取支付配置信息。这一步在 HAR 中被调用<strong>两次</strong>——一次在税务更新前，一次在税务更新后。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">GET https://api.stripe.com/v1/elements/sessions?deferred_intent[mode]=subscription
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;deferred_intent[amount]=98214
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;deferred_intent[currency]=php
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;deferred_intent[setup_future_usage]=off_session
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;deferred_intent[payment_method_types][0]=card
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;type=deferred_intent
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;key=pk_live_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">    &amp;_stripe_version=2025-03-31.basil
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>关键返回值：</p>
+<ul>
+<li><strong><code>elements_session_id</code></strong>：<code>elements_session_xxx</code>，后续 confirm 请求需要</li>
+<li><strong><code>customer_session_client_secret</code></strong>：<code>cuss_xxx</code>，客户会话密钥</li>
+<li><strong><code>payment_method_configuration</code></strong>：<code>pmc_xxx</code>，支付方式配置 ID</li>
+</ul>
+<h3 id="34-税务地址优化--us-免税地址消除-vat">3.4 税务地址优化 — US 免税地址消除 VAT
+</h3><p>这是一个实际操作中极其重要的技巧。</p>
+<p>很多 SaaS 平台默认按账号注册地收税。比如菲律宾区的订阅，标价 ₱982.14 但实际会加 12% VAT 变成 ₱1,100+。</p>
+<p><strong>解决方案</strong>：在 <code>taxes</code> API 调用中使用美国免税州地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST /api/v1/payments/checkout/taxes
+</span></span></span><span class="line"><span class="cl"><span class="err">{
+</span></span></span><span class="line"><span class="cl"><span class="err">  "checkout_session_id": "oaics_xxx",
+</span></span></span><span class="line"><span class="cl"><span class="err">  "billing_details": {
+</span></span></span><span class="line"><span class="cl"><span class="err">    "name": "John Doe",
+</span></span></span><span class="line"><span class="cl"><span class="err">    "address": {
+</span></span></span><span class="line"><span class="cl"><span class="err">      "country": "US",
+</span></span></span><span class="line"><span class="cl"><span class="err">      "state": "OR",
+</span></span></span><span class="line"><span class="cl"><span class="err">      "city": "Portland",
+</span></span></span><span class="line"><span class="cl"><span class="err">      "postal_code": "97201",
+</span></span></span><span class="line"><span class="cl"><span class="err">      "line1": "123 Main St"
+</span></span></span><span class="line"><span class="cl"><span class="err">    }
+</span></span></span><span class="line"><span class="cl"><span class="err">  }
+</span></span></span><span class="line"><span class="cl"><span class="err">}
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>美国有 5 个无销售税的州：</p>
+<ul>
+<li><strong>Oregon (OR)</strong> — 无销售税</li>
+<li><strong>Montana (MT)</strong> — 无销售税</li>
+<li><strong>Delaware (DE)</strong> — 无销售税</li>
+<li><strong>New Hampshire (NH)</strong> — 无销售税</li>
+<li><strong>Alaska (AK)</strong> — 大部分地区无销售税</li>
+</ul>
+<p>HAR 验证：使用 US 地址后 tax=0，最终金额保持 ₱982.14。</p>
+<p><strong>重要</strong>：<code>taxes</code> 和后续 <code>confirmation_tokens</code> 中的地址必须一致。同一个 session 内选择一个地址后全程复用。</p>
+<h3 id="35-paymentintent-确认--stripe-侧扣款">3.5 PaymentIntent 确认 — Stripe 侧扣款
+</h3><p>平台的 <code>/confirm</code> 返回 <code>client_secret</code>（格式：<code>pi_xxx_secret_xxx</code>）后，需要调用 Stripe 的 <code>payment_intents/confirm</code> 完成实际扣款：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/payment_intents/{pi_id}/confirm
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">return_url = https://platform.example.com/checkout/verify?stripe_session_id=oaics_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">confirmation_token = ctoken_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">key = pk_live_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">_stripe_version = 2025-03-31.basil
+</span></span></span><span class="line"><span class="cl"><span class="err">client_secret = pi_xxx_secret_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">client_attribution_metadata[client_session_id] = &lt;UUID&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">client_attribution_metadata[merchant_integration_source] = l1
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意这里 <code>merchant_integration_source</code> 变成了 <code>l1</code>，不再是 <code>elements</code>。</p>
+<h4 id="pi-拒卡重试">PI 拒卡重试
+</h4><p>HAR 验证了一个重要特性：<strong>同一个 PaymentIntent 被拒卡后可以用新的 ConfirmationToken 重试</strong>。</p>
+<p>流程：</p>
+<ol>
+<li>第一张卡 → <code>generic_decline</code> → PI 状态 <code>requires_payment_method</code></li>
+<li>创建新的 <code>confirmation_token</code>（用另一张卡）</li>
+<li>再次调用 <code>payment_intents/confirm</code></li>
+<li>第二张卡 → <code>succeeded</code></li>
+</ol>
+<p><strong>这意味着拒卡不需要重建整个 Checkout Session</strong>，只需要换卡重建 token。</p>
+<h3 id="36-cookie-隔离架构">3.6 Cookie 隔离架构
+</h3><p>协议支付需要严格的 Cookie 隔离。一个常见的 bug 是平台的 Cookie 被发送到 Stripe API，或反过来。</p>
+<p>最佳实践：使用两个独立的 HTTP 客户端：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 平台客户端 — 带 Cookie（session token）</span>
+</span></span><span class="line"><span class="cl"><span class="n">platform_http</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">cookies_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">platform_http</span><span class="o">.</span><span class="n">set_cookie</span><span class="p">(</span><span class="s2">"__Secure-platform-auth"</span><span class="p">,</span> <span class="n">session_token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Stripe 客户端 — 不带 Cookie</span>
+</span></span><span class="line"><span class="cl"><span class="n">stripe_http</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">cookies_enabled</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><strong>绝不</strong>让 Stripe 客户端发送平台 Cookie，也不要让平台客户端发送 Stripe 的 Cookie。</p>
+<hr>
+<h2 id="四hosted-模式协议流程详解">四、Hosted 模式协议流程详解
+</h2><p>Hosted 模式（<code>cs_live_</code>）的流程更复杂，因为需要模拟 Stripe Payment Page 的完整内部协议。</p>
+<pre tabindex="0"><code>┌────────────────────────────────────────────────┐
+│ 1. 创建 Checkout (hosted) → cs_live_ session    │
+│ 2. 更新税务                                      │
+│ 3. 分配信用卡                                    │
+│ 4. 初始化 Payment Page → ppage_ token            │
+│ 5. 获取 Elements Session                         │
+│ 6. 创建 ConfirmationToken                        │
+│ 7. 确认 Checkout (内部 confirm)                   │
+│ 8. 平台 Approve 操作                              │
+│ 9. 轮询 PaymentIntent 状态                       │
+│ 10. 处理 3DS Challenge（如果需要）                 │
+│ 11. 验证最终状态                                  │
+└────────────────────────────────────────────────┘
+</code></pre><h3 id="41-payment-page-初始化">4.1 Payment Page 初始化
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">GET https://checkout.stripe.com/api/payment-page/{cs_live_xxx}/init
+</span></span></span><span class="line"><span class="cl"><span class="err">→ {"ppage_token": "ppage_xxx", "merchant_name": "..."}
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这是 Hosted 模式独有的。返回一个 <code>ppage_</code> token，后续所有 Stripe Payment Page API 都需要这个 token。</p>
+<h3 id="42-elements-sessionhosted-模式特殊字段">4.2 Elements Session（Hosted 模式特殊字段）
+</h3><p>Hosted 模式的 <code>elements/sessions</code> 请求比 Custom 模式多出很多字段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/elements/sessions
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[mode] = subscription
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[amount] = 98214
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[currency] = php
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[setup_future_usage] = off_session
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[payment_method_types][0] = card
+</span></span></span><span class="line"><span class="cl"><span class="err">deferred_intent[payment_method_configuration][id] = pmc_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">currency = php
+</span></span></span><span class="line"><span class="cl"><span class="err">elements_init_source = custom_checkout
+</span></span></span><span class="line"><span class="cl"><span class="err">referrer_host = platform.example.com
+</span></span></span><span class="line"><span class="cl"><span class="err">stripe_js_id = &lt;UUID&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">locale = zh
+</span></span></span><span class="line"><span class="cl"><span class="err">type = deferred_intent
+</span></span></span><span class="line"><span class="cl"><span class="err">checkout_session_id = cs_live_xxx
+</span></span></span><span class="line"><span class="cl"><span class="err">_stripe_version = 2025-03-31.basil; checkout_server_update_beta=v1; ...
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>关键差异：</p>
+<ul>
+<li>需要传 <code>checkout_session_id</code>（Custom 模式不需要）</li>
+<li><code>elements_init_source</code> 是 <code>custom_checkout</code>（不是 <code>elements</code>）</li>
+<li>需要传 <code>referrer_host</code>、<code>stripe_js_id</code>、<code>locale</code></li>
+<li>使用<strong>长版本</strong>的 <code>_stripe_version</code></li>
+</ul>
+<p>返回值中有一个重要字段 <code>passive_captcha.rqdata</code>——这是 hCaptcha Enterprise 的 <code>rqdata</code>，后续 confirm 如果触发 challenge 需要用到。</p>
+<h3 id="43-hosted-模式的-confirm-请求">4.3 Hosted 模式的 Confirm 请求
+</h3><p>cs_live_ 的 confirm 走的是 <code>payment_pages/confirm</code>，不是 <code>payment_intents/confirm</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/payment_pages/{cs_live_xxx}/confirm
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这个请求的 body 字段比 Custom 模式多很多：</p>
+<pre tabindex="0"><code>elements_session_client[client_betas][0] = custom_checkout_server_updates_1
+elements_session_client[client_betas][1] = custom_checkout_manual_approval_1
+elements_session_client[elements_init_source] = custom_checkout
+elements_session_client[referrer_host] = platform.example.com
+elements_session_client[session_id] = elements_session_xxx
+elements_session_client[stripe_js_id] = &lt;UUID&gt;
+elements_session_client[locale] = zh
+elements_session_client[is_aggregation_expected] = false
+elements_options_client[saved_payment_method][enable_save] = auto
+elements_options_client[saved_payment_method][enable_redisplay] = auto
+init_checksum = &lt;checksum&gt;
+js_checksum = &lt;checksum&gt;
+rv_timestamp = &lt;timestamp&gt;
+expected_amount = 98214
+expected_payment_method_type = card
+version = &lt;build_hash&gt;
+</code></pre><p><code>js_checksum</code> 和 <code>rv_timestamp</code> 是从 Stripe.js 部署状态动态提取的，<code>init_checksum</code> 来自 init 响应。</p>
+<h3 id="44-approve-机制与-sentinel-token">4.4 Approve 机制与 Sentinel Token
+</h3><p>Hosted 模式下，<code>payment_pages/confirm</code> 成功后，状态不会直接变成 <code>succeeded</code>，而是进入 <code>requires_approval</code>（HAR 中 confirm 返回 <code>status=open</code>）。这时需要调用平台的 approve 接口：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST /api/v1/payments/checkout/approve
+</span></span></span><span class="line"><span class="cl"><span class="err">Authorization: Bearer {access_token}
+</span></span></span><span class="line"><span class="cl"><span class="err">X-Vendor-Challenge-Token: {sentinel_token}
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><h4 id="sentinel-token-结构">Sentinel Token 结构
+</h4><p>这里的 <code>challenge_token</code> 是一个编码后的 JSON 对象，内部包含多个通过算力证明（PoW）和 Turnstile 验证生成的字段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"p"</span><span class="p">:</span> <span class="s2">"gAAAAAB..."</span><span class="p">,</span>     <span class="c1">// 主负载（加密后的 PoW + session 信息）
+</span></span></span><span class="line"><span class="cl">  <span class="nt">"c"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>            <span class="c1">// enforcement_token（基于 FNV-1a 的算力证明结果）
+</span></span></span><span class="line"><span class="cl">  <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"&lt;UUID&gt;"</span><span class="p">,</span>        <span class="c1">// 一次性标识
+</span></span></span><span class="line"><span class="cl">  <span class="nt">"flow"</span><span class="p">:</span> <span class="s2">"platform_checkout"</span><span class="p">,</span>  <span class="c1">// 标记来源流程
+</span></span></span><span class="line"><span class="cl">  <span class="nt">"t"</span><span class="p">:</span> <span class="s2">"&lt;turnstile_dx_token&gt;"</span>  <span class="c1">// 4000+ 字符的 Turnstile 验证 token
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><strong><code>t</code> 字段是核心</strong>——如果为空字符串，approve 立即返回 <code>blocked</code>。它来自 Cloudflare Turnstile 的隐式挑战验证（不是肉眼可见的验证码）。</p>
+<h4 id="sentinel-token-生成流程">Sentinel Token 生成流程
+</h4><p>完整的 Sentinel 生成需要两个组件协作：</p>
+<pre tabindex="0"><code>1. 生成 requirements_token（本地 seed + difficulty "0"）
+2. POST sentinel.platform.com/backend-api/sentinel/req
+   → 返回 {turnstile: {dx: "..."}, ...}
+3. 用 server seed 生成 enforcement_token（FNV-1a 算力证明）
+4. 在 Node.js VM 中执行 Turnstile SDK（需要 jsdom 模拟 DOM 环境）
+   → 返回 turnstile token（~4388 字符）
+5. 组装 JSON → Base64 → 设为请求头
+</code></pre><p>关键点：</p>
+<ul>
+<li>PoW 使用 <strong>FNV-1a</strong> 哈希算法，difficulty 对 checkout 流程通常是 “0”（即几乎不需要算力）</li>
+<li>Turnstile SDK 必须在<strong>真实的 DOM 环境</strong>中执行——简单的字符串拼接无法通过验证</li>
+<li>实际生产中需要 Node.js + jsdom 来执行官方 Turnstile VM</li>
+<li>SDK 代码需要定期更新（随平台版本迭代）</li>
+</ul>
+<h4 id="approve-的正确时机">Approve 的正确时机
+</h4><p><strong>关键发现</strong>：Approve 不应该主动调用。正确的流程是 <strong>fall-through</strong>：</p>
+<pre tabindex="0"><code>confirm → status=open, requires_approval
+                       ↓
+               等待 Stripe 回调
+                       ↓
+    平台自动完成 approve（不需要客户端调）
+                       ↓
+    poll payment_page → PI 出现
+                       ↓
+    可能 requires_action → verify_challenge
+                       ↓
+    poll 到 succeeded → 完成
+</code></pre><p>但某些边缘情况下（平台回调未触发），客户端需要手动 approve。此时 Sentinel token 是必须的。</p>
+<ul>
+<li>Approve 是<strong>一次性操作</strong>，同一 session 不可重复</li>
+<li>如果 <code>t</code> 字段为空或格式错误 → 返回 <code>blocked</code> → session 作废</li>
+<li>成功的 approve 返回 <code>{"result":"approved"}</code></li>
+</ul>
+<hr>
+<h2 id="五3ds-验证挑战">五、3DS 验证挑战
+</h2><p>当 Stripe 判断交易需要额外验证时，PaymentIntent 会进入 <code>requires_action</code> 状态，附带 3DS challenge 信息。</p>
+<h3 id="51-challenge-类型">5.1 Challenge 类型
+</h3><p>Stripe 使用 hCaptcha Enterprise 作为 3DS 验证手段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"status"</span><span class="p">:</span> <span class="s2">"requires_action"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"next_action"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"verify_with_challenge"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"verify_with_challenge"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"url"</span><span class="p">:</span> <span class="s2">"https://challenges.stripe.com/..."</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"challenge_type"</span><span class="p">:</span> <span class="s2">"hcaptcha"</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="52-verify_challenge-完整请求格式">5.2 verify_challenge 完整请求格式
+</h3><p>HAR 中验证的 <code>verify_challenge</code> 完整请求：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/payment_intents/{pi_id}/verify_challenge
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">captcha_response = {hcaptcha_token}     # P0开头的长字符串
+</span></span></span><span class="line"><span class="cl"><span class="err">captcha_vendor_name = hcaptcha           # 固定值
+</span></span></span><span class="line"><span class="cl"><span class="err">captcha_sitekey = xxxxxxxx-xxxx-xxxx    # Stripe 的 hCaptcha sitekey
+</span></span></span><span class="line"><span class="cl"><span class="err">expected_amount = 98214                  # 交易金额
+</span></span></span><span class="line"><span class="cl"><span class="err">expected_currency = php                  # 币种
+</span></span></span><span class="line"><span class="cl"><span class="err">key = pk_live_xxx                        # Publishable Key
+</span></span></span><span class="line"><span class="cl"><span class="err">_stripe_version = 2025-03-31.basil; checkout_server_update_beta=v1; ...
+</span></span></span><span class="line"><span class="cl"><span class="err">client_secret = pi_xxx_secret_xxx        # PI 的 client_secret
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意：</p>
+<ul>
+<li>字段名是 <code>captcha_response</code> 而不是 <code>challenge_response</code></li>
+<li>需要同时传 <code>captcha_vendor_name</code> 和 <code>captcha_sitekey</code></li>
+<li>需要传 <code>expected_amount</code>/<code>expected_currency</code> 做一致性校验</li>
+<li>使用<strong>长版本</strong> <code>_stripe_version</code>（与 Hosted 模式一致）</li>
+</ul>
+<h3 id="53-hcaptcha-enterprise-的特殊性">5.3 hCaptcha Enterprise 的特殊性
+</h3><p>Stripe 使用的不是普通 hCaptcha，而是 <strong>hCaptcha Enterprise</strong>。区别：</p>
+<ol>
+<li><strong>有 <code>rqdata</code> 参数</strong>：普通 hCaptcha 不需要 rqdata，Enterprise 必须传</li>
+<li><strong>sitekey 是 Stripe 专有的</strong>：从 <code>elements/sessions</code> 响应的 <code>passive_captcha</code> 字段中提取</li>
+<li><strong>invisible 模式</strong>：浏览器里看不到验证码图片，但后台在做风控评估</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 从 elements_session 响应中提取</span>
+</span></span><span class="line"><span class="cl"><span class="n">rqdata</span> <span class="o">=</span> <span class="n">elements_session</span><span class="p">[</span><span class="s2">"passive_captcha"</span><span class="p">][</span><span class="s2">"rqdata"</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">sitekey</span> <span class="o">=</span> <span class="n">elements_session</span><span class="p">[</span><span class="s2">"passive_captcha"</span><span class="p">][</span><span class="s2">"sitekey"</span><span class="p">]</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="54-时效性问题">5.4 时效性问题
+</h3><p><strong>hCaptcha token 有时效性</strong>——浏览器里 ~4 秒解出即有效，但远程打码服务可能需要 30-120 秒。如果超时：</p>
+<ul>
+<li><code>verify_challenge</code> 返回 <code>payment_intent_authentication_failure</code></li>
+<li>但 PI 状态仍然是 <code>requires_action</code>——<strong>可以重新 verify_challenge</strong></li>
+</ul>
+<p>解决方案分级：</p>
+<ol>
+<li><strong>最优</strong>：本地 headless 浏览器解 hCaptcha（&lt;5s，成功率 95%+）</li>
+<li><strong>次优</strong>：支持 Enterprise rqdata 的快速打码 API（如 YesCaptcha，~15s）</li>
+<li><strong>兜底</strong>：如果 PI 已经进入 <code>requires_action</code>，可以循环重试 verify_challenge（每次用新 captcha token）</li>
+</ol>
+<h3 id="55-3ds-vs-hcaptcha-的区别">5.5 3DS vs hCaptcha 的区别
+</h3><p><strong>重要澄清</strong>：Stripe 的 <code>verify_with_challenge</code> 并非传统银行 3DS 验证（3D Secure）。它是 Stripe 自有的风控挑战，使用 hCaptcha 作为人机验证手段。</p>
+<p>真正的银行 3DS（如 Visa Secure）会打开银行页面要求输入 OTP/密码，这个在纯协议支付中<strong>无法绕过</strong>——但使用虚拟信用卡（VCC）通常不会触发银行 3DS，只会触发 Stripe 自身的 hCaptcha challenge。</p>
+<hr>
+<h2 id="六tls-指纹对抗">六、TLS 指纹对抗
+</h2><p>纯 HTTP 请求最大的挑战不是协议逻辑，而是 <strong>TLS 指纹</strong>。</p>
+<p>Stripe 和 Cloudflare 都会检查 TLS Client Hello 的指纹（JA3/JA4），如果发现你的 TLS 握手特征不像浏览器，直接返回 403/429。</p>
+<h3 id="61-指纹伪装">6.1 指纹伪装
+</h3><p>Python 项目使用 <code>curl_cffi</code> 库，支持模拟多种浏览器的 TLS 指纹：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">PROFILES</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">"chrome131"</span><span class="p">,</span> <span class="s2">"Mozilla/5.0 ... Chrome/131.0"</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">"chrome124"</span><span class="p">,</span> <span class="s2">"Mozilla/5.0 ... Chrome/124.0"</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">"safari18"</span><span class="p">,</span>  <span class="s2">"Mozilla/5.0 ... Safari/605.1"</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="s2">"firefox117"</span><span class="p">,</span> <span class="s2">"Mozilla/5.0 ... Firefox/117.0"</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>Node.js 项目使用 <code>CycleTLS</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">import</span> <span class="nx">initCycleTLS</span> <span class="nx">from</span> <span class="s1">'cycletls'</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">cycleTLS</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">initCycleTLS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">cycleTLS</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ja3</span><span class="o">:</span> <span class="s1">'771,4865-4866-4867...'</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">userAgent</span><span class="o">:</span> <span class="s1">'Mozilla/5.0 ...'</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="62-指纹轮换策略">6.2 指纹轮换策略
+</h3><p>当遇到 403/429 时，自动切换到下一个 TLS 指纹配置：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TLSFingerprintManager</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">rotate_on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">exclude_current</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pick_next</span><span class="p">()</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>最多重试 3 次，每次使用不同的浏览器指纹。</p>
+<h3 id="63-tls-指纹与-user-agent-一致性">6.3 TLS 指纹与 User-Agent 一致性
+</h3><p>一个常见错误是 TLS 指纹和 User-Agent 不匹配。比如用 Chrome 131 的 TLS 指纹配置但 User-Agent 写的是 Chrome 124，Cloudflare 的 bot detection 会立即发现这种不一致。</p>
+<p><strong>正确做法</strong>：TLS profile 和 UA 必须成对配置：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">PROFILES</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"tls"</span><span class="p">:</span> <span class="s2">"chrome131"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"ua"</span><span class="p">:</span> <span class="s2">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Chrome/131.0.0.0 Safari/537.36"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"sec_ch_ua"</span><span class="p">:</span> <span class="s1">'"Not=A?Brand";v="99", "Chromium";v="131"'</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"tls"</span><span class="p">:</span> <span class="s2">"safari18"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"ua"</span><span class="p">:</span> <span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) ... Safari/605.1.15"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">"sec_ch_ua"</span><span class="p">:</span> <span class="kc">None</span>  <span class="c1"># Safari 不发 sec-ch-ua</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="64-http-协议版本">6.4 HTTP 协议版本
+</h3><p>另一个细节：Stripe 的 API 请求在浏览器中走 <strong>HTTP/2</strong>，但 <code>payment_intents/confirm</code> 在某些实现中用 HTTP/1.1 反而更稳定。</p>
+<p>HAR 中观察到：</p>
+<ul>
+<li><code>confirmation_tokens</code>：HTTP/2</li>
+<li><code>payment_intents/confirm</code>：可以 HTTP/1.1</li>
+<li><code>payment_pages/confirm</code>：HTTP/2</li>
+</ul>
+<p>使用 <code>curl_cffi</code> 时默认走 HTTP/2（如果服务端支持），CycleTLS 需要在选项中显式指定。</p>
+<hr>
+<h2 id="七stripejs-指纹参数">七、Stripe.js 指纹参数
+</h2><p>Stripe 的 <code>confirmation_tokens</code> 和 <code>payment_intents/confirm</code> 接口都需要一组指纹参数。这些参数由 Stripe.js 在前端收集，协议支付需要正确模拟：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>含义</th>
+          <th>生成方式</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>guid</code></td>
+          <td>全局唯一 ID</td>
+          <td>UUID + 6位 hex = 42 字符（见 3.1 节）</td>
+      </tr>
+      <tr>
+          <td><code>muid</code></td>
+          <td>设备 ID</td>
+          <td>同 guid 格式，42 字符</td>
+      </tr>
+      <tr>
+          <td><code>sid</code></td>
+          <td>会话 ID</td>
+          <td>同 guid 格式，42 字符</td>
+      </tr>
+      <tr>
+          <td><code>time_on_page</code></td>
+          <td>页面停留时间</td>
+          <td>随机 8-30 秒（模拟真实用户）</td>
+      </tr>
+      <tr>
+          <td><code>key</code></td>
+          <td>Publishable Key</td>
+          <td>从 Checkout Session 获取</td>
+      </tr>
+      <tr>
+          <td><code>_stripe_version</code></td>
+          <td>API 版本</td>
+          <td>从 Stripe.js 的 basil 部署中提取</td>
+      </tr>
+  </tbody>
+</table></div>
+<h3 id="71-mstripecom6--指纹注册">7.1 m.stripe.com/6 — 指纹注册
+</h3><p>在所有业务请求之前，Stripe.js 会向 <code>m.stripe.com/6</code> 发送 4 次 POST 请求注册设备指纹。HAR 中的完整调用链：</p>
+<pre tabindex="0"><code>POST https://m.stripe.com/6  (×4)
+</code></pre><p>每次请求的 body 是 <code>application/x-www-form-urlencoded</code>，包含：</p>
+<pre tabindex="0"><code>v2 = 1
+id = &lt;stripe_js_id&gt;     # 与 confirmation_tokens 中的 guid 不同
+tag = &lt;event_tag&gt;
+src = js
+a = &lt;JSON编码的分析数据&gt;
+</code></pre><p><code>tag</code> 的值依次为：</p>
+<ol>
+<li><code>stripejs-init-started</code></li>
+<li><code>stripejs-init-complete</code></li>
+<li><code>adyen-component-loaded</code>（如果有 Adyen）</li>
+<li><code>payment-element-mounted</code></li>
+</ol>
+<p><code>a</code> 字段包含浏览器环境的详细指纹数据（屏幕尺寸、时区、语言、plugin 列表等）。</p>
+<p><strong>实际影响</strong>：不发这些请求也能支付成功，但长期使用同一个 <code>guid</code>/<code>muid</code> 而从未注册过指纹可能触发 Stripe Radar 的异常检测。建议至少发一次 <code>stripejs-init-complete</code>。</p>
+<h3 id="72-rstripecomb--遥测上报">7.2 r.stripe.com/b — 遥测上报
+</h3><p>Stripe.js 还会持续向 <code>r.stripe.com/b</code> 发送遥测数据：</p>
+<pre tabindex="0"><code>POST https://r.stripe.com/b
+Content-Type: text/plain
+
+{JSON payload}
+</code></pre><p>这个请求的 payload 是 JSON（不是 form-urlencoded），包含支付流程中的各种事件指标（加载时间、渲染时间、错误数）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"measurement"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"event_name"</span><span class="p">:</span> <span class="s2">"paymentElement.mount"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"metrics"</span><span class="p">:</span> <span class="p">{</span><span class="nt">"duration"</span><span class="p">:</span> <span class="mi">342</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"client_session_id"</span><span class="p">:</span> <span class="s2">"&lt;UUID&gt;"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"publish_key"</span><span class="p">:</span> <span class="s2">"pk_live_xxx"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><strong>实际影响</strong>：纯可选。不发不影响支付成功。但如果你的实现在生产中运行，偶尔发几次遥测可以让你的流量看起来更像真实浏览器。</p>
+<h3 id="73-动态提取-stripejs-版本">7.3 动态提取 Stripe.js 版本
+</h3><p>Stripe.js 的版本（<code>_stripe_version</code>）和构建哈希（<code>rv</code>/<code>sv</code>）不是固定的，需要从 Stripe 的部署状态接口动态提取：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// 获取当前 Stripe.js 部署信息
+</span></span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">status</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://js.stripe.com/deploy_status_henson.json'</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="p">{</span> <span class="nx">basil</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">status</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// basil.rv = "2025-03-31" → _stripe_version = "2025-03-31.basil"
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>Custom 模式只需要基础版本：<code>2025-03-31.basil</code></p>
+<p>Hosted 模式需要追加 beta flags：</p>
+<pre tabindex="0"><code>2025-03-31.basil; checkout_server_update_beta=v1; custom_checkout_beta=v1; ...
+</code></pre><p>这些 beta flags 从 <code>deploy_status_henson.json</code> 的 metadata 或 checkout 页面的初始化脚本中提取。Stripe 大约每 1-2 周更新一次部署版本。</p>
+<h3 id="74-js_checksum-和-rv_timestamp">7.4 js_checksum 和 rv_timestamp
+</h3><p>Hosted 模式的 <code>payment_pages/confirm</code> 需要两个动态校验值：</p>
+<ul>
+<li><strong><code>js_checksum</code></strong>：当前 Stripe.js bundle 的 SHA 校验和，从 deploy status 提取</li>
+<li><strong><code>rv_timestamp</code></strong>：当前 Stripe.js 的部署时间戳（Unix 毫秒），也从 deploy status 提取</li>
+</ul>
+<p>这两个值随 Stripe.js 版本更新而变化。如果使用过期的 checksum/timestamp，confirm 可能会被静默拒绝。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">deploy</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://js.stripe.com/deploy_status_henson.json"</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">js_checksum</span> <span class="o">=</span> <span class="n">deploy</span><span class="p">[</span><span class="s2">"basil"</span><span class="p">][</span><span class="s2">"js_checksum"</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">rv_timestamp</span> <span class="o">=</span> <span class="n">deploy</span><span class="p">[</span><span class="s2">"basil"</span><span class="p">][</span><span class="s2">"rv_timestamp"</span><span class="p">]</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><hr>
+<h2 id="八代理池架构">八、代理池架构
+</h2><p>协议支付的另一个核心组件是代理池。Stripe 和平台都会检查请求的源 IP，用数据中心 IP 直连容易被标记。</p>
+<h3 id="81-双代理池">8.1 双代理池
+</h3><p>最佳实践是使用两个独立的代理池：</p>
+<ul>
+<li><strong>平台代理池</strong>：用于访问 SaaS 平台的 API（需要与账号注册地匹配）</li>
+<li><strong>Stripe 代理池</strong>：用于访问 Stripe API（需要住宅 IP，避免被 Radar 标记）</li>
+</ul>
+<h3 id="82-代理健康检查">8.2 代理健康检查
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">ProxyVerifier</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxy_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">expected_country</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"https://ipapi.co/json/"</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxy_url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">actual</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">"country_code"</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">actual</span> <span class="o">!=</span> <span class="n">expected_country</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">raise</span> <span class="n">ProxyCountryMismatchError</span><span class="p">(</span><span class="n">expected_country</span><span class="p">,</span> <span class="n">actual</span><span class="p">)</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="83-出口-ip-一致性">8.3 出口 IP 一致性
+</h3><p><strong>关键规则</strong>：创建 Checkout Session 和确认支付时，必须使用<strong>同一个出口 IP</strong>。Stripe 会比对两次请求的 IP，如果不一致会拒绝交易。</p>
+<p>这意味着整个支付流程中的所有请求（从创建 session 到 confirm）必须绑定同一个代理出口。如果代理池做了负载均衡，需要在支付流程中"钉住"一个代理节点。</p>
+<h3 id="84-代理类型选择">8.4 代理类型选择
+</h3><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>代理类型</th>
+          <th>适用场景</th>
+          <th>风险</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>住宅代理（Residential）</td>
+          <td>Stripe API / 平台 API</td>
+          <td>最安全，IP 信誉高</td>
+      </tr>
+      <tr>
+          <td>ISP 代理（Static Residential）</td>
+          <td>长期固定使用</td>
+          <td>中等，某些已被标记</td>
+      </tr>
+      <tr>
+          <td>数据中心代理（Datacenter）</td>
+          <td>测试/开发</td>
+          <td>高风险，Stripe Radar 会标记</td>
+      </tr>
+      <tr>
+          <td>移动代理（Mobile）</td>
+          <td>高价值交易</td>
+          <td>最安全但最贵</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>生产环境建议住宅代理。数据中心 IP 在 Stripe 的风控系统中通常有较高的 risk score。</p>
+<h3 id="85-代理故障降级">8.5 代理故障降级
+</h3><p>代理不可用时的处理策略：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">get_proxy_with_fallback</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">country</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">proxy</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="n">country</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">proxy</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">proxy</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 降级：尝试其他国家的代理</span>
+</span></span><span class="line"><span class="cl">    <span class="n">proxy</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="s2">"US"</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">proxy</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">proxy</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 最终降级：直连（仅限测试环境）</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">allow_direct</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="n">NoProxyAvailableError</span><span class="p">()</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><strong>注意</strong>：不要在生产环境用直连降级——数据中心 IP 直连 Stripe 几乎必被拒。</p>
+<hr>
+<h2 id="九状态机设计">九、状态机设计
+</h2><p>完整的协议支付需要处理多种失败场景和重试逻辑。最佳实践是使用状态机：</p>
+<pre tabindex="0"><code>初始化 → 刷新Session → 检查权限 → 获取定价 → 创建Checkout
+    ↓           ↓           ↓           ↓           ↓
+  失败→退出   失败→退出  已有订阅→跳过  失败→退出   失败→退出
+                                                    ↓
+                                              更新税务 → 创建Token → 确认支付
+                                                ↓           ↓           ↓
+                                              失败→退出   卡被拒→换卡   3DS→验证
+                                                                        ↓
+                                                                    成功 / 失败
+</code></pre><p>每个状态转移都需要处理：</p>
+<ul>
+<li><strong>卡被拒（Card Declined）</strong>：分类拒绝原因（余额不足/CVV错误/风控拒绝），决定是换卡重试还是放弃</li>
+<li><strong>3DS 验证</strong>：进入 Challenge 流程</li>
+<li><strong>Session 过期</strong>：创建新 Session 重试</li>
+<li><strong>Rate Limiting</strong>：TLS 指纹轮换 + 退避重试</li>
+</ul>
+<h3 id="91-decline-错误分类">9.1 Decline 错误分类
+</h3><p>Stripe 的卡拒绝错误不是一个笼统的"失败"，而是分为可重试和不可重试两类：</p>
+<p><strong>可重试（换卡后重试）</strong>：</p>
+<ul>
+<li><code>generic_decline</code> — 最常见，通常是风控拒绝，换卡几乎总能过</li>
+<li><code>insufficient_funds</code> — 余额不足，充值后或换卡可过</li>
+<li><code>processing_error</code> — Stripe 侧临时错误，直接重试</li>
+</ul>
+<p><strong>不可重试（放弃本次 session）</strong>：</p>
+<ul>
+<li><code>stolen_card</code> / <code>lost_card</code> — 卡已被标记，不能再用</li>
+<li><code>card_not_supported</code> — 卡类型不支持（如某些预付卡）</li>
+<li><code>currency_not_supported</code> — 卡不支持目标币种</li>
+</ul>
+<p><strong>需要特殊处理</strong>：</p>
+<ul>
+<li><code>incorrect_cvc</code> — CVC 错误，检查是否传错了</li>
+<li><code>expired_card</code> — 卡过期，需要从卡池中移除</li>
+<li><code>card_velocity_exceeded</code> — 卡的交易频率超限，冷却后可重试</li>
+</ul>
+<h3 id="92-fast-path-优化">9.2 Fast-Path 优化
+</h3><p>一个重要的状态机优化：<strong>如果 PI 已经 <code>succeeded</code>，跳过 hCaptcha</strong>。</p>
+<p>HAR 中发现，有时 confirm 返回 <code>requires_action</code>（hCaptcha challenge），但 PI 实际上已经扣款成功。这时如果盲目去解 captcha，反而可能出错。</p>
+<p>正确做法是在收到 <code>requires_action</code> 后，<strong>先查询 PI 状态</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">pi</span> <span class="o">=</span> <span class="n">stripe</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"/v1/payment_intents/</span><span class="si">{</span><span class="n">pi_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">pk_live</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">pi</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"succeeded"</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 已经扣款成功，跳过 captcha</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">PaymentResult</span><span class="o">.</span><span class="n">SUCCESS</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="n">pi</span><span class="p">[</span><span class="s2">"status"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"requires_action"</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 确实需要解 captcha</span>
+</span></span><span class="line"><span class="cl">    <span class="n">solve_hcaptcha</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><h3 id="93-hosted-模式轮询">9.3 Hosted 模式轮询
+</h3><p>cs_live_ 模式在 confirm 之后需要轮询 <code>payment_page</code> 状态：</p>
+<pre tabindex="0"><code>POST https://api.stripe.com/v1/payment_pages/{cs_live_xxx}/poll
+→ {"payment_intent": "pi_xxx", "status": "open"}  // 等待中
+→ {"payment_intent": "pi_xxx", "payment_object_status": "requires_action"}  // 需要 captcha
+→ {"payment_intent": "pi_xxx", "payment_object_status": "succeeded"}  // 完成
+</code></pre><p>轮询间隔建议 2-3 秒，最多轮询 60 秒。如果超时未变化，检查是否需要手动 approve。</p>
+<hr>
+<h2 id="十安全边界与最佳实践">十、安全边界与最佳实践
+</h2><h3 id="101-session-隔离">10.1 Session 隔离
+</h3><p>每次支付使用独立的 Session，不复用已失败的 Session。特别是 Hosted 模式下，<code>approve</code> 操作后的 Session 不可再次使用。</p>
+<h3 id="102-dry-run-模式">10.2 Dry-Run 模式
+</h3><p>所有实现都应支持 Dry-Run 模式——执行完整流程但不提交最终的 <code>confirm</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">commit_payments</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">result</span> <span class="o">=</span> <span class="n">stripe</span><span class="o">.</span><span class="n">confirm_payment_intent</span><span class="p">(</span><span class="n">pi_id</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Dry-run: skipping confirm"</span><span class="p">)</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这对于调试非常重要：你可以验证整个流程（创建 session、生成 token、税务计算）都正确，而不实际扣钱。</p>
+<h3 id="103-不要存储敏感数据">10.3 不要存储敏感数据
+</h3><ul>
+<li>信用卡号仅在内存中使用，支付完成后立即清除</li>
+<li>Session token 不应写入日志（log 中用 <code>***</code> 替代）</li>
+<li>代理凭据不要硬编码，用环境变量或加密存储</li>
+<li>Stripe Publishable Key 可以写入代码（它本来就是公开的），但 Secret Key 绝不能出现在客户端</li>
+</ul>
+<h3 id="104-请求节奏模拟">10.4 请求节奏模拟
+</h3><p>纯协议支付的一个风险是请求速度<strong>太快</strong>。浏览器用户从打开支付页面到点击确认，通常需要 15-60 秒。如果你的自动化在 2 秒内完成全部请求，Stripe Radar 可能标记为异常。</p>
+<p>建议在关键步骤间加入随机延迟：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">))</span>   <span class="c1"># 创建 session 后</span>
+</span></span><span class="line"><span class="cl"><span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">))</span>   <span class="c1"># 更新税务后</span>
+</span></span><span class="line"><span class="cl"><span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">))</span>   <span class="c1"># 创建 token 后</span>
+</span></span><span class="line"><span class="cl"><span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span>   <span class="c1"># confirm 前</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>总时间控制在 8-30 秒之间比较自然。</p>
+<h3 id="105-并发控制">10.5 并发控制
+</h3><p>批量处理多个账号时，不要让所有请求同时发出：</p>
+<ul>
+<li><strong>Stripe API</strong>：有 rate limit，同一 publishable key 下大量并发 confirm 会触发 429</li>
+<li><strong>平台 API</strong>：多个账号同时操作可能触发风控</li>
+<li><strong>代理池</strong>：每个代理 IP 上同时只运行 1-2 个支付流程</li>
+</ul>
+<p>建议使用信号量（semaphore）限制并发：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># 最多同时处理 3 个支付</span>
+</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">with</span> <span class="n">sem</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">await</span> <span class="n">process_payment</span><span class="p">(</span><span class="n">account</span><span class="p">)</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><hr>
+<h2 id="十一实现对比">十一、实现对比
+</h2><p>文末提供的 5 套实现覆盖了不同的技术栈和使用场景：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>实现</th>
+          <th>语言/框架</th>
+          <th>模式</th>
+          <th>特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>saas-pay-sdk</strong></td>
+          <td>Python / CLI</td>
+          <td>Custom</td>
+          <td>最精简的 CLI 工具，TLS 指纹轮换，daemon 上报</td>
+      </tr>
+      <tr>
+          <td><strong>subscription-manager</strong></td>
+          <td>Python Flask / Web UI</td>
+          <td>Both</td>
+          <td>完整 Web 管理面板，支持绑卡、查账单、升级降级</td>
+      </tr>
+      <tr>
+          <td><strong>payment-gateway</strong></td>
+          <td>Python Flask / Web UI</td>
+          <td>Both</td>
+          <td>批量支付面板，账号池管理，barrier 模式批量确认</td>
+      </tr>
+      <tr>
+          <td><strong>checkout-server</strong></td>
+          <td>Python / Local HTTP</td>
+          <td>Both</td>
+          <td>本地支付编排服务器，Playwright 降级，SQLite 持久化</td>
+      </tr>
+      <tr>
+          <td><strong>protocol-engine</strong></td>
+          <td>Node.js / Modules</td>
+          <td>Both</td>
+          <td>模块化协议引擎，CycleTLS，动态 Stripe.js 版本抓取</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>每个实现都有自己的优缺点：</p>
+<ul>
+<li>想要最快上手 → <code>saas-pay-sdk</code>（纯 CLI，pip install 即可）</li>
+<li>想要可视化管理 → <code>subscription-manager</code>（Web UI）</li>
+<li>想要批量处理 → <code>payment-gateway</code>（账号池 + 批量模式）</li>
+<li>想要理解底层 → <code>protocol-engine</code>（模块化，可以单独引用任何一层）</li>
+</ul>
+<hr>
+<h2 id="下载">下载
+</h2><p>以下是 5 套完整实现的源码下载链接：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>项目</th>
+          <th>下载链接</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>saas-pay-sdk</td>
+          <td><a class="link" href="https://blog.caowo.de/downloads/saas-pay-sdk.zip">下载</a></td>
+          <td>Python CLI 工具</td>
+      </tr>
+      <tr>
+          <td>subscription-manager</td>
+          <td><a class="link" href="https://blog.caowo.de/downloads/subscription-manager.zip">下载</a></td>
+          <td>Flask Web 管理面板</td>
+      </tr>
+      <tr>
+          <td>payment-gateway</td>
+          <td><a class="link" href="https://blog.caowo.de/downloads/payment-gateway.zip">下载</a></td>
+          <td>批量支付网关面板</td>
+      </tr>
+      <tr>
+          <td>checkout-server</td>
+          <td><a class="link" href="https://blog.caowo.de/downloads/checkout-server.zip">下载</a></td>
+          <td>本地支付编排服务器</td>
+      </tr>
+      <tr>
+          <td>protocol-engine</td>
+          <td><a class="link" href="https://blog.caowo.de/downloads/protocol-engine.zip">下载</a></td>
+          <td>Node.js 协议引擎模块</td>
+      </tr>
+  </tbody>
+</table></div>
+
+    <blockquote>
+        <p><strong>注意</strong>：所有源码中的 API Key、域名、账号信息均已替换为占位符。使用前需要根据你的实际环境配置 <code>.env</code> 文件。</p>
+
+    </blockquote>
+<hr>
+<h2 id="推荐虚拟卡平台">推荐：虚拟卡平台
+</h2><p>协议支付离不开信用卡。如果你需要一张支持 Stripe 的虚拟信用卡用于订阅海外 SaaS 服务（ChatGPT、Claude、Cursor 等），推荐 <strong>ZovoCard</strong>：</p>
+<ul>
+<li>支持 Visa / Mastercard，全球 Stripe 商户可用</li>
+<li>即开即用，无需实体卡，支持 USDT 充值</li>
+<li>多卡管理，适合批量订阅场景</li>
+</ul>
+<p><a href="https://zovocard.com/register?invite=DW6AYPAP" target="_blank" rel="noopener" style="display:inline-block;padding:8px 20px;font-size:14px;color:#fff;background:#6366f1;border-radius:6px;text-decoration:none;font-weight:600;">注册 ZovoCard →</a></p>
+<hr>
+<p><em>如果你对支付安全感兴趣，欢迎加微信群交流。</em></p>
+
+</section>
+
+
+    
+<div style="
+  display: block;
+  margin: 24px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid #8b5cf6;
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">SwitchBase — 站长自用 API 中转站</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">
+    强推 Claude 全系列，纯血自有 CCMax 号池，在线率 99%+。不算最便宜，但稳定性一骑绝尘，站长本人长期使用中。
+  </div>
+  <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #fff;
+    background: #8b5cf6;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往注册 →</a>
+</div>
+
+
+    
+<div style="
+  display: block;
+  margin: 30px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐服务</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">Florence AI — AI 会员一站式充值</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">ChatGPT Plus / Pro · Claude Pro · Grok — 正规信用卡渠道，自动发货 30 秒到账</div>
+  <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent-color-text);
+    background: var(--accent-color);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往充值 →</a>
+</div>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="https://blog.caowo.de/tags/stripe/">Stripe</a>
+        
+            <a href="https://blog.caowo.de/tags/%E5%8D%8F%E8%AE%AE%E6%94%AF%E4%BB%98/">协议支付</a>
+        
+            <a href="https://blog.caowo.de/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a>
+        
+            <a href="https://blog.caowo.de/tags/confirmationtoken/">ConfirmationToken</a>
+        
+            <a href="https://blog.caowo.de/tags/paymentintent/">PaymentIntent</a>
+        
+            <a href="https://blog.caowo.de/tags/tls%E6%8C%87%E7%BA%B9/">TLS指纹</a>
+        
+            <a href="https://blog.caowo.de/tags/%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B/">逆向工程</a>
+        
+            <a href="https://blog.caowo.de/tags/checkout-session/">Checkout Session</a>
+        
+            <a href="https://blog.caowo.de/tags/%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8/">支付安全</a>
+        
+            <a href="https://blog.caowo.de/tags/api/">API</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">提链 — ChatGPT 跨区支付链接提取的完整技术拆解</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/chatgpt-plus-0php-cross-region-pricing-exploit-2026/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">0 PHP 白嫖 ChatGPT Plus — 跨区定价混淆攻击的完整技术拆解</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/newapi-stripe-webhook-vulnerability-analysis/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">newapi Stripe Webhook 充值漏洞深度分析 - 空密钥绕过支付验证</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/acg-faka-bepusdt-callback-forgery-analysis/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">虚拟发卡系统回调伪造漏洞全链路拆解 — 从备份文件泄露到批量盗取卡密</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gmail-sanitizer-credential-cutoff-analysis/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Gmail Sanitizer 深度拆解：8 步全链路凭据切断的自动化实现</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        © 
+        
+        2026 言零的博客 - 20260405
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com/" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+            <div class="ads-mobile-inline">
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+            </div>
+        </div>
+        
+<script type="text/javascript" src="./Stripe 协议支付自动化深度拆解：从 HAR 抓包到纯 API 全链路实现_files/main.acaf849f2b273f6a8368a58b001f336738d0c948d92e79b116467d0c7515f932.js" defer=""></script>
+
+
+    
+
+</body></html>
