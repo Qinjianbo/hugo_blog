@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/ -->
+<html lang="zh-CN" dir="ltr" data-scheme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="完整拆解 ChatGPT 提链技术：从 Session Token 出发，通过 12 步协议流程构造 Stripe Checkout Session，最终提取 iDEAL/UPI/PIX/Kakao Pay 等本地支付链接。附带八种支付方式的技术对比和完整代码分析。">
+<title>提链 — ChatGPT 跨区支付链接提取的完整技术拆解</title>
+
+
+<link rel="canonical" href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="preload" as="style" href="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/css2">
+<link rel="stylesheet" href="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/css2">
+
+
+<link rel="stylesheet" href="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/style.min.a2bf8a31dd38effd9e8b27128b1a2f407446a71dcf0b7d93eeb8c57bb6f9cc04.css"><meta property="og:title" content="提链 — ChatGPT 跨区支付链接提取的完整技术拆解">
+<meta property="og:description" content="完整拆解 ChatGPT 提链技术：从 Session Token 出发，通过 12 步协议流程构造 Stripe Checkout Session，最终提取 iDEAL/UPI/PIX/Kakao Pay 等本地支付链接。附带八种支付方式的技术对比和完整代码分析。">
+<meta property="og:url" content="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/">
+<meta property="og:site_name" content="言零的博客 - 20260405">
+<meta property="og:type" content="article"><meta property="article:section" content="Posts"><meta property="article:tag" content="ChatGPT"><meta property="article:tag" content="Stripe"><meta property="article:tag" content="提链"><meta property="article:tag" content="跨区支付"><meta property="article:tag" content="iDEAL"><meta property="article:tag" content="UPI"><meta property="article:tag" content="本地支付"><meta property="article:tag" content="Checkout Session"><meta property="article:published_time" content="2026-08-01T20:00:00+08:00"><meta property="article:modified_time" content="2026-08-01T20:00:00+08:00">
+<meta name="twitter:title" content="提链 — ChatGPT 跨区支付链接提取的完整技术拆解">
+<meta name="twitter:description" content="完整拆解 ChatGPT 提链技术：从 Session Token 出发，通过 12 步协议流程构造 Stripe Checkout Session，最终提取 iDEAL/UPI/PIX/Kakao Pay 等本地支付链接。附带八种支付方式的技术对比和完整代码分析。">
+
+<script src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/hm.js"></script><script defer="" src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;SDZvDCIq-3er2UKht5fIrl2UvvIrJxi6hZVxBfIa&quot;}"></script>
+
+
+
+
+
+<script async="" src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M3JN483VK6', {
+    'anonymize_ip': true
+  });
+</script><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?459a34335680d2c2b91885b9497df7ff";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    <link rel="stylesheet" href="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/photoswipe.css"></head>
+    <body class="
+    article-page
+    " style="transition: background-color 0.3s;">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="https://blog.caowo.de/">言零的博客 - 20260405</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/posts/">
+                
+                <span>文章 / Posts</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/categories/">
+                
+                <span>分类 / Categories</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/tags/">
+                
+                <span>标签 / Tags</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/about/">
+                
+                <span>关于 / About</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/links/">
+                
+                <span>友链 / Links</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/search/">
+                
+                <span>🔍 搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="8" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="16" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+
+    
+    <div class="sidebar-ads-desktop">
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+    </div>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <line x1="5" y1="9" x2="19" y2="9"></line>
+  <line x1="5" y1="15" x2="19" y2="15"></line>
+  <line x1="11" y1="4" x2="7" y2="20"></line>
+  <line x1="17" y1="4" x2="13" y2="20"></line>
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ul>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%80%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8F%90%E9%93%BE%E4%BF%A1%E7%94%A8%E5%8D%A1%E7%9A%84%E5%9B%B0%E5%A2%83">一、为什么需要提链——信用卡的困境</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%BA%8C%E6%8F%90%E9%93%BE%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E5%9B%9B%E6%AD%A5%E6%8B%86%E8%A7%A3">二、提链的技术原理——四步拆解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-1%E8%8E%B7%E5%8F%96-access-token">Step 1：获取 Access Token</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-2%E5%88%9B%E5%BB%BA-checkout-session">Step 2：创建 Checkout Session</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-3stripe-%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B">Step 3：Stripe 协议流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-4%E6%8F%90%E5%8F%96%E6%94%AF%E4%BB%98%E9%93%BE%E6%8E%A5">Step 4：提取支付链接</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%89stripe-checkout-session-%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84">三、Stripe Checkout Session 的内部结构</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9B%9B%E5%85%AB%E7%A7%8D%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AF%B9%E6%AF%94">四、八种支付方式的技术对比</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%BA%94%E4%BB%8E-0-php-%E5%88%B0%E6%8F%90%E9%93%BE%E6%BC%8F%E6%B4%9E%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%9A%84%E8%BE%B9%E7%95%8C">五、从 0 PHP 到提链——漏洞与工具的边界</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%85%AD%E5%8D%8F%E8%AE%AE%E7%BB%86%E8%8A%82%E9%82%A3%E4%BA%9B%E8%AE%A9%E4%BD%A0%E5%8D%A1%E4%BD%8F%E7%9A%84%E5%9D%91">六、协议细节——那些让你卡住的坑</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-1ip-%E4%B8%80%E8%87%B4%E6%80%A7">坑 1：IP 一致性</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-2expected_amount">坑 2：<code>expected_amount</code></a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-3stripe-session-state">坑 3：Stripe Session State</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-4accept-language-%E5%92%8C-guid">坑 4：<code>Accept-Language</code> 和 <code>guid</code></a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-5%E8%B6%85%E6%97%B6">坑 5：超时</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%83%E5%BC%80%E6%BA%90%E6%8F%90%E9%93%BE%E8%84%9A%E6%9C%AC">七、开源提链脚本</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%A4%9A%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E6%8F%90%E9%93%BE%E5%A5%97%E4%BB%B6">多支付方式提链套件</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#momo-%E6%8F%90%E5%8F%96%E8%84%9A%E6%9C%AC%E8%B6%8A%E5%8D%97">MoMo 提取脚本（越南）</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E8%84%9A%E6%9C%AC%E7%9A%84%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1">脚本的核心设计</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%85%AB%E4%B8%BA%E4%BB%80%E4%B9%88-openai-%E4%B8%8D%E7%9B%B4%E6%8E%A5%E6%8F%90%E4%BE%9B%E8%BF%99%E4%BA%9B%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F">八、为什么 OpenAI 不直接提供这些支付方式？</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B9%9D%E5%92%8C-0-php-%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85">九、和 0 PHP 漏洞的关系——一张图说清</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%8D%81%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E">十、写在最后</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E9%99%84%E5%BD%95%E7%9B%B4%E5%8D%A1%E7%BB%91%E5%AE%9A%E5%8F%A6%E4%B8%80%E6%9D%A1%E8%B7%AF">附录：直卡绑定——另一条路</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%8E%9F%E7%90%86">原理</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%92%8C%E6%8F%90%E9%93%BE%E7%9A%84%E5%85%B3%E7%B3%BB">和提链的关系</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E7%9B%B8%E5%85%B3%E9%98%85%E8%AF%BB">相关阅读</a></li>
+  </ul>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    
+
+</aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/">
+            <img src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/blog-cover-default.jpg" alt="Featured image of post 提链 — ChatGPT 跨区支付链接提取的完整技术拆解" loading="lazy">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="background-color: hsl(247, 60%, 84%); color: hsl(247, 60%, 15%);">
+                漏洞分析
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8/" style="background-color: hsl(39, 60%, 84%); color: hsl(39, 60%, 15%);">
+                支付安全
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/web-%E5%AE%89%E5%85%A8/" style="background-color: hsl(219, 60%, 84%); color: hsl(219, 60%, 15%);">
+                Web 安全
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/">提链 — ChatGPT 跨区支付链接提取的完整技术拆解</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            完整拆解 ChatGPT 提链技术：从 Session Token 出发，通过 12 步协议流程构造 Stripe Checkout Session，最终提取 iDEAL/UPI/PIX/Kakao Pay 等本地支付链接。附带八种支付方式的技术对比和完整代码分析。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+  <circle cx="18" cy="18" r="4"></circle>
+  <path d="M15 3v4"></path>
+  <path d="M7 3v4"></path>
+  <path d="M3 11h16"></path>
+  <path d="M18 16.496v1.504l1 1"></path>
+</svg>
+                    <time class="article-time--published" datetime="2026-08-01T20:00:00+08:00">Saturday, August 1, 2026</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        6 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 6l6 6l-6 6"></path></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ul>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%80%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8F%90%E9%93%BE%E4%BF%A1%E7%94%A8%E5%8D%A1%E7%9A%84%E5%9B%B0%E5%A2%83">一、为什么需要提链——信用卡的困境</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%BA%8C%E6%8F%90%E9%93%BE%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E5%9B%9B%E6%AD%A5%E6%8B%86%E8%A7%A3">二、提链的技术原理——四步拆解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-1%E8%8E%B7%E5%8F%96-access-token">Step 1：获取 Access Token</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-2%E5%88%9B%E5%BB%BA-checkout-session">Step 2：创建 Checkout Session</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-3stripe-%E5%8D%8F%E8%AE%AE%E6%B5%81%E7%A8%8B">Step 3：Stripe 协议流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#step-4%E6%8F%90%E5%8F%96%E6%94%AF%E4%BB%98%E9%93%BE%E6%8E%A5">Step 4：提取支付链接</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%89stripe-checkout-session-%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84">三、Stripe Checkout Session 的内部结构</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9B%9B%E5%85%AB%E7%A7%8D%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AF%B9%E6%AF%94">四、八种支付方式的技术对比</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%BA%94%E4%BB%8E-0-php-%E5%88%B0%E6%8F%90%E9%93%BE%E6%BC%8F%E6%B4%9E%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%9A%84%E8%BE%B9%E7%95%8C">五、从 0 PHP 到提链——漏洞与工具的边界</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%85%AD%E5%8D%8F%E8%AE%AE%E7%BB%86%E8%8A%82%E9%82%A3%E4%BA%9B%E8%AE%A9%E4%BD%A0%E5%8D%A1%E4%BD%8F%E7%9A%84%E5%9D%91">六、协议细节——那些让你卡住的坑</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-1ip-%E4%B8%80%E8%87%B4%E6%80%A7">坑 1：IP 一致性</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-2expected_amount">坑 2：<code>expected_amount</code></a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-3stripe-session-state">坑 3：Stripe Session State</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-4accept-language-%E5%92%8C-guid">坑 4：<code>Accept-Language</code> 和 <code>guid</code></a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%9D%91-5%E8%B6%85%E6%97%B6">坑 5：超时</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B8%83%E5%BC%80%E6%BA%90%E6%8F%90%E9%93%BE%E8%84%9A%E6%9C%AC">七、开源提链脚本</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%A4%9A%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E6%8F%90%E9%93%BE%E5%A5%97%E4%BB%B6">多支付方式提链套件</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#momo-%E6%8F%90%E5%8F%96%E8%84%9A%E6%9C%AC%E8%B6%8A%E5%8D%97">MoMo 提取脚本（越南）</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E8%84%9A%E6%9C%AC%E7%9A%84%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1">脚本的核心设计</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%85%AB%E4%B8%BA%E4%BB%80%E4%B9%88-openai-%E4%B8%8D%E7%9B%B4%E6%8E%A5%E6%8F%90%E4%BE%9B%E8%BF%99%E4%BA%9B%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F">八、为什么 OpenAI 不直接提供这些支付方式？</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E4%B9%9D%E5%92%8C-0-php-%E6%BC%8F%E6%B4%9E%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%80%E5%BC%A0%E5%9B%BE%E8%AF%B4%E6%B8%85">九、和 0 PHP 漏洞的关系——一张图说清</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%8D%81%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E">十、写在最后</a></li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E9%99%84%E5%BD%95%E7%9B%B4%E5%8D%A1%E7%BB%91%E5%AE%9A%E5%8F%A6%E4%B8%80%E6%9D%A1%E8%B7%AF">附录：直卡绑定——另一条路</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%8E%9F%E7%90%86">原理</a></li>
+        <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E5%92%8C%E6%8F%90%E9%93%BE%E7%9A%84%E5%85%B3%E7%B3%BB">和提链的关系</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/chatgpt-paylink-extraction-technical-guide/#%E7%9B%B8%E5%85%B3%E9%98%85%E8%AF%BB">相关阅读</a></li>
+  </ul>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p></p><figure><img src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/wechat-qr.jpg" alt="微信二维码" width="200">
+</figure>
+
+<figure><img src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/qq-group-qr.jpg" alt="QQ群二维码" width="200">
+</figure>
+
+<strong>联系方式 &amp; 交流群</strong><p></p>
+<ul>
+<li><strong>QQ</strong>: 46333839</li>
+<li><strong>微信</strong>: GOV-HACK</li>
+</ul>
+<p>进微信群请联系博主，各位觉得文章对你有帮助的话可否打赏一些呀~</p>
+<hr>
+
+    <blockquote>
+        <p><strong>⚠️ 免责声明</strong>：本文仅供安全研究与技术讨论。文中不提供可直接复用的攻击工具或完整利用脚本。本文目的是帮助开发者理解 Stripe 跨区支付的工作原理，以及为什么某些支付方式在不同区域可见性不同。提链工具不篡改金额、不注入优惠码，用户以正常价格通过本地支付方式完成订阅。</p>
+
+    </blockquote>
+<hr>
+<h2 id="前言">前言
+</h2><p>“提链"这个词，最近在各种 ChatGPT 合租群、代充群里频繁出现。</p>
+<p>什么意思呢？简单来说：<strong>把 ChatGPT 的信用卡结账页面，转换成一个本地支付方式（iDEAL / UPI / PIX / Kakao Pay / GCash…）的跳转链接。</strong></p>
+<p>你可能会问——OpenAI 不是只接受信用卡吗？</p>
+<p>准确地说，<strong>OpenAI 的前端只展示信用卡表单</strong>。但后端用的是 Stripe，而 Stripe 在全球支持几十种本地支付方式。这些支付方式对应的国家、货币、支付类型都不同，OpenAI 在结账页面上做了筛选，只让你看到"信用卡 / 借记卡"一个选项。</p>
+<p>但 Stripe 的能力是在的。只要你能在创建 Checkout Session 时告诉 Stripe “我要用荷兰 iDEAL 支付”——Stripe 就会老老实实返回一个 iDEAL 的跳转链接。</p>
+<p>提链，就是<strong>从 Stripe 的 Checkout Session 里把这个跳转链接提出来</strong>。</p>
+<p>上一篇文章我们拆了 <a class="link" href="https://blog.caowo.de/posts/chatgpt-plus-0php-cross-region-pricing-exploit-2026/">0 PHP 白嫖 ChatGPT Plus</a> 的跨区定价混淆攻击。那个是利用区域信号碎片化 + 工具注入参数让金额变成 0——纯粹的漏洞利用，现在大概率已经被修了。</p>
+<p>而提链不同。<strong>提链是正常的商业行为</strong>——用户以当地正常价格、通过当地正常的支付方式付款。只不过 OpenAI 的 UI 不展示这些选项，你得自己绕过前端的限制，直接和 Stripe 对话。</p>
+<p>今天把它从协议层完整拆开。</p>
+<hr>
+<h2 id="一为什么需要提链信用卡的困境">一、为什么需要提链——信用卡的困境
+</h2><p>全球 80 亿人，有信用卡的不到 20 亿。</p>
+<p>印度人用 UPI，巴西人用 PIX，荷兰人用 iDEAL，韩国人用 Kakao Pay，越南人用 MoMo。这些不是什么小众支付方式——它们在各自国家的渗透率往往超过 70%。</p>
+<p>但 OpenAI 的结账页面只给你一个 Stripe Elements 信用卡表单：卡号、有效期、CVC。没有信用卡？不好意思。</p>
+<p>讽刺的是，Stripe 本身是支持这些本地支付方式的。OpenAI 创建 Checkout Session 时，就是通过 <code>billing_details.country</code> 和 <code>billing_details.currency</code> 来决定哪些支付方式可用。</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>国家</th>
+          <th>货币</th>
+          <th>可用支付方式</th>
+          <th>月费</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>??🇱 荷兰</td>
+          <td>EUR</td>
+          <td>iDEAL</td>
+          <td>€20</td>
+      </tr>
+      <tr>
+          <td>🇮🇳 印度</td>
+          <td>INR</td>
+          <td>UPI</td>
+          <td>₹1,950</td>
+      </tr>
+      <tr>
+          <td>🇧🇷 巴西</td>
+          <td>BRL</td>
+          <td>PIX</td>
+          <td>R$99.90</td>
+      </tr>
+      <tr>
+          <td>??🇭 瑞士</td>
+          <td>CHF</td>
+          <td>TWINT</td>
+          <td>CHF 20</td>
+      </tr>
+      <tr>
+          <td>🇰🇷 韩国</td>
+          <td>KRW</td>
+          <td>Kakao Pay</td>
+          <td>₩26,400</td>
+      </tr>
+      <tr>
+          <td>🇵🇱 波兰</td>
+          <td>PLN</td>
+          <td>BLIK</td>
+          <td>zł79.99</td>
+      </tr>
+      <tr>
+          <td>🇻🇳 越南</td>
+          <td>VND</td>
+          <td>MoMo</td>
+          <td>₫460,000</td>
+      </tr>
+      <tr>
+          <td>??🇭 菲律宾</td>
+          <td>PHP</td>
+          <td>GCash</td>
+          <td>₱990</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>这些价格不是我编的——它们真实存在于 Stripe 的 Checkout Session 响应里。OpenAI 按照区域设置了不同的定价，Stripe 负责处理。只是 OpenAI 的前端选择性地隐藏了这些支付方式。</p>
+<p>提链工具要做的，就是<strong>绕过前端的限制，以目标国家/货币创建 Checkout Session，然后从 Stripe 的 confirm 响应中提取第三方支付的跳转链接</strong>。</p>
+<hr>
+<h2 id="二提链的技术原理四步拆解">二、提链的技术原理——四步拆解
+</h2><h3 id="step-1获取-access-token">Step 1：获取 Access Token
+</h3><p>登录 chatgpt.com，在浏览器中打开：</p>
+<pre tabindex="0"><code>https://chatgpt.com/api/auth/session
+</code></pre><p>返回一个 JSON：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"user"</span><span class="p">:</span> <span class="p">{</span> <span class="nt">"id"</span><span class="p">:</span> <span class="s2">"user-xxx"</span><span class="p">,</span> <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span> <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"..."</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"accessToken"</span><span class="p">:</span> <span class="s2">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><code>accessToken</code> 是一个标准 JWT，有效期通常 5~10 分钟。它是后续所有 API 调用的认证凭据。</p>
+
+    <blockquote>
+        <p>提链工具同时也支持直接粘贴 <code>__Secure-next-auth.session-token</code> cookie——这个 cookie 可以用来换取新的 access token。但最简单的方式还是直接复制上面的 JSON。</p>
+
+    </blockquote>
+<h3 id="step-2创建-checkout-session">Step 2：创建 Checkout Session
+</h3><p>用 Access Token 调用 OpenAI 的 checkout API：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://chatgpt.com/backend-api/payments/checkout
+</span></span></span><span class="line"><span class="cl"><span class="err">Authorization: Bearer eyJ...
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">{
+</span></span></span><span class="line"><span class="cl"><span class="err">  "entry_point": "all_plans_pricing_modal",
+</span></span></span><span class="line"><span class="cl"><span class="err">  "plan_name": "chatgptplusplan",
+</span></span></span><span class="line"><span class="cl"><span class="err">  "billing_details": {
+</span></span></span><span class="line"><span class="cl"><span class="err">    "country": "NL",
+</span></span></span><span class="line"><span class="cl"><span class="err">    "currency": "EUR"
+</span></span></span><span class="line"><span class="cl"><span class="err">  },
+</span></span></span><span class="line"><span class="cl"><span class="err">  "checkout_ui_mode": "custom"
+</span></span></span><span class="line"><span class="cl"><span class="err">}
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>关键参数是 <code>billing_details</code> 里的 <code>country</code> 和 <code>currency</code>。这两个字段决定了 Stripe 在初始化支付页面时会提供哪些支付方式。传 <code>NL</code> + <code>EUR</code>，Stripe 就会在 <code>payment_method_types</code> 里包含 <code>ideal</code>。</p>
+<p>响应：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"checkout_session_id"</span><span class="p">:</span> <span class="s2">"oaics_xxxxxxxxxxxx"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"processor_entity"</span><span class="p">:</span> <span class="s2">"openai_llc"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"publishable_key"</span><span class="p">:</span> <span class="s2">"pk_live_xxxxxxxxxxxx"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"payment_method_types"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"card"</span><span class="p">,</span> <span class="s2">"ideal"</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><code>oaics_</code> 前缀是 OpenAI 定制的 Stripe Checkout Session ID 格式。</p>
+<h3 id="step-3stripe-协议流程">Step 3：Stripe 协议流程
+</h3><p>拿到 Checkout Session ID 后，需要完成一系列 Stripe API 调用。这是提链的核心技术含量所在——不是简单地 POST 一个接口就完事了。</p>
+<p>完整的协议流程有 12 步：</p>
+<pre tabindex="0"><code>┌──────────────────────────┐
+│  1. Session Refresh       │  (用 cookie 换新的 AT)
+│  2. Create Checkout       │  (拿 AT 创建 checkout session)
+│  3. Stripe Init           │  (初始化支付页面状态)
+│  4. Update OAI Taxes      │  (通知 OpenAI 更新税务)
+│  5. Stripe Tax Region     │  (更新 Stripe 税务区域)
+│  6. Stripe Customer Data  │  (更新客户信息)
+│  7. OAI Checkout Snapshot │  (保存 checkout 快照)
+│  8. Pre-Confirm           │  (部分支付方式需要)
+│  9. Create Payment Method │  (创建 PM，类型=ideal/upi/pix...)
+│ 10. Confirm               │  (确认支付，触发重定向)
+│ 11. Approve               │  (如果需要额外批准)
+│ 12. Extract Redirect URL  │  (从 confirm 响应中提取跳转链接)
+└──────────────────────────┘
+</code></pre><p>每一步都有自己的参数格式和必要的状态管理。Stripe 的 Checkout Session 是有状态的——它跟踪你的 <code>eid</code>（element ID）、<code>mrid</code>（merchant reference ID）、<code>expected_amount</code> 等等。如果你跳过了某一步或者参数不对，后续步骤就会报错。</p>
+<h3 id="step-4提取支付链接">Step 4：提取支付链接
+</h3><p>第 10 步 <code>Confirm</code> 之后，如果支付方式是重定向类型（iDEAL、UPI、PIX 等都是），Stripe 会在响应中返回一个 <code>redirect_url</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"status"</span><span class="p">:</span> <span class="s2">"requires_action"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"next_action"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"type"</span><span class="p">:</span> <span class="s2">"redirect_to_url"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"redirect_to_url"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">"url"</span><span class="p">:</span> <span class="s2">"https://hooks.stripe.com/redirect/authenticate/src_xxx?client_secret=..."</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这个 URL 就是最终的支付链接。用户在浏览器中打开它，会被重定向到对应的支付方式页面（iDEAL 的银行选择页、UPI 的付款确认页、PIX 的二维码页面等）。完成支付后，Stripe webhook 通知 OpenAI，OpenAI 确认订阅生效。</p>
+<p><strong>整个流程，金额由 Stripe 的价格表决定，提链工具不篡改任何金额字段。</strong> 用户付的就是对应国家/地区的标准月费。</p>
+<hr>
+<h2 id="三stripe-checkout-session-的内部结构">三、Stripe Checkout Session 的内部结构
+</h2><p>拆开看，Stripe Checkout Session 里藏了不少有趣的东西。</p>
+<p>第 3 步 <code>Stripe Init</code> 调用的是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/payment_pages/{oaics_xxx}/init
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>响应中最关键的几个字段：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"payment_method_types"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"card"</span><span class="p">,</span> <span class="s2">"ideal"</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"line_items"</span><span class="p">:</span> <span class="p">[{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"description"</span><span class="p">:</span> <span class="s2">"ChatGPT Plus subscription"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"amount"</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"currency"</span><span class="p">:</span> <span class="s2">"eur"</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"shipping_address_collection"</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"payment_method_configuration"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"merchant_reference_id"</span><span class="p">:</span> <span class="s2">"mri_xxx"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"customer_session_client_secret"</span><span class="p">:</span> <span class="s2">"cuss_xxx"</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"session_id"</span><span class="p">:</span> <span class="s2">"oaics_xxx"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><code>payment_method_types</code> 是关键——它决定了这个 Checkout Session 支持哪些支付方式。同一个接口，传不同的 <code>country</code> / <code>currency</code>，返回的 <code>payment_method_types</code> 就不同。</p>
+<p>这也解释了为什么 OpenAI 前端只显示信用卡——它在创建 Checkout Session 时没有传目标国家的 <code>billing_details</code>，或者传的是用户账号的注册国家（通常是 US），所以 Stripe 只返回 <code>["card"]</code>。</p>
+<hr>
+<h2 id="四八种支付方式的技术对比">四、八种支付方式的技术对比
+</h2><p>每种支付方式在 Stripe 层面的行为略有不同：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>支付方式</th>
+          <th>PM Type</th>
+          <th>国家</th>
+          <th>货币</th>
+          <th style="text-align: center">需要 pre_confirm</th>
+          <th>重定向类型</th>
+          <th>特殊处理</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>iDEAL</td>
+          <td><code>ideal</code></td>
+          <td>NL</td>
+          <td>EUR</td>
+          <td style="text-align: center">✗</td>
+          <td>银行选择页</td>
+          <td>无</td>
+      </tr>
+      <tr>
+          <td>UPI</td>
+          <td><code>upi</code></td>
+          <td>IN</td>
+          <td>INR</td>
+          <td style="text-align: center">✗</td>
+          <td>VPA 输入页</td>
+          <td>无</td>
+      </tr>
+      <tr>
+          <td>PIX</td>
+          <td><code>pix</code></td>
+          <td>BR</td>
+          <td>BRL</td>
+          <td style="text-align: center">✗</td>
+          <td>二维码页</td>
+          <td>无</td>
+      </tr>
+      <tr>
+          <td>TWINT</td>
+          <td><code>twint</code></td>
+          <td>CH</td>
+          <td>CHF</td>
+          <td style="text-align: center">✗</td>
+          <td>App 跳转</td>
+          <td>无</td>
+      </tr>
+      <tr>
+          <td>Kakao Pay</td>
+          <td><code>kakao_pay</code></td>
+          <td>KR</td>
+          <td>KRW</td>
+          <td style="text-align: center">✓</td>
+          <td>Kakao 确认页</td>
+          <td>需要 pre_confirm 调用</td>
+      </tr>
+      <tr>
+          <td>BLIK</td>
+          <td><code>blik</code></td>
+          <td>PL</td>
+          <td>PLN</td>
+          <td style="text-align: center">✗</td>
+          <td>6位码输入</td>
+          <td>无</td>
+      </tr>
+      <tr>
+          <td>MoMo</td>
+          <td><code>momo</code></td>
+          <td>VN</td>
+          <td>VND</td>
+          <td style="text-align: center">✓</td>
+          <td>MoMo App</td>
+          <td>需要 pre_confirm 调用</td>
+      </tr>
+      <tr>
+          <td>GCash</td>
+          <td><code>gcash</code></td>
+          <td>PH</td>
+          <td>PHP</td>
+          <td style="text-align: center">✗</td>
+          <td>GCash 确认页</td>
+          <td>无</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>大多数支付方式流程一致：创建 PM → Confirm → 提取 redirect URL。但 Kakao Pay 和 MoMo 需要额外的 <code>pre_confirm</code> 调用——如果跳过这一步，Confirm 会返回 <code>incomplete</code> 状态，没有 redirect URL。</p>
+<p><code>pre_confirm</code> 的请求格式：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST https://api.stripe.com/v1/payment_pages/{oaics_xxx}/pre_confirm
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Type: application/x-www-form-urlencoded
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">expected_payment_method_type=kakao_pay
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>看起来简单，但如果你不知道有这一步，Kakao Pay 的提链就会卡在最后一步——所有参数都对了，就是拿不到链接。这类细节只有通过 HAR 抓包 Stripe 的完整结账流程才能发现。</p>
+<hr>
+<h2 id="五从-0-php-到提链漏洞与工具的边界">五、从 0 PHP 到提链——漏洞与工具的边界
+</h2><p>上一篇文章分析了 <a class="link" href="https://blog.caowo.de/posts/chatgpt-plus-0php-cross-region-pricing-exploit-2026/">0 PHP 攻击</a>，里面提到第三方工具在创建 Checkout Session 时可能注入了零元参数（如 <code>promo_campaign</code>）。那么问题来了：</p>
+<p><strong>提链工具和那个"CDK 提炼"工具是一回事吗？</strong></p>
+<p>不是。区别在于：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>0 PHP “提炼"工具</th>
+          <th>正常提链工具</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>目的</td>
+          <td>白嫖（amount = 0）</td>
+          <td>正常付款</td>
+      </tr>
+      <tr>
+          <td>是否注入优惠码</td>
+          <td>是（<code>promo_campaign</code>、<code>discount</code> 等）</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td>金额来源</td>
+          <td>工具操纵</td>
+          <td>Stripe 价格表</td>
+      </tr>
+      <tr>
+          <td>合法性</td>
+          <td>灰色/违法</td>
+          <td>正常商业行为</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>正常的提链工具<strong>不注入任何优惠参数</strong>。它只是：</p>
+<ol>
+<li>用你的 AT 创建一个以目标国家/货币计价的 Checkout Session</li>
+<li>走完 Stripe 的协议流程</li>
+<li>把 redirect URL 返回给你</li>
+</ol>
+<p>你付的是 Stripe 价格表上对应区域的标准价格——荷兰 €20/月，印度 ₹1,950/月，巴西 R$99.90/月。没有优惠码，没有金额篡改。</p>
+<p>正常的提链工具的设计原则应该是：<strong>不注入 <code>promo_campaign</code>，不传 <code>discount</code>，不覆盖 <code>amount</code>。</strong> 工具只做一件事——把 Stripe 的本地支付能力释放出来，让没有信用卡的用户也能正常订阅。</p>
+<hr>
+<h2 id="六协议细节那些让你卡住的坑">六、协议细节——那些让你卡住的坑
+</h2><p>如果你自己尝试过写提链脚本，你一定踩过这些坑。</p>
+<h3 id="坑-1ip-一致性">坑 1：IP 一致性
+</h3><p>Stripe Checkout Session 在创建和确认时需要使用同一个 IP。如果你用代理 A 创建了 Checkout Session，又用代理 B 去 Confirm——Stripe 会返回 <code>invalid_request_error</code>。</p>
+<p>这不是 Stripe 的 bug，是安全机制。Stripe 检测到 session 的创建 IP 和确认 IP 不一致，会认为可能是中间人攻击。</p>
+<p>解决方案：<strong>整个 12 步流程使用同一个 HTTP client（或 cookie jar），确保所有请求走同一个出口 IP。</strong></p>
+<h3 id="坑-2expected_amount">坑 2：<code>expected_amount</code>
+</h3><p>Stripe 的 Confirm 请求需要传 <code>expected_amount</code> 参数，值必须和 Checkout Session 的金额一致。这个值从哪来？</p>
+<p>最准确的来源是第 4 步 <code>Update Taxes</code> 的响应。这一步把账单地址传给 OpenAI，OpenAI 计算含税金额后写入 Checkout Session，然后返回一个 snapshot，里面有 <code>amount_total</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"snapshot"</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"amount_total"</span><span class="p">:</span> <span class="mi">2000</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">"currency"</span><span class="p">:</span> <span class="s2">"eur"</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>如果你用 Init 步骤的金额去 Confirm，可能会因为税后金额不一致而失败。</p>
+<h3 id="坑-3stripe-session-state">坑 3：Stripe Session State
+</h3><p>Stripe 的 Checkout Session 维护了一个内部状态。每次 API 调用后，响应里都会更新 <code>eid</code>、<code>mrid</code> 等字段。下一次调用必须带上最新的状态值。</p>
+<p>这意味着你不能简单地并行调用 12 步——必须严格按顺序执行，每一步用上一步返回的最新状态。</p>
+<h3 id="坑-4accept-language-和-guid">坑 4：<code>Accept-Language</code> 和 <code>guid</code>
+</h3><p>这两个是容易忽略的细节：</p>
+<ul>
+<li>Stripe API 会根据 <code>Accept-Language</code> 请求头返回不同的 <code>locale</code> 配置。如果你不传，默认是 <code>en-US</code>，但某些支付方式在特定 locale 下行为不同。</li>
+<li>Stripe 的某些内部 API 需要一个 <code>guid</code> 参数，格式是 <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code>（UUID v4）。不是随便写的——格式不对会被拒绝。</li>
+</ul>
+<h3 id="坑-5超时">坑 5：超时
+</h3><p>整个流程从创建 Checkout Session 到拿到 redirect URL，通常需要 10~30 秒。某些支付方式（如 Kakao Pay）可能需要更长时间，因为 Stripe 需要和第三方支付系统交互。</p>
+<p>如果 Confirm 之后没有立刻返回 redirect URL，需要轮询 Init 接口。URL 可能在 Confirm 后几秒到几十秒内才出现。我们的工具最多等 90 秒——超过这个时间通常意味着哪里出了问题。</p>
+<hr>
+<h2 id="七开源提链脚本">七、开源提链脚本
+</h2><p>说了这么多原理，给一些现成的实现参考。</p>
+
+    <blockquote>
+        <p><strong>⚠️ 时效性声明</strong>：以下脚本收集于 2026 年 7 月。OpenAI/Stripe 的 API 接口、Stripe runtime 版本、风控策略随时可能变更，脚本<strong>可能已不可用</strong>。仅供学习协议流程和理解技术原理，不保证当前可运行。使用前请自行验证。</p>
+
+    </blockquote>
+<h3 id="多支付方式提链套件">多支付方式提链套件
+</h3><p>来源：社区开源的 <code>ideal-link-extractor</code>，MIT License。</p>
+<p>包含 6 种支付方式的独立提取脚本：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>脚本</th>
+          <th>支付方式</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ideal_qr_extract.py</code></td>
+          <td>iDEAL（荷兰）</td>
+          <td>核心脚本（3263 行），其他脚本的参考实现</td>
+      </tr>
+      <tr>
+          <td><code>upi/upi_extract.py</code></td>
+          <td>UPI（印度）</td>
+          <td>含多代理轮转、并行模式</td>
+      </tr>
+      <tr>
+          <td><code>pix/pix_extract.py</code></td>
+          <td>PIX（巴西）</td>
+          <td>二维码提取</td>
+      </tr>
+      <tr>
+          <td><code>twint/twint_extract.py</code></td>
+          <td>TWINT（瑞士）</td>
+          <td>App 跳转链接</td>
+      </tr>
+      <tr>
+          <td><code>kakao/kakao_extract.py</code></td>
+          <td>Kakao Pay（韩国）</td>
+          <td>含 pre_confirm 处理</td>
+      </tr>
+      <tr>
+          <td><code>blik/blik_qr_extract.py</code></td>
+          <td>BLIK（波兰）</td>
+          <td>6 位码输入链接</td>
+      </tr>
+      <tr>
+          <td><code>detect_payment_methods.py</code></td>
+          <td>通用</td>
+          <td>按国家检测可用的 Stripe 支付方式</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>依赖：<code>requests</code>、<code>curl_cffi</code>、<code>qrcode[pil]</code></p>
+<p>基本用法（以 UPI 为例）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install requests curl_cffi
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">UPI_TOKEN</span><span class="o">=</span><span class="s2">"eyJhbGciOi..."</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">UPI_PROXY</span><span class="o">=</span><span class="s2">"socks5://user:pass@host:port"</span>  <span class="c1"># 自备代理</span>
+</span></span><span class="line"><span class="cl">python upi_extract.py
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>每个脚本通过环境变量配置代理（<code>XXX_PROXY</code>）和 Token（<code>XXX_TOKEN</code> 或 <code>token.txt</code> 文件）。代理需自备——脚本不内置任何代理。</p>
+<h3 id="momo-提取脚本越南">MoMo 提取脚本（越南）
+</h3><p>独立维护的 MoMo/Kakao 脚本集，包含：</p>
+<ul>
+<li><code>kakao_extract.py</code>——共享的会话管理和 Stripe 协议辅助函数</li>
+<li><code>momo_channel_probe.py</code>——只读模式探测 MoMo 通道可用性</li>
+<li><code>momo_probe.py</code>——默认只读，设置 <code>MOMO_EXTRACT_REDIRECT=1</code> 才尝试提取</li>
+</ul>
+<p>依赖额外的 Playwright（需要 Chromium）。</p>
+<h3 id="脚本的核心设计">脚本的核心设计
+</h3><p>这些脚本的技术亮点：</p>
+<ol>
+<li><strong>代理状态持久化</strong>——<code>proxy_state.json</code> 记录每个代理的健康状态、成功/失败计数、冷却时间</li>
+<li><strong>日志脱敏</strong>——自动将代理地址、Token 等敏感信息替换为安全标签</li>
+<li><strong>多 Worker 并行</strong>——支持多线程并发提取，自动分配代理</li>
+<li><strong>Stripe 协议完整实现</strong>——Session state 管理、<code>eid</code>/<code>mrid</code> 追踪、tax region 更新，完整复刻浏览器行为</li>
+</ol>
+
+    <blockquote>
+        <p><strong>注意</strong>：部分脚本包含 <code>promo_campaign</code> 注入逻辑和 <code>REQUIRE_ZERO</code> 选项（用于上一篇文章分析的 0 PHP 攻击路径）。这些属于漏洞利用代码，<strong>不建议使用</strong>——OpenAI 大概率已做修复，强行使用可能导致账号风控。</p>
+
+    </blockquote>
+<hr>
+<h2 id="八为什么-openai-不直接提供这些支付方式">八、为什么 OpenAI 不直接提供这些支付方式？
+</h2><p>好问题。Stripe 支持它们，OpenAI 用的是 Stripe，为什么不在结账页面上显示？</p>
+<p>几个可能的原因：</p>
+<ol>
+<li>
+<p><strong>合规成本</strong>：每个国家的本地支付方式有不同的合规要求（反洗钱、实名验证等）。支持 iDEAL 意味着要满足荷兰的金融监管要求。</p>
+</li>
+<li>
+<p><strong>退款风险</strong>：某些本地支付方式的退款/dispute 流程和信用卡不同。PIX 的退款机制、UPI 的 chargeback 流程，都需要额外的运营投入。</p>
+</li>
+<li>
+<p><strong>税务复杂度</strong>：不同国家的增值税率不同，账单格式要求不同。OpenAI 需要为每个国家维护正确的税务处理。</p>
+</li>
+<li>
+<p><strong>优先级</strong>：信用卡覆盖了 OpenAI 的核心市场（北美、欧洲）。本地支付方式对应的市场（东南亚、拉美、南亚）目前可能不是优先级。</p>
+</li>
+</ol>
+<p>但 Stripe 的能力已经在那里了。<code>payment_method_types</code> 里已经包含了这些方式。OpenAI 只需要在前端把选项打开。在此之前——提链工具就是桥梁。</p>
+<hr>
+<h2 id="九和-0-php-漏洞的关系一张图说清">九、和 0 PHP 漏洞的关系——一张图说清
+</h2><pre tabindex="0"><code>                ┌───────────────────────────────────┐
+                │         正常提链工具               │
+                │  country=NL, currency=EUR          │
+                │  NO promo_campaign                 │
+                │  → amount = €20 (Stripe 价格表)    │
+                │  → redirect URL → iDEAL 付款       │
+                └───────────┬───────────────────────┘
+                            │
+          同一个 API        │        同一个 API
+                            │
+                ┌───────────▼───────────────────────┐
+                │   OpenAI /payments/checkout API    │
+                │   + Stripe Checkout Session        │
+                └───────────┬───────────────────────┘
+                            │
+                ┌───────────▼───────────────────────┐
+                │        0 PHP 攻击工具              │
+                │  country=PH, currency=PHP          │
+                │  + promo_campaign injection         │
+                │  + cross-region confusion           │
+                │  → amount = ₱0 (被操纵)            │
+                │  → PH BIN 卡完成支付               │
+                └───────────────────────────────────┘
+</code></pre><p>同一个 API，两种用法：</p>
+<ul>
+<li><strong>提链</strong>：合法利用 Stripe 的本地支付能力，正常价格</li>
+<li><strong>0 PHP</strong>：利用跨区信号碎片化 + 参数注入，把价格打到零</li>
+</ul>
+<p>提链不是漏洞利用。它只是 Stripe 本来就有的能力，被 OpenAI 前端隐藏了而已。</p>
+<hr>
+<h2 id="十写在最后">十、写在最后
+</h2><p>提链的本质是一个简单的事实：<strong>Stripe 是一个全球支付平台，它天然支持几十种本地支付方式。OpenAI 的 UI 做了限制，但 API 没有。</strong></p>
+<p>从技术角度看，12 步协议流程的每一步都有其必要性——IP 一致性、状态管理、税务更新、pre_confirm。跳过任何一步都会导致最终拿不到 redirect URL。这也是为什么"提链"不是简单地抓个包就能搞定的——你需要理解 Stripe 的完整 Checkout 流程。</p>
+<p>从商业角度看，提链让全球用户有了一种不依赖信用卡的方式来使用 ChatGPT。在信用卡渗透率不到 10% 的印度，UPI 是 8 亿人的默认支付方式。提链本身不是什么灰色操作——它只是把 Stripe 的能力释放给了真正需要的人。</p>
+
+    <blockquote>
+        <p><strong>最后的最后</strong>：本文提到的所有脚本和协议细节都有时效性。OpenAI 和 Stripe 的接口在持续变化——Stripe runtime version 会更新，API 字段会调整，风控规则会收紧。今天能跑的脚本，明天可能就 403 了。理解原理比收藏脚本更重要。</p>
+
+    </blockquote>
+<hr>
+<h2 id="附录直卡绑定另一条路">附录：直卡绑定——另一条路
+</h2><p>除了提链，还有一种完全不同的思路：<strong>直接给 ChatGPT 账号绑一张卡，然后正常走 checkout。</strong></p>
+<p>这就是"直卡焚决"方法的核心。它不绕过前端、不走第三方支付——它解决的是"没有美区信用卡"这个前置问题。</p>
+<h3 id="原理">原理
+</h3><p>OpenAI 的 <code>/backend-api/payments/payment_method</code> 接口支持创建 Stripe <code>SetupIntent</code>——这是 Stripe 的"先绑卡不扣款"机制。绑上之后，下次走 checkout 时就有卡可用了。</p>
+<p>配套的控制台脚本（在 chatgpt.com 的 Console 里运行）做了这几件事：</p>
+<ol>
+<li><strong>自动发现 Stripe 公钥</strong>——OpenAI 有两个 Stripe 商户分片（<code>KslHRdbaPg</code> 和 <code>C6h1nxGoI3</code>），脚本通过 <code>retrieveSetupIntent</code> 自动匹配当前账号属于哪个分片</li>
+<li><strong>创建 SetupIntent</strong>——调用 OpenAI 的 <code>payment_method</code> API，拿到 <code>client_secret</code></li>
+<li><strong>渲染 Stripe Card Element</strong>——在页面上弹出一个模态框，内嵌 Stripe 的标准卡输入组件</li>
+<li><strong>确认绑定</strong>——<code>stripe.confirmCardSetup</code> + <code>set_as_default_payment_method: true</code></li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// 关键调用
+</span></span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">stripe</span><span class="p">.</span><span class="nx">confirmCardSetup</span><span class="p">(</span><span class="nx">clientSecret</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">payment_method</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">card</span><span class="o">:</span> <span class="nx">cardElement</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">billing_details</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">allow_redisplay</span><span class="o">:</span> <span class="s1">'always'</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">set_as_default_payment_method</span><span class="o">:</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>绑卡成功后，脚本还会调用 <code>/backend-api/payments/payment_methods</code> 拉取当前账号的所有支付方式列表，用 <code>console.table</code> 打印出来。你可以看到新绑的卡已经成为默认支付方式。</p>
+<h3 id="和提链的关系">和提链的关系
+</h3><ul>
+<li><strong>直卡绑定</strong>：解决"没有卡"的问题。需要有一张能过 Stripe AVS/3DS 验证的实体或虚拟卡。</li>
+<li><strong>提链</strong>：解决"不想/不能用信用卡"的问题。走本地支付方式，完全不涉及信用卡。</li>
+</ul>
+<p>两种方法互补——有卡的用直卡，没卡的用提链。</p>
+<hr>
+<h2 id="相关阅读">相关阅读
+</h2><ul>
+<li><a class="link" href="https://blog.caowo.de/posts/chatgpt-plus-0php-cross-region-pricing-exploit-2026/">0 PHP 白嫖 ChatGPT Plus — 跨区定价混淆攻击的完整技术拆解</a></li>
+<li><a class="link" href="https://blog.caowo.de/posts/gpt-plus-google-play-subscription-transfer/">ChatGPT Plus Google Play 订阅转移漏洞分析</a></li>
+<li><a class="link" href="https://blog.caowo.de/posts/gpt-plus-exploit-revenuecat-vulnerability/">RevenueCat 凭证转移漏洞——匿名购买 + restore 归属偷渡</a></li>
+<li><a class="link" href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">Google Play CC Max 比例分配漏洞</a></li>
+</ul>
+
+</section>
+
+
+    
+<div style="
+  display: block;
+  margin: 24px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid #8b5cf6;
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">SwitchBase — 站长自用 API 中转站</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">
+    强推 Claude 全系列，纯血自有 CCMax 号池，在线率 99%+。不算最便宜，但稳定性一骑绝尘，站长本人长期使用中。
+  </div>
+  <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #fff;
+    background: #8b5cf6;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往注册 →</a>
+</div>
+
+
+    
+<div style="
+  display: block;
+  margin: 30px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐服务</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">Florence AI — AI 会员一站式充值</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">ChatGPT Plus / Pro · Claude Pro · Grok — 正规信用卡渠道，自动发货 30 秒到账</div>
+  <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent-color-text);
+    background: var(--accent-color);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往充值 →</a>
+</div>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="https://blog.caowo.de/tags/chatgpt/">ChatGPT</a>
+        
+            <a href="https://blog.caowo.de/tags/stripe/">Stripe</a>
+        
+            <a href="https://blog.caowo.de/tags/%E6%8F%90%E9%93%BE/">提链</a>
+        
+            <a href="https://blog.caowo.de/tags/%E8%B7%A8%E5%8C%BA%E6%94%AF%E4%BB%98/">跨区支付</a>
+        
+            <a href="https://blog.caowo.de/tags/ideal/">IDEAL</a>
+        
+            <a href="https://blog.caowo.de/tags/upi/">UPI</a>
+        
+            <a href="https://blog.caowo.de/tags/%E6%9C%AC%E5%9C%B0%E6%94%AF%E4%BB%98/">本地支付</a>
+        
+            <a href="https://blog.caowo.de/tags/checkout-session/">Checkout Session</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/chatgpt-plus-0php-cross-region-pricing-exploit-2026/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">0 PHP 白嫖 ChatGPT Plus — 跨区定价混淆攻击的完整技术拆解</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-plus-google-play-subscription-transfer/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT Plus 订阅转移全解析 - 从 Google Play Token 到一键开通的完整技术链路</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-plus-exploit-revenuecat-vulnerability/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT Plus 订阅漏洞深度分析 - Google Play Billing 鉴权缺失导致 0 元订阅</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-5-4-thinking-juice-test-guide-2026/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-5.4 Thinking 降智测试完整指南 - Juice 值检测与 IP 影响分析</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/chatgpt-pro-free-trial-methods-2026/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ChatGPT 免费试用漏洞汇总 - 2026 年 4 月最新白嫖指南</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        © 
+        
+        2026 言零的博客 - 20260405
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com/" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+            <div class="ads-mobile-inline">
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+            </div>
+        </div>
+        
+<script type="text/javascript" src="./提链 — ChatGPT 跨区支付链接提取的完整技术拆解_files/main.acaf849f2b273f6a8368a58b001f336738d0c948d92e79b116467d0c7515f932.js" defer=""></script>
+
+
+    
+
+</body></html>
