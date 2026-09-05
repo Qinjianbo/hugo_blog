@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/ -->
+<html lang="zh-CN" dir="ltr" data-scheme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="深入拆解传说中的「焚决」——通过 Tampermonkey 油猴脚本劫持 checkout_capabilities API 响应，前端注入 cassia 支付流，配合随机德国 IBAN 实现 Claude Max/Pro 零元订阅。完整技术分析：Fetch/XHR 双通道拦截、SEPA CORE 直接借记清算机制、MOD 97-10 校验算法局限性、客户端信任边界漏洞的通用攻击框架与防御方案。">
+<title>焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门</title>
+
+
+<link rel="canonical" href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="preload" as="style" href="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/css2">
+<link rel="stylesheet" href="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/css2">
+
+
+<link rel="stylesheet" href="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/style.min.a2bf8a31dd38effd9e8b27128b1a2f407446a71dcf0b7d93eeb8c57bb6f9cc04.css"><meta property="og:title" content="焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门">
+<meta property="og:description" content="深入拆解传说中的「焚决」——通过 Tampermonkey 油猴脚本劫持 checkout_capabilities API 响应，前端注入 cassia 支付流，配合随机德国 IBAN 实现 Claude Max/Pro 零元订阅。完整技术分析：Fetch/XHR 双通道拦截、SEPA CORE 直接借记清算机制、MOD 97-10 校验算法局限性、客户端信任边界漏洞的通用攻击框架与防御方案。">
+<meta property="og:url" content="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/">
+<meta property="og:site_name" content="言零的博客 - 20260405">
+<meta property="og:type" content="article"><meta property="article:section" content="Posts"><meta property="article:tag" content="Claude"><meta property="article:tag" content="订阅漏洞"><meta property="article:tag" content="API 劫持"><meta property="article:tag" content="Tampermonkey"><meta property="article:tag" content="SEPA"><meta property="article:tag" content="支付安全"><meta property="article:tag" content="漏洞复现"><meta property="article:tag" content="客户端安全"><meta property="article:published_time" content="2026-07-26T04:49:00+08:00"><meta property="article:modified_time" content="2026-07-26T04:49:00+08:00">
+<meta name="twitter:title" content="焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门">
+<meta name="twitter:description" content="深入拆解传说中的「焚决」——通过 Tampermonkey 油猴脚本劫持 checkout_capabilities API 响应，前端注入 cassia 支付流，配合随机德国 IBAN 实现 Claude Max/Pro 零元订阅。完整技术分析：Fetch/XHR 双通道拦截、SEPA CORE 直接借记清算机制、MOD 97-10 校验算法局限性、客户端信任边界漏洞的通用攻击框架与防御方案。">
+
+<script src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/hm.js"></script><script defer="" src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;SDZvDCIq-3er2UKht5fIrl2UvvIrJxi6hZVxBfIa&quot;}"></script>
+
+
+
+
+
+<script async="" src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M3JN483VK6', {
+    'anonymize_ip': true
+  });
+</script><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?459a34335680d2c2b91885b9497df7ff";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    <link rel="stylesheet" href="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/photoswipe.css"></head>
+    <body class="
+    article-page
+    " style="transition: background-color 0.3s;">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="https://blog.caowo.de/">言零的博客 - 20260405</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/posts/">
+                
+                <span>文章 / Posts</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/categories/">
+                
+                <span>分类 / Categories</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/tags/">
+                
+                <span>标签 / Tags</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/about/">
+                
+                <span>关于 / About</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/links/">
+                
+                <span>友链 / Links</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/search/">
+                
+                <span>🔍 搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="8" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="16" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+
+    
+    <div class="sidebar-ads-desktop">
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+    </div>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <line x1="5" y1="9" x2="19" y2="9"></line>
+  <line x1="5" y1="15" x2="19" y2="15"></line>
+  <line x1="11" y1="4" x2="7" y2="20"></line>
+  <line x1="17" y1="4" x2="13" y2="20"></line>
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ul>
+    <li class="active-class"><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%80%E6%94%BB%E5%87%BB%E5%85%A8%E6%99%AF%E4%B8%80%E4%B8%AA-api-%E5%AD%97%E6%AE%B5%E6%94%B9%E5%86%99%E5%BC%95%E5%8F%91%E7%9A%84%E8%BF%9E%E9%94%81%E5%8F%8D%E5%BA%94">一、攻击全景：一个 API 字段改写引发的连锁反应</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E6%AD%A3%E5%B8%B8%E7%9A%84-claude-%E8%AE%A2%E9%98%85%E6%B5%81%E7%A8%8B">正常的 Claude 订阅流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%8A%AB%E6%8C%81%E5%90%8E%E7%9A%84%E6%B5%81%E7%A8%8B">劫持后的流程</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%8Csepa-%E7%9B%B4%E6%8E%A5%E5%80%9F%E8%AE%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A1%AB%E4%B8%AA%E5%81%87%E8%B4%A6%E5%8F%B7%E4%B9%9F%E8%83%BD%E8%BF%87">二、SEPA 直接借记——为什么填个假账号也能过</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%85%88%E6%90%9E%E6%B8%85%E6%A5%9A-sepa-%E6%98%AF%E4%BB%80%E4%B9%88">先搞清楚 SEPA 是什么</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BF%A1%E7%94%A8%E5%8D%A1-vs-sepa-%E7%9B%B4%E6%8E%A5%E5%80%9F%E8%AE%B0%E4%B8%A4%E5%A5%97%E5%AE%8C%E5%85%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BF%A1%E4%BB%BB%E6%A8%A1%E5%9E%8B">信用卡 vs SEPA 直接借记：两套完全不同的信任模型</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#sepa-core-%E6%B8%85%E7%AE%97%E6%B5%81%E7%A8%8B">SEPA CORE 清算流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#mod-97-10%E6%A0%BC%E5%BC%8F%E6%A0%A1%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7">MOD 97-10：格式校验的局限性</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%8F%E5%81%8F%E6%98%AF%E5%BE%B7%E5%9B%BD-iban">为什么偏偏是德国 IBAN？</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%89%E8%84%9A%E6%9C%AC%E9%80%90%E8%A1%8C%E6%8A%80%E6%9C%AF%E6%8B%86%E8%A7%A3">三、脚本逐行技术拆解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#31-%E5%85%83%E6%95%B0%E6%8D%AE%E6%8A%A2%E5%9C%A8%E4%B8%80%E5%88%87%E4%B9%8B%E5%89%8D">3.1 元数据——抢在一切之前</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#32-%E7%B2%BE%E7%A1%AE%E5%88%B6%E5%AF%BC%E5%8F%AA%E6%94%B9%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3">3.2 精确制导——只改一个接口</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#33-fetch-%E6%8B%A6%E6%88%AA%E5%85%88%E5%8F%91%E5%90%8E%E6%94%B9">3.3 Fetch 拦截——先发后改</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#34-response-%E9%87%8D%E6%9E%84%E7%BB%86%E8%8A%82%E5%86%B3%E5%AE%9A%E6%88%90%E8%B4%A5">3.4 Response 重构——细节决定成败</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#35-xhr-%E5%8F%8C%E9%80%9A%E9%81%93%E4%BF%9D%E9%99%A9">3.5 XHR 双通道保险</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#36-%E7%8A%B6%E6%80%81%E6%8C%87%E7%A4%BA%E5%99%A8">3.6 状态指示器</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%9B%9B%E6%A8%AA%E5%90%91%E8%BF%81%E7%A7%BB%E8%BF%99%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%98%AF%E4%B8%80%E7%B1%BB%E6%BC%8F%E6%B4%9E">四、横向迁移：这不是一个漏洞，是一类漏洞</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E6%BC%8F%E6%B4%9E%E6%9C%AC%E8%B4%A8">漏洞本质</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E9%80%9A%E7%94%A8%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B">通用攻击模型</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%94%E9%98%B2%E5%BE%A1%E8%A7%86%E8%A7%92">五、防御视角</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%BB%99%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%BC%80%E5%8F%91%E8%80%85">给服务端开发者</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%BB%99%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6%E8%80%85">给安全研究者</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%85%AD%E5%AE%9E%E6%88%98%E7%BF%BB%E8%BD%A6%E7%8E%B0%E5%9C%BA%E9%AA%8C%E8%AF%81%E5%A4%B1%E8%B4%A5%E5%B9%B6%E6%B8%85%E9%99%A4%E6%97%A7%E4%BC%9A%E8%AF%9D">六、实战翻车现场：“验证失败并清除旧会话”</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E4%B8%AA%E9%94%99%E8%AF%AF">为什么会出现这个错误？</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%94%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BC%9A%E8%AF%9D%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0">五种常见的会话失效原因</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%BA%94%E5%AF%B9%E7%AD%96%E7%95%A5">应对策略</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%B0%8F%E7%BB%93">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%83%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E">七、写在最后</a></li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%9B%B8%E5%85%B3%E9%98%85%E8%AF%BB">相关阅读</a></li>
+  </ul>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    
+
+</aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/">
+            <img src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/blog-cover-default.jpg" alt="Featured image of post 焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门" loading="lazy">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="background-color: hsl(247, 60%, 84%); color: hsl(247, 60%, 15%);">
+                漏洞分析
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8/" style="background-color: hsl(39, 60%, 84%); color: hsl(39, 60%, 15%);">
+                支付安全
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/web-%E5%AE%89%E5%85%A8/" style="background-color: hsl(219, 60%, 84%); color: hsl(219, 60%, 15%);">
+                Web 安全
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/">焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            深入拆解传说中的「焚决」——通过 Tampermonkey 油猴脚本劫持 checkout_capabilities API 响应，前端注入 cassia 支付流，配合随机德国 IBAN 实现 Claude Max/Pro 零元订阅。完整技术分析：Fetch/XHR 双通道拦截、SEPA CORE 直接借记清算机制、MOD 97-10 校验算法局限性、客户端信任边界漏洞的通用攻击框架与防御方案。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+  <circle cx="18" cy="18" r="4"></circle>
+  <path d="M15 3v4"></path>
+  <path d="M7 3v4"></path>
+  <path d="M3 11h16"></path>
+  <path d="M18 16.496v1.504l1 1"></path>
+</svg>
+                    <time class="article-time--published" datetime="2026-07-26T04:49:00+08:00">Sunday, July 26, 2026</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        5 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 6l6 6l-6 6"></path></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ul>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%89%8D%E8%A8%80">前言</a></li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%80%E6%94%BB%E5%87%BB%E5%85%A8%E6%99%AF%E4%B8%80%E4%B8%AA-api-%E5%AD%97%E6%AE%B5%E6%94%B9%E5%86%99%E5%BC%95%E5%8F%91%E7%9A%84%E8%BF%9E%E9%94%81%E5%8F%8D%E5%BA%94">一、攻击全景：一个 API 字段改写引发的连锁反应</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E6%AD%A3%E5%B8%B8%E7%9A%84-claude-%E8%AE%A2%E9%98%85%E6%B5%81%E7%A8%8B">正常的 Claude 订阅流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%8A%AB%E6%8C%81%E5%90%8E%E7%9A%84%E6%B5%81%E7%A8%8B">劫持后的流程</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%8Csepa-%E7%9B%B4%E6%8E%A5%E5%80%9F%E8%AE%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A1%AB%E4%B8%AA%E5%81%87%E8%B4%A6%E5%8F%B7%E4%B9%9F%E8%83%BD%E8%BF%87">二、SEPA 直接借记——为什么填个假账号也能过</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%85%88%E6%90%9E%E6%B8%85%E6%A5%9A-sepa-%E6%98%AF%E4%BB%80%E4%B9%88">先搞清楚 SEPA 是什么</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BF%A1%E7%94%A8%E5%8D%A1-vs-sepa-%E7%9B%B4%E6%8E%A5%E5%80%9F%E8%AE%B0%E4%B8%A4%E5%A5%97%E5%AE%8C%E5%85%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BF%A1%E4%BB%BB%E6%A8%A1%E5%9E%8B">信用卡 vs SEPA 直接借记：两套完全不同的信任模型</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#sepa-core-%E6%B8%85%E7%AE%97%E6%B5%81%E7%A8%8B">SEPA CORE 清算流程</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#mod-97-10%E6%A0%BC%E5%BC%8F%E6%A0%A1%E9%AA%8C%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7">MOD 97-10：格式校验的局限性</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%81%8F%E5%81%8F%E6%98%AF%E5%BE%B7%E5%9B%BD-iban">为什么偏偏是德国 IBAN？</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%89%E8%84%9A%E6%9C%AC%E9%80%90%E8%A1%8C%E6%8A%80%E6%9C%AF%E6%8B%86%E8%A7%A3">三、脚本逐行技术拆解</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#31-%E5%85%83%E6%95%B0%E6%8D%AE%E6%8A%A2%E5%9C%A8%E4%B8%80%E5%88%87%E4%B9%8B%E5%89%8D">3.1 元数据——抢在一切之前</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#32-%E7%B2%BE%E7%A1%AE%E5%88%B6%E5%AF%BC%E5%8F%AA%E6%94%B9%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3">3.2 精确制导——只改一个接口</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#33-fetch-%E6%8B%A6%E6%88%AA%E5%85%88%E5%8F%91%E5%90%8E%E6%94%B9">3.3 Fetch 拦截——先发后改</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#34-response-%E9%87%8D%E6%9E%84%E7%BB%86%E8%8A%82%E5%86%B3%E5%AE%9A%E6%88%90%E8%B4%A5">3.4 Response 重构——细节决定成败</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#35-xhr-%E5%8F%8C%E9%80%9A%E9%81%93%E4%BF%9D%E9%99%A9">3.5 XHR 双通道保险</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#36-%E7%8A%B6%E6%80%81%E6%8C%87%E7%A4%BA%E5%99%A8">3.6 状态指示器</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%9B%9B%E6%A8%AA%E5%90%91%E8%BF%81%E7%A7%BB%E8%BF%99%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%AA%E6%BC%8F%E6%B4%9E%E6%98%AF%E4%B8%80%E7%B1%BB%E6%BC%8F%E6%B4%9E">四、横向迁移：这不是一个漏洞，是一类漏洞</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E6%BC%8F%E6%B4%9E%E6%9C%AC%E8%B4%A8">漏洞本质</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E9%80%9A%E7%94%A8%E6%94%BB%E5%87%BB%E6%A8%A1%E5%9E%8B">通用攻击模型</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%94%E9%98%B2%E5%BE%A1%E8%A7%86%E8%A7%92">五、防御视角</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%BB%99%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%BC%80%E5%8F%91%E8%80%85">给服务端开发者</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%BB%99%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6%E8%80%85">给安全研究者</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%85%AD%E5%AE%9E%E6%88%98%E7%BF%BB%E8%BD%A6%E7%8E%B0%E5%9C%BA%E9%AA%8C%E8%AF%81%E5%A4%B1%E8%B4%A5%E5%B9%B6%E6%B8%85%E9%99%A4%E6%97%A7%E4%BC%9A%E8%AF%9D">六、实战翻车现场：“验证失败并清除旧会话”</a>
+      <ul>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E4%B8%AA%E9%94%99%E8%AF%AF">为什么会出现这个错误？</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%BA%94%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BC%9A%E8%AF%9D%E5%A4%B1%E6%95%88%E5%8E%9F%E5%9B%A0">五种常见的会话失效原因</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%BA%94%E5%AF%B9%E7%AD%96%E7%95%A5">应对策略</a></li>
+        <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E5%B0%8F%E7%BB%93">小结</a></li>
+      </ul>
+    </li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E4%B8%83%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E">七、写在最后</a></li>
+    <li><a href="https://blog.caowo.de/posts/claude-cassia-mock-payment-bypass-analysis/#%E7%9B%B8%E5%85%B3%E9%98%85%E8%AF%BB">相关阅读</a></li>
+  </ul>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p></p><figure><img src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/wechat-qr.jpg" alt="微信二维码" width="200">
+</figure>
+
+<figure><img src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/qq-group-qr.jpg" alt="QQ群二维码" width="200">
+</figure>
+
+<strong>联系方式 &amp; 交流群</strong><p></p>
+<ul>
+<li><strong>QQ</strong>: 46333839</li>
+<li><strong>微信</strong>: GOV-HACK</li>
+</ul>
+<p>进微信群请联系博主，各位觉得文章对你有帮助的话可否打赏一些呀~</p>
+<hr>
+
+    <blockquote>
+        <p><strong>⚠️ 时效性提醒</strong>：本文发布于 2026 年 7 月，文中涉及的 API 端点、支付流参数均为发布时有效值。Anthropic 随时可能修改 <code>checkout_capabilities</code> 响应结构或在后端追加校验逻辑，届时本方法将失效。本文保留仅供安全研究与客户端安全防御参考。</p>
+
+    </blockquote>
+<hr>
+<h2 id="前言">前言
+</h2><p>最近圈子里流传着一个叫**「焚决」**的东西，名字取得很玄，搞得好像什么了不得的秘术。拿到手一看——是一段不到 200 行的 Tampermonkey 油猴脚本。</p>
+<p>但别小看这 200 行代码。它干了一件非常漂亮的事情：在你打开 Claude 网页版准备付费订阅的瞬间，在浏览器内部悄无声息地篡改了一个 API 响应，把你看到的支付页面从信用卡表单换成了 SEPA 银行转账。然后你去 <code>randomiban.com</code> 随便生成一个德国银行账号，填进去，提交——<strong>Claude Max 到手，扣款金额 0 元。</strong></p>
+<p>这玩意在外面传得沸沸扬扬，各路卡网卖的廉价 Claude 会员，相当一部分就是靠这个批量生产的。</p>
+<p>今天咱们把它彻底拆开。不光讲它怎么工作，更要讲<strong>为什么能成</strong>、<strong>它利用了支付系统的哪个结构性缺陷</strong>、以及<strong>这种攻击模式怎么迁移到其他平台</strong>。</p>
+<hr>
+<h2 id="一攻击全景一个-api-字段改写引发的连锁反应">一、攻击全景：一个 API 字段改写引发的连锁反应
+</h2><h3 id="正常的-claude-订阅流程">正常的 Claude 订阅流程
+</h3><p>打开 <code>claude.ai</code>，点击升级订阅，前端第一件事不是弹出支付表单——它先问后端一个问题：</p>
+<pre tabindex="0"><code>GET /api/organizations/{org_id}/subscription/checkout_capabilities
+</code></pre><p>这个接口的职责很简单：<strong>告诉前端，当前这个用户应该走哪条支付通道。</strong> 后端会综合 IP 地理位置、账号注册区域、浏览器 Accept-Language 等信号，返回一个支付流标识：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"checkout_flow"</span><span class="p">:</span> <span class="s2">"stripe"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>前端拿到 <code>stripe</code>，渲染信用卡表单——卡号、有效期、CVV、3DS 二次验证，一套标准流程。信用卡支付是同步授权的，银行实时校验，过不了就是过不了。</p>
+<h3 id="劫持后的流程">劫持后的流程
+</h3><p>脚本做的事情只有一件：<strong>把所有命中 <code>checkout_capabilities</code> 的响应体替换为</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">"checkout_flow"</span><span class="p">:</span> <span class="s2">"cassia"</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p><code>cassia</code> 是 Anthropic 内部用于欧洲 SEPA 银行转账的支付流标识。前端一看返回值变了，渲染逻辑直接切换——不再是信用卡表单，而是一个 IBAN 输入框。</p>
+<p>这时候去 randomiban.com 生成一个德国 IBAN（格式：<code>DE</code> + 2 位校验码 + 8 位银行代码 + 10 位账号，共 22 位），填进去，点提交。</p>
+<p>前端校验？只检查 IBAN 格式是否合法（MOD 97-10 校验通过即可）。</p>
+<p>后端校验？SEPA 体系下，<strong>提交时不做实时账户验证</strong>。</p>
+<p><strong>结果：Claude 立刻给你开通了订阅。</strong></p>
+<hr>
+<h2 id="二sepa-直接借记为什么填个假账号也能过">二、SEPA 直接借记——为什么填个假账号也能过
+</h2><p>这是整个攻击的核心利用点，不理解 SEPA 的清算机制，就不可能理解这个漏洞为什么成立。</p>
+<h3 id="先搞清楚-sepa-是什么">先搞清楚 SEPA 是什么
+</h3><p>SEPA（Single Euro Payments Area，单一欧元支付区）覆盖 36 个欧洲国家和地区，是欧盟推动的统一支付基础设施。其中的 <strong>SEPA Direct Debit</strong>（直接借记，德语叫 Lastschriftverfahren）允许商家向消费者的银行账户"拉钱"——不是你给商家转账，而是商家拿着你的授权凭证去你的银行把钱取走。</p>
+<p>听起来很方便对吧？问题就出在这个"拉钱"的流程设计上。</p>
+<h3 id="信用卡-vs-sepa-直接借记两套完全不同的信任模型">信用卡 vs SEPA 直接借记：两套完全不同的信任模型
+</h3><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th></th>
+          <th>信用卡（Stripe 标准流）</th>
+          <th>SEPA 直接借记（cassia 流）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>授权模式</strong></td>
+          <td>同步在线授权</td>
+          <td>异步离线扣款</td>
+      </tr>
+      <tr>
+          <td><strong>交易发起时校验</strong></td>
+          <td>卡号 Luhn 校验 + CVV 验证 + 3DS 二次认证 + 银行实时授权</td>
+          <td>IBAN MOD 97-10 格式校验，<strong>仅此而已</strong></td>
+      </tr>
+      <tr>
+          <td><strong>银行参与时机</strong></td>
+          <td>交易发起的瞬间</td>
+          <td>交易发起后的 1-3 个工作日</td>
+      </tr>
+      <tr>
+          <td><strong>资金确认</strong></td>
+          <td>毫秒级返回授权结果</td>
+          <td>银行不返回任何确认，排队等清算</td>
+      </tr>
+      <tr>
+          <td><strong>消费者保护</strong></td>
+          <td>Chargeback 争议流程</td>
+          <td><strong>8 周无条件撤回权</strong>（SEPA CORE 规则）</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>看到关键区别了吗？信用卡在你点击支付的<strong>那一瞬间</strong>就跟银行确认了你有没有钱、卡号对不对、你本人是不是同意的。而 SEPA 直接借记<strong>完全不做这些</strong>——它只检查 IBAN 的格式，然后把扣款请求扔进银行间的批量清算队列里，等着慢慢处理。</p>
+<h3 id="sepa-core-清算流程">SEPA CORE 清算流程
+</h3><p>实际的清算过程是这样的：</p>
+<pre tabindex="0"><code>你提交 IBAN
+  ↓
+支付网关做 MOD 97-10 校验（纯数学公式，检查 IBAN 格式是否合法）
+  ↓
+校验通过 → 支付网关返回"交易成功"
+  ↓
+Anthropic 收到成功信号 → 开通你的 Claude Max 订阅
+  ↓
+... T+1 到 T+3 工作日 ...
+  ↓
+扣款请求进入 SEPA CORE 清算系统
+  ↓
+商家银行 → 消费者银行：请从账号 DEXX XXXX XXXX XXXX XXXX XX 扣 $20
+  ↓
+消费者银行查询账号 → 账号不存在 / 余额不足 / 未授权
+  ↓
+返回 R 代码拒绝（R02=无效账号, R04=账户已关, R05=被授权人撤销...）
+  ↓
+Anthropic 收到扣款失败通知 → 关闭你的订阅
+</code></pre><p><strong>重点来了：从你提交 IBAN 到银行清算出结果，中间有一个 1-3 个工作日的真空期。</strong> 在这段时间里，你的 Claude Max 订阅是完全生效的——能用 Opus、能用所有高级功能、流量不限。</p>
+<h3 id="mod-97-10格式校验的局限性">MOD 97-10：格式校验的局限性
+</h3><p>IBAN 的校验算法叫 ISO 7064 MOD 97-10，原理其实很简单：</p>
+<ol>
+<li>把 IBAN 的国家代码和校验码移到末尾</li>
+<li>把字母转换为数字（A=10, B=11, …, Z=35）</li>
+<li>对整个大整数做 MOD 97 运算</li>
+<li>结果等于 1 就合法</li>
+</ol>
+<p>这个算法能检出什么？<strong>格式错误</strong>——打错了某一位、漏了一位、国家代码不对。</p>
+<p>这个算法检不出什么？<strong>一切跟真实世界有关的东西</strong>——账户是否存在、余额是否充足、持有人是不是你。</p>
+<p><code>randomiban.com</code> 生成的 IBAN 就是利用了这一点：它按照 MOD 97-10 算法逆向构造，生成的 IBAN <strong>格式 100% 合法</strong>，能通过任何基于此算法的前端和后端校验。至于这个账号在不在现实中存在——那是 3 天后银行清算时才会发现的事情。</p>
+<h3 id="为什么偏偏是德国-iban">为什么偏偏是德国 IBAN？
+</h3><p>SEPA 覆盖 36 个国家，为什么脚本选了德国（DE）？</p>
+<ol>
+<li><strong>格式最简单</strong>：DE 开头的 IBAN 固定 22 位，结构是 <code>DE + 2位校验码 + 8位银行代码(BLZ) + 10位账号</code>，没有额外的国家级校验叠加</li>
+<li><strong>通过率最高</strong>：德国 IBAN 在 Stripe 等主流支付网关的接受度最好，不会触发额外的地区风控</li>
+<li><strong>银行代码空间大</strong>：8 位 BLZ 有大量有效的银行代码段，随机生成碰上有效 BLZ 前缀的概率不低</li>
+</ol>
+<p>对比一下法国 IBAN（27 位，还有额外的 RIB 密钥校验）或者西班牙 IBAN（24 位，有 DC 校验位），德国确实是阻力最小的选择。</p>
+<hr>
+<h2 id="三脚本逐行技术拆解">三、脚本逐行技术拆解
+</h2><p>理解了 SEPA 的机制，再来看脚本本身就清晰多了。每一个设计决策都有明确的技术理由。</p>
+<h3 id="31-元数据抢在一切之前">3.1 元数据——抢在一切之前
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// @name         TestExample Cassia Response Mock
+</span></span></span><span class="line"><span class="cl"><span class="c1">// @match        *://claude.ai/*
+</span></span></span><span class="line"><span class="cl"><span class="c1">// @match        *://*.claude.ai/*
+</span></span></span><span class="line"><span class="cl"><span class="c1">// @run-at       document-start
+</span></span></span><span class="line"><span class="cl"><span class="c1">// @grant        none
+</span></span></span><span class="line"><span class="cl"><span class="c1">// @sandbox      raw
+</span></span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>三个关键设定：</p>
+<ul>
+<li>
+<p><strong><code>@run-at document-start</code></strong>：页面 DOM 还没开始构建，脚本已经注入完毕。这不是可选项——如果等到 <code>document-idle</code>，<code>checkout_capabilities</code> 的请求可能已经发出去了，Hook 就晚了。整个攻击成立的前提就是<strong>比目标请求更早完成注入</strong>。</p>
+</li>
+<li>
+<p><strong><code>@sandbox raw</code></strong>：绕过 Tampermonkey 的安全沙箱。默认沙箱会隔离脚本的执行上下文，导致你覆盖的 <code>window.fetch</code> 和页面实际用的 <code>window.fetch</code> 不是同一个。<code>raw</code> 模式下脚本直接在页面上下文中执行，Hook 才能真正生效。</p>
+</li>
+<li>
+<p><strong><code>@grant none</code></strong>：不申请 <code>GM_*</code> 系列 API 权限。一方面减少 Tampermonkey 的安全提示弹窗，另一方面 <code>@sandbox raw</code> 本身就不兼容 <code>GM_*</code> API。</p>
+</li>
+</ul>
+<h3 id="32-精确制导只改一个接口">3.2 精确制导——只改一个接口
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">TARGET_PATH</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">  <span class="sr">/^\/api\/organizations\/[^/]+\/subscription\/checkout_capabilities\/?$/</span><span class="p">;</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>正则匹配精确到路径段，连末尾有没有斜杠都考虑了。<strong>只拦截这一个接口，其他所有请求原样放行。</strong></p>
+<p>为什么是这个接口？因为它是 Claude 前端支付流的<strong>单一决策点</strong>——前端根据它的返回值决定渲染 Stripe 信用卡表单还是 SEPA IBAN 输入框。控制了这个响应，就控制了用户看到的整个支付界面。</p>
+<p>这种精准度也是为了隐蔽性——如果你 Hook 了所有请求，前端的行为会出各种异常，容易暴露。只改一个接口，前端其他部分的运行完全正常。</p>
+<h3 id="33-fetch-拦截先发后改">3.3 Fetch 拦截——先发后改
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">nativeFetch</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">fetch</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">window</span><span class="p">.</span><span class="nx">fetch</span> <span class="o">=</span> <span class="kr">async</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="nx">init</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">init</span><span class="o">?</span><span class="p">.</span><span class="nx">method</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    <span class="p">(</span><span class="nx">input</span> <span class="k">instanceof</span> <span class="nx">Request</span> <span class="o">?</span> <span class="nx">input</span><span class="p">.</span><span class="nx">method</span> <span class="o">:</span> <span class="s2">"GET"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">targetUrl</span> <span class="o">=</span> <span class="nx">getTargetUrl</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="nx">method</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">originalResponse</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">nativeFetch</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">targetUrl</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">originalResponse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">createMockResponse</span><span class="p">(</span><span class="nx">originalResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意调用顺序：<strong>先用原生 <code>fetch</code> 把真实请求正常发出去，等拿到响应后再替换返回值。</strong></p>
+<p>这是这个脚本最巧妙的地方。</p>
+<p>如果直接拦截请求不发出去，构造一个假响应返回呢？功能上没问题。但从服务端的角度看——你打开了支付页面，前端应该调 <code>checkout_capabilities</code>，结果后端日志里根本没看到这个请求。这就是一个异常信号，可以被 Anthropic 的安全团队用于检测。</p>
+<p>先发后改的策略完美回避了这个问题：服务端日志里看到了正常的 GET 请求、正常的 200 响应，一切如常。篡改发生在浏览器内部，从 HTTPS 加密通道往外看什么都没变。</p>
+<h3 id="34-response-重构细节决定成败">3.4 Response 重构——细节决定成败
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">createMockResponse</span><span class="p">(</span><span class="nx">originalResponse</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Headers</span><span class="p">(</span><span class="nx">originalResponse</span><span class="p">.</span><span class="nx">headers</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"content-length"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"content-encoding"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"etag"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="s2">"content-md5"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">"content-type"</span><span class="p">,</span> <span class="s2">"application/json; charset=utf-8"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">"content-length"</span><span class="p">,</span> <span class="nb">String</span><span class="p">(</span><span class="nx">MOCK_LENGTH</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">headers</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">"cache-control"</span><span class="p">,</span> <span class="s2">"no-store"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="nx">MOCK_BODY</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">status</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">statusText</span><span class="o">:</span> <span class="s2">"OK"</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">headers</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>逐个分析删掉的响应头：</p>
+<ul>
+<li><strong><code>content-encoding</code></strong>：原始响应大概率是 gzip 或 br 压缩的。我们构造的 JSON 是明文，如果不删这个头，浏览器会拿着明文 JSON 去做 gzip 解压——直接炸。</li>
+<li><strong><code>content-length</code></strong>：原始响应体大小和我们构造的不一样，不改的话浏览器会截断或报错。</li>
+<li><strong><code>etag</code> / <code>content-md5</code></strong>：完整性校验头。原始响应的哈希和我们篡改后的内容对不上。虽然浏览器通常不强制校验这些头，但删掉更保险——万一前端代码拿这些值做了缓存校验呢。</li>
+<li><strong><code>cache-control: no-store</code></strong>：强制不缓存。如果浏览器缓存了我们的假响应，下次刷新页面不走 Hook 了就拿到缓存的假数据——反而弄巧成拙。反过来，如果缓存了之前的真响应，前端可能直接用缓存不发请求，Hook 就没机会触发。<code>no-store</code> 确保每次都走网络请求，每次都经过 Hook。</li>
+</ul>
+<h3 id="35-xhr-双通道保险">3.5 XHR 双通道保险
+</h3><p>脚本不光 Hook 了 <code>fetch</code>，还对 <code>XMLHttpRequest</code> 做了一套完整的拦截——覆盖了 <code>responseText</code>、<code>response</code>、<code>status</code>、<code>statusText</code>、<code>getResponseHeader</code>、<code>getAllResponseHeaders</code>。</p>
+<p>为什么要两套？现代 Web 应用大多用 <code>fetch</code>，但你无法保证 Anthropic 的前端代码——或者它依赖的第三方库——不会在某些场景下 fallback 到 XHR。少 Hook 一个通道就是留了一条漏网之鱼。</p>
+<p>XHR 的 Hook 方式也值得一看：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">replaceXhrGetter</span><span class="p">(</span><span class="nx">propertyName</span><span class="p">,</span> <span class="nx">replacement</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">descriptor</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">Object</span><span class="p">.</span><span class="nx">getOwnPropertyDescriptor</span><span class="p">(</span><span class="nx">XhrPrototype</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">descriptor</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">descriptor</span><span class="p">.</span><span class="nx">get</span> <span class="o">!==</span> <span class="s2">"function"</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">descriptor</span><span class="p">.</span><span class="nx">configurable</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="sb">`[Cassia Mock] 无法接管 XHR.</span><span class="si">${</span><span class="nx">propertyName</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">nativeGetter</span> <span class="o">=</span> <span class="nx">descriptor</span><span class="p">.</span><span class="nx">get</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">XhrPrototype</span><span class="p">,</span> <span class="nx">propertyName</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span><span class="nx">descriptor</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">getMatchedXhr</span><span class="p">(</span><span class="k">this</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">nativeGetter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nx">replacement</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">nativeGetter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>用 <code>Object.getOwnPropertyDescriptor</code> 先取原始的 property descriptor，再通过 <code>Object.defineProperty</code> 精确替换 getter。比直接赋值靠谱得多——它保留了原始 descriptor 的所有属性（<code>configurable</code>、<code>enumerable</code>），而且会先检查 <code>configurable</code> 是否为 <code>false</code>，如果属性被冻结就优雅降级而不是静默失败。</p>
+<h3 id="36-状态指示器">3.6 状态指示器
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">badge</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"div"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">badge</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">"cassia-mock-badge"</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">badge</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">"Cassia Mock ON"</span><span class="p">;</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>页面右下角一个绿色小角标，确认脚本已激活。实际攻击中这是个安慰剂——真正的确认是看支付页面有没有从信用卡变成 IBAN 输入框。但对于批量操作的卡商来说，这个视觉反馈能提高操作效率。</p>
+<hr>
+<h2 id="四横向迁移这不是一个漏洞是一类漏洞">四、横向迁移：这不是一个漏洞，是一类漏洞
+</h2><p>分析完焚决，我们跳出来看一个更有价值的问题：<strong>这类攻击是可复用的。</strong></p>
+<h3 id="漏洞本质">漏洞本质
+</h3>
+    <blockquote>
+        <p><strong>客户端信任边界缺失</strong>：服务端将支付流的决策权——“这个用户该走哪条支付通道”——交给了一个客户端可以任意篡改的 API 响应。</p>
+
+    </blockquote>
+<p>这不是孤例。回顾我们之前分析过的一系列支付漏洞，它们共享同一个底层模式：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>漏洞</th>
+          <th>被篡改的对象</th>
+          <th>信任边界裂缝</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>焚决（本例）</strong></td>
+          <td><code>checkout_capabilities</code> 响应</td>
+          <td>前端信任 API 返回值决定支付通道</td>
+      </tr>
+      <tr>
+          <td>GPT Plus offerToken 注入</td>
+          <td>Google Play Billing 内存中的 offerToken</td>
+          <td>服务端不校验 token 与账号资格的绑定关系</td>
+      </tr>
+      <tr>
+          <td>GPT iOS 收据复用</td>
+          <td>Base64 App Store 收据</td>
+          <td>服务端不验证收据与提交者账号的对应关系</td>
+      </tr>
+      <tr>
+          <td>Cloudflare Pro 竞态</td>
+          <td>并发请求的状态窗口</td>
+          <td>权限发放与支付确认之间存在可利用的时序差</td>
+      </tr>
+      <tr>
+          <td>RevenueCat 回调劫持</td>
+          <td><code>fetch_token</code> 跨账号提交</td>
+          <td>第三方回调接口缺乏调用方鉴权</td>
+      </tr>
+  </tbody>
+</table></div>
+<h3 id="通用攻击模型">通用攻击模型
+</h3><p>把这些漏洞抽象一下，可以提取出一个四步攻击框架：</p>
+<pre tabindex="0"><code>1. 定位决策接口
+   找到决定支付流 / 功能开关 / 定价计算的 API 端点
+   信号关键词：checkout_capabilities, payment_methods, available_plans,
+              eligible_promotions, feature_flags, entitlements
+
+2. 注入篡改数据
+   通过油猴脚本（Web）、MITM（移动端）、Frida Hook（Native）等
+   方式替换响应内容
+
+3. 选择确认延迟最长的路径
+   SEPA 直接借记 &gt; 银行转账 &gt; PayPal &gt; 信用卡
+   延迟越长，时间窗口越大
+
+4. 利用"前端校验 + 后端真空"
+   前端校验通过后，后端在异步确认完成前不暂停服务发放
+</code></pre><p><strong>这个框架可以复用到任何订阅制平台</strong>，只要目标满足：</p>
+<ul>
+<li>支付方式的选择依赖客户端可控状态</li>
+<li>存在至少一种异步确认的支付方式</li>
+<li>“服务开通"发生在"支付确认"之前</li>
+</ul>
+<p>在漏洞挖掘实战中，打开 DevTools Network 面板，搜索 <code>checkout</code>、<code>payment</code>、<code>billing</code>、<code>plan</code>、<code>subscription</code> 这些关键词，找到所有影响支付逻辑的端点，逐个测试响应注入——这就是最直接的攻击面枚举方式。</p>
+<hr>
+<h2 id="五防御视角">五、防御视角
+</h2><h3 id="给服务端开发者">给服务端开发者
+</h3><ol>
+<li>
+<p><strong>支付流决策必须服务端闭环</strong>。<code>checkout_flow</code> 的值应该在后端根据用户地区、账号状态、风控信号独立计算，前端只是一个渲染器——它不应该有能力选择自己走哪条支付通道。</p>
+</li>
+<li>
+<p><strong>异步支付必须延迟开通</strong>。SEPA、银行转账这类异步支付方式，在银行返回扣款成功确认之前，不应该开通任何付费功能。可以给用户一个"支付处理中"的状态，等清算完成后再激活。</p>
+</li>
+<li>
+<p><strong>API 响应签名</strong>。对关键 API 响应做 HMAC 签名（密钥存服务端），前端消费前验签。虽然不能根治（攻击者可以 Hook 验签逻辑），但大幅提高了攻击门槛——从改一个 JSON 字段变成了还得逆向验签实现。</p>
+</li>
+<li>
+<p><strong>IBAN 实时银行验证</strong>。接入 SWIFT gpi 或各国央行的 IBAN 验证服务（如德国 Bundesbank 的 IBAN 验证接口），在提交时做实时的账户存在性校验，而不是只靠本地 MOD 97。</p>
+</li>
+</ol>
+<h3 id="给安全研究者">给安全研究者
+</h3><p>这类漏洞的攻击面很清晰——任何一个返回了影响支付逻辑数据的 API 端点，且这个数据可以被前端篡改，都是潜在的攻击入口。</p>
+<p>一些高价值的"信号接口”：</p>
+<ul>
+<li><code>checkout_capabilities</code> / <code>payment_methods</code> / <code>available_plans</code></li>
+<li><code>region</code> / <code>locale</code> / <code>country_detection</code></li>
+<li><code>eligible_promotions</code> / <code>offers</code> / <code>discounts</code></li>
+<li><code>feature_flags</code> / <code>entitlements</code> / <code>subscription_tiers</code></li>
+</ul>
+<hr>
+<h2 id="六实战翻车现场验证失败并清除旧会话">六、实战翻车现场：“验证失败并清除旧会话”
+</h2><p>讲完了攻击原理和防御思路，再来看一个真实场景——<strong>焚决并不是每次都能成功的</strong>。</p>
+<p>在实际操作中（不管是焚决的 SEPA 路径还是正常的 Stripe 信用卡路径），你大概率会遇到这样一幕：</p>
+<p><img alt="Claude支付失败截图" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px"></p>
+<p>两条红色报错同时弹出来：</p>
+<ol>
+<li><strong>“未提交付款：发生了意外错误。请检查表单后重试。”</strong></li>
+<li><strong>“验证失败并清除旧会话”</strong></li>
+</ol>
+<p>第一次看到这个，很多人会以为是卡的问题、网络的问题、脚本的问题。其实都不是——<strong>这是会话状态失效的问题</strong>，而且它能帮我们理解 Anthropic 的支付架构到底是怎么做验证的。</p>
+<h3 id="为什么会出现这个错误">为什么会出现这个错误？
+</h3><p>两条错误同时出现，意味着<strong>会话死在了支付提交的瞬间</strong>。理解这一点需要知道 Claude 支付提交时后端做了什么：</p>
+<pre tabindex="0"><code>用户点击"提交支付"
+  ↓
+前端将 Stripe token / IBAN 提交到 Anthropic 后端
+  ↓
+后端第一件事：校验当前会话（session）是否有效
+  ↓
+会话失效 → 返回"验证失败" → 前端清除旧 session → 支付自然失败
+</code></pre><p><strong>关键点在于：Anthropic 在处理支付请求之前，会先验证你的登录会话。</strong> 如果会话已经过期或被吊销，支付请求根本不会到达 Stripe——它在 session 校验这一步就被打回来了。</p>
+<h3 id="五种常见的会话失效原因">五种常见的会话失效原因
+</h3><p><strong>① SK Cookie 过期（最常见）</strong></p>
+<p>Claude.ai 使用 <code>__Secure-next-auth.session-token</code>（业内简称 SK Cookie）维持登录态。这个 cookie 有 TTL，通常几个小时后过期。</p>
+<p>如果你在打开支付页面之前获取的 cookie，到填完表单点提交的时候刚好过期——恭喜，踩中了时间窗口。自动化场景下尤其常见：任务在队列里排了一段时间，等轮到你的时候 cookie 已经不新鲜了。</p>
+<p><strong>② Session 被踢（多端互踢）</strong></p>
+<p>同一个账号如果在多个地方同时登录（比如你开了好几个 Worker 共用一个 cookie），后登录的会话会使前一个失效。你在 Worker A 上正准备提交支付，Worker B 刚好用同一个 cookie 做了一次请求刷新了 session——A 的 session 就死了。</p>
+<p><strong>③ 代理 IP 切换（Session-IP 绑定）</strong></p>
+<p>Anthropic 很可能在 session 上绑定了创建时的 IP 或 IP 段。如果你的代理在支付流程中间断线重连，换了一个出口 IP，后端一比对——这个 session 是从 <code>45.67.xx.xx</code> 创建的，现在请求来自 <code>89.12.xx.xx</code>？验证失败。</p>
+<p><strong>④ Stripe PaymentIntent 过期</strong></p>
+<p>即使 session 没问题，Stripe 侧也有自己的超时机制。<code>PaymentIntent</code> 和对应的 <code>client_secret</code> 有有效期（通常数小时，但在高风控场景下可能更短）。如果从打开支付页面到实际提交间隔太长，Intent 过期了，Stripe 返回错误，前端展示为"发生了意外错误"。</p>
+<p><strong>⑤ Checkout Session 并发冲突</strong></p>
+<p>同一个 Organization 如果同时发起了多个订阅操作（比如一个在升级 Pro，另一个在改支付方式），后一个操作创建的 <code>checkout session</code> 会使前一个失效。前一个提交的时候引用的 session ID 已经不存在了。</p>
+<h3 id="应对策略">应对策略
+</h3><p>针对这类会话失效问题，无论是做自动化还是做安全防护，都有几条通用原则：</p>
+<p><strong>从攻击者/自动化角度看：</strong></p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>策略</th>
+          <th>做法</th>
+          <th>解决的问题</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Session 预检</strong></td>
+          <td>进支付页之前先调 <code>/api/auth/session</code> 确认 cookie 存活</td>
+          <td>Cookie 过期</td>
+      </tr>
+      <tr>
+          <td><strong>快进快出</strong></td>
+          <td>打开支付页后立刻完成填写和提交，压缩停留时间</td>
+          <td>Intent 超时</td>
+      </tr>
+      <tr>
+          <td><strong>代理钉住</strong></td>
+          <td>支付全流程内锁定同一个代理出口，不允许中途切换</td>
+          <td>IP 绑定</td>
+      </tr>
+      <tr>
+          <td><strong>Cookie 生命周期管理</strong></td>
+          <td>记录每个 cookie 的获取时间，临近 TTL 时主动刷新</td>
+          <td>Cookie 过期</td>
+      </tr>
+      <tr>
+          <td><strong>错误分类重试</strong></td>
+          <td>检测到"清除旧会话"后标记为 session 失效，重新获取 cookie 再试</td>
+          <td>所有会话类问题</td>
+      </tr>
+      <tr>
+          <td><strong>单账号串行化</strong></td>
+          <td>同一个 org 同时只跑一个支付操作</td>
+          <td>并发冲突</td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong>从防御者角度看：</strong></p>
+<p>这个报错机制本身就是 Anthropic 的一层防线——在处理支付之前先验会话，避免在认证不确定的情况下创建订阅。这个设计是对的。</p>
+<p>但如果要更进一步：</p>
+<ol>
+<li>
+<p><strong>Session 绑定 + 支付确认二次绑定</strong>：不光 session 绑 IP，<code>PaymentIntent</code> 也应该绑定创建时的 session ID。Session 变了，Intent 就失效——即使攻击者拿到了一个新的有效 session，也得重新走一遍支付页面，不能复用之前的 Intent。</p>
+</li>
+<li>
+<p><strong>支付提交时的实时 Session 刷新</strong>：在提交支付的瞬间，后端不仅校验 session 是否有效，还可以强制刷新一次 token，确保提交时的 session 是"活跃"的而不仅仅是"未过期"的。</p>
+</li>
+<li>
+<p><strong>异常模式检测</strong>：如果一个 org 短时间内反复出现"session 校验通过 → 进入支付页 → 提交时 session 失效"的模式，说明有人在用自动化工具——标记为可疑行为。</p>
+</li>
+</ol>
+<h3 id="小结">小结
+</h3><p>这个"验证失败"的报错看着烦人，但它揭示了一个重要的架构细节：<strong>Anthropic 的支付流不是单纯的前端-Stripe 双边交互，中间有一层 session 校验网关。</strong> 这层网关既是防线（挡住了过期/伪造的会话），也是自动化场景下最常踩的坑。</p>
+<p>理解了这个机制，不管你是想加固自己平台的支付安全，还是想搞清楚为什么自己的自动化流程老是翻车——这个报错里都有答案。</p>
+<hr>
+<h2 id="七写在最后">七、写在最后
+</h2><p>焚决这个东西，技术上说穿了就是一个<strong>客户端状态注入</strong>工具。它不攻击 Claude 的认证系统，不碰 Anthropic 的服务器，攻击目标是<strong>前端与后端之间那条看不见的信任边界</strong>。</p>
+<p>它的精妙不在于代码多复杂——说真的 200 行 JS 连个正经项目的单元测试都撑不满——而在于它精准地捏住了两个系统设计缺陷的交叉点：</p>
+<ul>
+<li><strong>Anthropic 的前端支付流由一个可篡改的 API 响应驱动</strong></li>
+<li><strong>SEPA 直接借记在清算完成前不验证账户真实性</strong></li>
+</ul>
+<p>两个缺陷单独拿出来，各自都不算致命。但组合在一起，就变成了一条从"修改一个 JSON 字段"到"零元订阅 Claude Max"的完整攻击链。</p>
+<p>而这类"信任边界错位 + 异步确认间隙"的组合漏洞，绝不仅限于 Claude。任何一个同时提供信用卡和 SEPA 支付的 SaaS 平台，如果支付通道的选择权交给了前端，都可能面临同样的问题。</p>
+<p><strong>工具可以被修复，模式值得被记住。</strong></p>
+<hr>
+<h2 id="相关阅读">相关阅读
+</h2><ul>
+<li><a class="link" href="https://blog.caowo.de/posts/gpt-plus-exploit-revenuecat-vulnerability/">GPT Plus 订阅漏洞深度分析 — Google Play Billing 鉴权缺失导致 0 元订阅</a></li>
+<li><a class="link" href="https://blog.caowo.de/posts/gpt-plus-receipt-vulnerability-2026/">GPT Plus 收据复用漏洞 — iOS 收据验证缺陷</a></li>
+<li><a class="link" href="https://blog.caowo.de/posts/manual-sec-20260519-cloudflare-billing-race-condition/">Cloudflare 计费逻辑缺陷 — 请求重放绕过订阅支付</a></li>
+</ul>
+<hr>
+<p><strong>标签</strong>: #Claude #支付安全 #API劫持 #客户端安全 #SEPA #Tampermonkey #漏洞分析 #焚决</p>
+
+</section>
+
+
+    
+<div style="
+  display: block;
+  margin: 24px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid #8b5cf6;
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">SwitchBase — 站长自用 API 中转站</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">
+    强推 Claude 全系列，纯血自有 CCMax 号池，在线率 99%+。不算最便宜，但稳定性一骑绝尘，站长本人长期使用中。
+  </div>
+  <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #fff;
+    background: #8b5cf6;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往注册 →</a>
+</div>
+
+
+    
+<div style="
+  display: block;
+  margin: 30px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐服务</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">Florence AI — AI 会员一站式充值</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">ChatGPT Plus / Pro · Claude Pro · Grok — 正规信用卡渠道，自动发货 30 秒到账</div>
+  <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent-color-text);
+    background: var(--accent-color);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往充值 →</a>
+</div>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="https://blog.caowo.de/tags/claude/">Claude</a>
+        
+            <a href="https://blog.caowo.de/tags/%E8%AE%A2%E9%98%85%E6%BC%8F%E6%B4%9E/">订阅漏洞</a>
+        
+            <a href="https://blog.caowo.de/tags/api-%E5%8A%AB%E6%8C%81/">API 劫持</a>
+        
+            <a href="https://blog.caowo.de/tags/tampermonkey/">Tampermonkey</a>
+        
+            <a href="https://blog.caowo.de/tags/sepa/">SEPA</a>
+        
+            <a href="https://blog.caowo.de/tags/%E6%94%AF%E4%BB%98%E5%AE%89%E5%85%A8/">支付安全</a>
+        
+            <a href="https://blog.caowo.de/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a>
+        
+            <a href="https://blog.caowo.de/tags/%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%89%E5%85%A8/">客户端安全</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-plus-exploit-revenuecat-vulnerability/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT Plus 订阅漏洞深度分析 - Google Play Billing 鉴权缺失导致 0 元订阅</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/newapi-stripe-webhook-vulnerability-analysis/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">newapi Stripe Webhook 充值漏洞深度分析 - 空密钥绕过支付验证</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/windsurf-api-proxy/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Windsurf 开源反代工具：59 个 AI 模型一站式接入</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        © 
+        
+        2026 言零的博客 - 20260405
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com/" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+            <div class="ads-mobile-inline">
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+            </div>
+        </div>
+        
+<script type="text/javascript" src="./焚决 Claude — 一个油猴脚本如何撬开 Anthropic 的支付大门_files/main.acaf849f2b273f6a8368a58b001f336738d0c948d92e79b116467d0c7515f932.js" defer=""></script>
+
+
+    
+
+</body></html>

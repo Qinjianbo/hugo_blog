@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/ -->
+<html lang="zh-CN" dir="ltr" data-scheme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="深度拆解 Google Play 内购订阅升级的 prorationMode 漏洞：攻击者如何用 Frida 把一个 putInt 的参数从 1 改成 3，就拿到了价值 $250/月的 Claude Max 订阅。已修复，但同类攻击面仍在。">
+<title>Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max</title>
+
+
+<link rel="canonical" href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="preload" as="style" href="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/css2">
+<link rel="stylesheet" href="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/css2">
+
+
+<link rel="stylesheet" href="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/style.min.a2bf8a31dd38effd9e8b27128b1a2f407446a71dcf0b7d93eeb8c57bb6f9cc04.css"><meta property="og:title" content="Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max">
+<meta property="og:description" content="深度拆解 Google Play 内购订阅升级的 prorationMode 漏洞：攻击者如何用 Frida 把一个 putInt 的参数从 1 改成 3，就拿到了价值 $250/月的 Claude Max 订阅。已修复，但同类攻击面仍在。">
+<meta property="og:url" content="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">
+<meta property="og:site_name" content="言零的博客 - 20260405">
+<meta property="og:type" content="article"><meta property="article:section" content="Posts"><meta property="article:tag" content="Google Play"><meta property="article:tag" content="内购漏洞"><meta property="article:tag" content="Frida"><meta property="article:tag" content="Android 逆向"><meta property="article:tag" content="Claude"><meta property="article:tag" content="prorationMode"><meta property="article:tag" content="订阅升级"><meta property="article:published_time" content="2026-07-22T10:00:00+08:00"><meta property="article:modified_time" content="2026-07-22T10:00:00+08:00">
+<meta name="twitter:title" content="Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max">
+<meta name="twitter:description" content="深度拆解 Google Play 内购订阅升级的 prorationMode 漏洞：攻击者如何用 Frida 把一个 putInt 的参数从 1 改成 3，就拿到了价值 $250/月的 Claude Max 订阅。已修复，但同类攻击面仍在。">
+
+<script src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/hm.js"></script><script defer="" src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;SDZvDCIq-3er2UKht5fIrl2UvvIrJxi6hZVxBfIa&quot;}"></script>
+
+
+
+
+
+<script async="" src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/js"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-M3JN483VK6', {
+    'anonymize_ip': true
+  });
+</script><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?459a34335680d2c2b91885b9497df7ff";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    <link rel="stylesheet" href="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/photoswipe.css"></head>
+    <body class="
+    article-page
+    " style="transition: background-color 0.3s;">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+
+        <div class="site-meta">
+            <h1 class="site-name"><a href="https://blog.caowo.de/">言零的博客 - 20260405</a></h1>
+            <h2 class="site-description"></h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/posts/">
+                
+                <span>文章 / Posts</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/categories/">
+                
+                <span>分类 / Categories</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/tags/">
+                
+                <span>标签 / Tags</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/about/">
+                
+                <span>关于 / About</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/links/">
+                
+                <span>友链 / Links</span>
+            </a>
+        </li>
+        
+        
+        <li>
+            <a href="https://blog.caowo.de/search/">
+                
+                <span>🔍 搜索</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="8" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="16" cy="12" r="2"></circle>
+  <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+
+    
+    <div class="sidebar-ads-desktop">
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+        
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+    </div>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+            
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <line x1="5" y1="9" x2="19" y2="9"></line>
+  <line x1="5" y1="15" x2="19" y2="15"></line>
+  <line x1="11" y1="4" x2="7" y2="20"></line>
+  <line x1="17" y1="4" x2="13" y2="20"></line>
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ul>
+    <li class="active-class"><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x00-%E8%83%8C%E6%99%AF20-%E7%9A%84-pro250-%E7%9A%84-max%E4%B8%AD%E9%97%B4%E5%B7%AE%E4%BA%86%E4%B8%80%E4%B8%AA-hook">0x00 背景：$20 的 Pro，$250 的 Max，中间差了一个 hook</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x01-prorationmodegoogle-play-%E9%87%8C%E6%9C%80%E8%A2%AB%E4%BD%8E%E4%BC%B0%E7%9A%84%E6%94%BB%E5%87%BB%E9%9D%A2">0x01 prorationMode：Google Play 里最被低估的攻击面</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x02-%E6%94%BB%E5%87%BB%E9%93%BEfrida-%E4%B8%80%E6%9D%A1%E9%BE%99">0x02 攻击链：Frida 一条龙</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x03-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA-bug-%E8%83%BD%E6%88%90%E7%AB%8B">0x03 为什么这个 bug 能成立</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x04-%E4%B8%8D%E7%94%A8-hook-%E7%9A%84%E8%B7%AF%E5%AD%90%E9%80%9F%E5%88%B7">0x04 不用 hook 的路子：速刷</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x05-%E4%BF%AE%E5%A4%8D%E7%8A%B6%E6%80%81%E4%B8%8E%E5%90%8E%E7%BB%AD">0x05 修复状态与后续</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x06-%E6%8A%80%E6%9C%AF%E5%90%AF%E7%A4%BA">0x06 技术启示</a></li>
+  </ul>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    
+
+</aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">
+            <img src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/blog-cover-default.jpg" alt="Featured image of post Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max" loading="lazy">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E5%AE%89%E5%85%A8%E7%A0%94%E7%A9%B6/" style="background-color: hsl(328, 60%, 84%); color: hsl(328, 60%, 15%);">
+                安全研究
+            </a>
+        
+            
+            
+            
+            <a href="https://blog.caowo.de/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" style="background-color: hsl(247, 60%, 84%); color: hsl(247, 60%, 15%);">
+                漏洞分析
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/">Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250/月的 Claude Max</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            深度拆解 Google Play 内购订阅升级的 prorationMode 漏洞：攻击者如何用 Frida 把一个 putInt 的参数从 1 改成 3，就拿到了价值 $250/月的 Claude Max 订阅。已修复，但同类攻击面仍在。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+  <circle cx="18" cy="18" r="4"></circle>
+  <path d="M15 3v4"></path>
+  <path d="M7 3v4"></path>
+  <path d="M3 11h16"></path>
+  <path d="M18 16.496v1.504l1 1"></path>
+</svg>
+                    <time class="article-time--published" datetime="2026-07-22T10:00:00+08:00">Wednesday, July 22, 2026</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"></path>
+  <circle cx="12" cy="12" r="9"></circle>
+  <polyline points="12 7 12 12 15 15"></polyline>
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        4 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 6l6 6l-6 6"></path></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ul>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x00-%E8%83%8C%E6%99%AF20-%E7%9A%84-pro250-%E7%9A%84-max%E4%B8%AD%E9%97%B4%E5%B7%AE%E4%BA%86%E4%B8%80%E4%B8%AA-hook">0x00 背景：$20 的 Pro，$250 的 Max，中间差了一个 hook</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x01-prorationmodegoogle-play-%E9%87%8C%E6%9C%80%E8%A2%AB%E4%BD%8E%E4%BC%B0%E7%9A%84%E6%94%BB%E5%87%BB%E9%9D%A2">0x01 prorationMode：Google Play 里最被低估的攻击面</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x02-%E6%94%BB%E5%87%BB%E9%93%BEfrida-%E4%B8%80%E6%9D%A1%E9%BE%99">0x02 攻击链：Frida 一条龙</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x03-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B8%AA-bug-%E8%83%BD%E6%88%90%E7%AB%8B">0x03 为什么这个 bug 能成立</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x04-%E4%B8%8D%E7%94%A8-hook-%E7%9A%84%E8%B7%AF%E5%AD%90%E9%80%9F%E5%88%B7">0x04 不用 hook 的路子：速刷</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x05-%E4%BF%AE%E5%A4%8D%E7%8A%B6%E6%80%81%E4%B8%8E%E5%90%8E%E7%BB%AD">0x05 修复状态与后续</a></li>
+    <li><a href="https://blog.caowo.de/posts/google-play-ccmax-proration-vulnerability-2026/#0x06-%E6%8A%80%E6%9C%AF%E5%90%AF%E7%A4%BA">0x06 技术启示</a></li>
+  </ul>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p></p><figure><img src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/wechat-qr.jpg" alt="微信二维码" width="200">
+</figure>
+
+<figure><img src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/qq-group-qr.jpg" alt="QQ群二维码" width="200">
+</figure>
+
+<strong>联系方式 &amp; 交流群</strong><p></p>
+<ul>
+<li><strong>QQ</strong>: 46333839</li>
+<li><strong>微信</strong>: GOV-HACK</li>
+</ul>
+<p>进微信群请联系博主，各位觉得文章对你有帮助的话可否打赏一些呀~</p>
+<hr>
+
+    <blockquote>
+        <p><strong>⚠️ 免责声明</strong>：本文仅供安全研究与技术讨论。本文描述的漏洞<strong>已于 2026 年 7 月被修复</strong>。任何利用类似手段对正式服务进行未授权操作属违法行为，后果自负。</p>
+<p>部分思路来自 <a class="link" href="https://cctest.ai/" target="_blank" rel="noopener">cctest.ai</a> 作者，在此致谢。</p>
+
+    </blockquote>
+<hr>
+<h2 id="0x00-背景20-的-pro250-的-max中间差了一个-hook">0x00 背景：$20 的 Pro，$250 的 Max，中间差了一个 hook
+</h2><p>Claude 的 Android 客户端走 Google Play 内购（Google Play Billing Library）处理订阅。价格梯度大概是这样：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>方案</th>
+          <th>月费</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Pro</td>
+          <td>$20</td>
+      </tr>
+      <tr>
+          <td>Max 5x</td>
+          <td>$125</td>
+      </tr>
+      <tr>
+          <td>Max 20x</td>
+          <td>$250</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>正常流程：你是 Pro 用户，想升级到 Max，Google Play 会按剩余天数计算差价，立刻从你的信用卡上扣。</p>
+<p>但如果我告诉你，有个参数决定了 Google Play 对这笔"升级"收不收钱呢？</p>
+<p>而且这个参数，就是 Android Bundle 里一个普普通通的 <code>putInt</code> 调用？</p>
+<h2 id="0x01-prorationmodegoogle-play-里最被低估的攻击面">0x01 prorationMode：Google Play 里最被低估的攻击面
+</h2><p>Google Play Billing Library 在处理订阅升/降级时，有个参数叫 <code>prorationMode</code>（比例分配模式），定义在 <code>BillingFlowParams.SubscriptionUpdateParams</code> 里。它决定了用户切换订阅方案时的扣费逻辑：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>值</th>
+          <th>常量名</th>
+          <th>行为</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>0</td>
+          <td>UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY</td>
+          <td>未知</td>
+      </tr>
+      <tr>
+          <td>1</td>
+          <td>WITH_TIME_PRORATION</td>
+          <td>按剩余时间折算差价，<strong>立刻扣费</strong></td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>CHARGE_PRORATED_PRICE</td>
+          <td>按比例收取差价</td>
+      </tr>
+      <tr>
+          <td><strong>3</strong></td>
+          <td><strong>WITHOUT_PRORATION</strong></td>
+          <td><strong>立刻升级，本周期不收费，下个周期按新价扣</strong></td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>CHARGE_FULL_PRICE</td>
+          <td>立刻全额扣费</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>DEFERRED</td>
+          <td>延迟到下个周期才生效</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>重点关注 <code>3 — WITHOUT_PRORATION</code>：Google 官方文档里写得很清楚，这个模式的设计意图是"让用户立刻获得高级功能，但推迟扣费到下个计费周期"。本来是给某些业务场景用的（比如试用期升级），但如果被滥用……</p>
+<p>Claude 的客户端代码里，升级订阅时用的是模式 <code>1</code>（WITH_TIME_PRORATION），也就是正常的按比例扣差价。它通过 <code>Bundle.putInt("prorationMode", 1)</code> 把这个值传给 Google Play 的计费 Activity。</p>
+<p>这个 <code>Bundle.putInt</code> 调用发生在客户端侧。客户端侧的东西，你懂的。</p>
+<h2 id="0x02-攻击链frida-一条龙">0x02 攻击链：Frida 一条龙
+</h2><p>整个攻击链其实非常简洁，所有操作都在模拟器上完成。用到的工具：</p>
+<ul>
+<li><strong>MuMu 模拟器</strong>（x86_64，因为要跑 Frida server 的 x86 版本）</li>
+<li><strong>KernelSU</strong>（MuMu 自带，用来获取 root）</li>
+<li><strong>Frida 17.16.0</strong>（动态插桩框架）</li>
+<li><strong>特定版本的 Claude APK</strong>（v1.260330.27，在 Uptodown 可以下到历史版本）</li>
+<li>一个能扣 $20 的美区 Google 账号</li>
+<li>家宽 IP（避免 Google 风控拦截）</li>
+</ul>
+<p>步骤拆解：</p>
+<p><strong>第一步：搭环境</strong></p>
+<p>MuMu 模拟器装好后，用它自带的 Google 安装器装上 Google 套件 + Play 商店。打开 KernelSU Manager 给 Shell 授权 root。这步没啥技术含量，MuMu 对 Google 服务兼容性比 LDPlayer 好不少。</p>
+<p><strong>第二步：准备 Claude APK</strong></p>
+<p>这里有个前置问题——你不能直接从 Play 商店装 Claude。</p>
+<p>现在的 Android 应用普遍使用 App Bundle（AAB）格式发布，Play 商店下发的是 split APK：base.apk 加一堆按设备拆分的 config splits（ABI、密度、语言）。x86_64 模拟器拿到的 splits 跟 ARM 真机不一样，而且 split APK 不能直接 <code>adb install</code> 侧载。</p>
+<p>所以需要一个<strong>经过修补、移除了 split 限制的完整 APK</strong>。实测可用的版本是 <code>v1.260330.27</code>，从 Uptodown 等第三方市场可以找到历史版本的完整包。关键词：“已修补 split 限制”——就是把 App Bundle 重新打包成单个 APK，绕过 Play 商店的分发限制。</p>
+<p>还有一个连锁问题：修补过的 APK 签名跟 Google Play 原版不一致（相当于 debug 签名），<strong>Google OAuth 登录会直接拒绝</strong>——点 “Continue with Google” 没反应或者报错。解决办法很简单：用邮箱登录（Continue with email），输入 Claude 账号的邮箱和密码，完全不走 OAuth。</p>
+<p><strong>第三步：部署 Frida</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">adb push frida-server-17.16.0-android-x86_64 /data/local/tmp/frida-server
+</span></span><span class="line"><span class="cl">adb shell chmod <span class="m">755</span> /data/local/tmp/frida-server
+</span></span><span class="line"><span class="cl">adb shell su -c <span class="s2">"setenforce 0"</span>
+</span></span><span class="line"><span class="cl">adb shell su -c <span class="s2">"/data/local/tmp/frida-server -D &amp;"</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>MuMu 有个坑：它的 ADB 端口不是标准 5555，而是 5557（多开的话 5559、5561 递增）。另外 MuMu 用 houdini 做 ARM 翻译，所以 Frida 必须用 <strong>attach 模式</strong>，不能用 spawn 模式（<code>-f</code> 参数），否则 houdini 翻译层直接 SIGSEGV 崩掉。</p>
+<p><strong>第四步：注入 Hook</strong></p>
+<p>核心的 hook 脚本其实就干了一件事——拦截 <code>Bundle.putInt</code>，把 key 为 <code>prorationMode</code> 的值从 1 改成 3：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">Bundle</span> <span class="o">=</span> <span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">"android.os.Bundle"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Bundle</span><span class="p">.</span><span class="nx">putInt</span><span class="p">.</span><span class="nx">overload</span><span class="p">(</span><span class="s2">"java.lang.String"</span><span class="p">,</span> <span class="s2">"int"</span><span class="p">).</span><span class="nx">implementation</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">key</span> <span class="o">===</span> <span class="s2">"prorationMode"</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"[*] 拦截 prorationMode: "</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s2">" → 3 [WITHOUT_PRORATION]"</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">putInt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>  <span class="c1">// 就这一行，价值 $230/月
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">putInt</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>注意启动方式——必须先手动打开 Claude，再用 <code>-H</code> 连接（而不是 <code>-U</code>），因为 MuMu 的 USB 层跟标准 Android 不一样。而且 Frida 的进程名参数必须用<strong>显示名 <code>Claude</code></strong>，不能用包名 <code>com.anthropic.claude</code>——MuMu 上 <code>-H</code> 模式下 Frida 按包名是找不到进程的，只认 app_process 里注册的显示名：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">adb forward tcp:27042 tcp:27042
+</span></span><span class="line"><span class="cl">frida -H 127.0.0.1:27042 Claude -l hook-replacement-mode.js
+</span></span><span class="line"><span class="cl"><span class="c1"># 注意：用 com.anthropic.claude 会报 "unable to find process"</span>
+</span></span></code></pre><button class="copyCodeButton">Copy</button></div><p>这里还有个细节：脚本额外拦截了 <code>SentryNdk.loadNativeLibraries</code> 和 <code>SentryAndroidNdk</code> 的初始化方法，因为 Sentry 的 native crash 上报模块在 houdini 翻译层下也会崩。不拦截的话 App 直接闪退。</p>
+<p>除了核心的 prorationMode 拦截，脚本还 hook 了 <code>PurchaseReceipt</code> 的构造函数，打印 <code>purchase_token</code> 和 <code>organization_id</code>。这个 org_id 是 Anthropic 后端用来标识组织/用户的唯一 ID（格式类似 <code>6a085918-8383-44e5-9538-c4c81c6e122b</code>），在规模化操作时用于追踪哪个 Claude 账号绑定了哪笔 Google Play 订阅——一个 Google 账号只能给一个 Claude 账号开通订阅，org_id 就是这个映射关系的 key。</p>
+<p><strong>第五步：走一遍正常支付</strong></p>
+<p>hook 注入成功后（控制台会显示 <code>Frida Hook 注入成功!</code>，App 里也会弹 Toast），正常操作：</p>
+<ol>
+<li>用邮箱登录 Claude 账号（不能用 Google OAuth，原因见上）</li>
+<li>在模拟器里绑定支付卡（需要能扣 $20 的真实/虚拟信用卡）</li>
+<li>通过 Google Play 订阅 Pro（$20/月）—— 这笔钱是真扣的</li>
+</ol>
+<p><strong>第六步：触发升级</strong></p>
+<p>Pro 订阅成功后，直接在 App 里点"升级到 Max"。这时候 hook 就发挥作用了：</p>
+<p>控制台输出：</p>
+<pre tabindex="0"><code>[*] 拦截 prorationMode: 1 [WITH_TIME_PRORATION] → 3 [WITHOUT_PRORATION]
+</code></pre><p>同时 <code>PurchaseReceipt</code> 的 hook 会打印出新订阅的 org_id，确认升级已经走通了 Anthropic 后端。</p>
+<p>Google Play 的计费页面会显示：</p>
+<ul>
+<li>产品：Claude Max</li>
+<li>价格：$250.00/month（日区显示 JP¥42,500/month）</li>
+<li><strong>开始日期：2026年8月20日</strong>（注意，是下个月！）</li>
+<li>“我们将于 2026年8月20日向您收取第一笔费用”</li>
+</ul>
+<p>看到了吗？因为 prorationMode 被改成了 <code>WITHOUT_PRORATION</code>，Google Play 认为"当前不收费，下个计费周期再扣"。点击订阅，立刻升级到 Max，卡上不会多扣一分钱。</p>
+<p><strong>第七步：善后</strong></p>
+<p>升级成功后，去 <a class="link" href="https://payments.google.com/" target="_blank" rel="noopener">payments.google.com</a> 把这个订阅的支付方式换成余额钱包（Google Play 余额一般是 0）或者一张空的虚拟卡，然后解绑原来的支付卡。</p>
+<p>下个月续费的时候，余额不够或者虚拟卡扣费失败，订阅自然过期。但这一个月的 Max 你已经用上了。</p>
+<p>$20 的成本，享受 $250 的服务。利润率 1150%。</p>
+<p>有一个规模化的硬约束：<strong>一个 Google 账号只能给一个 Claude 账号开通订阅</strong>。想批量撸就得不断囤 Google 号——这也是为什么这条灰产链的瓶颈不在技术，而在号源。</p>
+<h2 id="0x03-为什么这个-bug-能成立">0x03 为什么这个 bug 能成立
+</h2><p>从技术层面分析，这个漏洞能成立需要几个条件同时满足：</p>
+<p><strong>1. prorationMode 由客户端决定</strong></p>
+<p>这是最根本的问题。Google Play Billing Library 的设计是把 <code>prorationMode</code> 作为客户端参数传递给 Google Play 的计费系统。Google Play 本身不会校验"这个 App 有没有资格用 WITHOUT_PRORATION 模式"——它无条件信任客户端传来的值。</p>
+<p>这是一个经典的<strong>信任边界错误</strong>：把安全关键参数的决定权放在了不可信的客户端侧。</p>
+<p><strong>2. 服务端验证缺位</strong></p>
+<p>Claude 的后端在收到 Google Play 的订阅回调时，主要验证的是"这个 purchase token 是否有效"和"订阅是否 active"。它不会去检查 <code>prorationMode</code> 是什么——因为这个信息在服务端回调里根本就没有。Google Play 的 <code>purchases.subscriptions</code> API 返回的数据里不包含当初用的是哪个 proration mode。</p>
+<p><strong>3. 历史版本 APK 的可用性</strong></p>
+<p>新版 Claude 可能已经做了混淆或者改变了参数传递方式，但旧版本在 Uptodown 等第三方市场永远可以下到。只要 Google Play 的 Billing API 版本还兼容，旧 APK 照样能完成订阅操作。</p>
+<h2 id="0x04-不用-hook-的路子速刷">0x04 不用 hook 的路子：速刷
+</h2><p>值得一提的是，prorationMode hook 并不是唯一的利用方式。圈子里还流传一种叫"速刷"的打法——不需要 Frida，不需要 hook，纯靠旧版本客户端的某些行为差异来打时间差。</p>
+<p>具体原理不在本文展开（毕竟还没被修），但核心思路类似：利用 Google Play Billing Library 旧版本在处理订阅变更时的窗口期，在扣费确认到达之前完成订阅切换。跟 prorationMode hook 相比，速刷的门槛更低（不需要 root、不需要 Frida），但成功率也更低，而且强依赖特定的历史版本 APK。</p>
+<p>这两种方法本质上攻击的是同一个面：<strong>Google Play 对客户端行为的过度信任</strong>。</p>
+<h2 id="0x05-修复状态与后续">0x05 修复状态与后续
+</h2><p>截至 2026 年 7 月，prorationMode hook 这个特定的攻击路径已被修复。从修复思路上猜测，可能的措施包括：</p>
+<ol>
+<li><strong>客户端侧</strong>：新版 Claude APK 不再使用 Bundle 明文传递 prorationMode，可能改用了加密或者服务端控制</li>
+<li><strong>服务端侧</strong>：在处理升级回调时增加了额外验证（比如检查 <code>linkedPurchaseToken</code> 的订阅金额是否合理）</li>
+<li><strong>Google Play 侧</strong>：Google 可能限制了 WITHOUT_PRORATION 模式的使用场景（需要应用显式在 Google Play Console 配置）</li>
+</ol>
+<p>但说实话，<strong>Google Play Billing 的这个攻击面远没有被堵死</strong>。<code>prorationMode</code> 只是其中一个参数，<code>BillingFlowParams</code> 里还有其他可操控的字段。只要"客户端构建支付参数 → 传给 Google Play → Google Play 无条件执行"这个模型不变，同类问题就会持续出现。</p>
+<p>据了解，目前仍有针对其他参数或其他 App 的类似攻击手法在流通。Google Play 内购系统的安全模型，说白了就是建立在"客户端可信"这个脆弱假设上的。</p>
+<h2 id="0x06-技术启示">0x06 技术启示
+</h2><p>如果你是开发者，从这个漏洞可以学到：</p>
+<ol>
+<li><strong>永远不要信任客户端传来的支付参数</strong>。即使是通过 Google Play 这种"可信"中间人，底层的 <code>BillingFlowParams</code> 仍然是客户端构造的。</li>
+<li><strong>服务端必须独立验证订阅状态</strong>。不要只检查 token 有效性，还要验证订阅的实际扣费金额（通过 <code>purchases.subscriptions</code> 的 <code>priceAmountMicros</code> 字段）与预期是否一致。</li>
+<li><strong>Pin APK 版本</strong>。如果你依赖客户端逻辑做安全控制，服务端应该检查客户端版本号，拒绝过旧版本的请求。</li>
+</ol>
+<p>如果你是安全研究者，这个 case 是一个很好的"API 信任边界"研究样本。Google Play Billing Library 把自己定位成"安全的支付中间件"，但它实际上信任了太多来自客户端的输入。类似 Frida hook <code>Bundle.putInt</code> 这种低成本的攻击手段，在整个 Android 内购生态里适用面很广。</p>
+<hr>
+
+    <blockquote>
+        <p>本文记录的是一个已修复的安全问题，旨在帮助开发者理解 Google Play 内购系统的安全边界。</p>
+<p>如果你对 Android 安全、支付系统攻防感兴趣，欢迎关注博客，后续会持续更新更多分析。</p>
+
+    </blockquote>
+
+</section>
+
+
+    
+<div style="
+  display: block;
+  margin: 24px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid #8b5cf6;
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">SwitchBase — 站长自用 API 中转站</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">
+    强推 Claude 全系列，纯血自有 CCMax 号池，在线率 99%+。不算最便宜，但稳定性一骑绝尘，站长本人长期使用中。
+  </div>
+  <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #fff;
+    background: #8b5cf6;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往注册 →</a>
+</div>
+
+
+    
+<div style="
+  display: block;
+  margin: 30px 0 0;
+  padding: 20px 24px;
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  border-left: 3px solid var(--accent-color);
+  box-shadow: var(--shadow-l1);
+">
+  <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐服务</div>
+  <div style="margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.5;">Florence AI — AI 会员一站式充值</div>
+  <div style="margin-bottom: 14px; font-size: 14px; color: var(--card-text-color-secondary); line-height: 1.7;">ChatGPT Plus / Pro · Claude Pro · Grok — 正规信用卡渠道，自动发货 30 秒到账</div>
+  <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: var(--accent-color-text);
+    background: var(--accent-color);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1.5;
+  ">前往充值 →</a>
+</div>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="https://blog.caowo.de/tags/google-play/">Google Play</a>
+        
+            <a href="https://blog.caowo.de/tags/%E5%86%85%E8%B4%AD%E6%BC%8F%E6%B4%9E/">内购漏洞</a>
+        
+            <a href="https://blog.caowo.de/tags/frida/">Frida</a>
+        
+            <a href="https://blog.caowo.de/tags/android-%E9%80%86%E5%90%91/">Android 逆向</a>
+        
+            <a href="https://blog.caowo.de/tags/claude/">Claude</a>
+        
+            <a href="https://blog.caowo.de/tags/prorationmode/">ProrationMode</a>
+        
+            <a href="https://blog.caowo.de/tags/%E8%AE%A2%E9%98%85%E5%8D%87%E7%BA%A7/">订阅升级</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-plus-google-play-subscription-transfer/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT Plus 订阅转移全解析 - 从 Google Play Token 到一键开通的完整技术链路</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/gpt-plus-exploit-revenuecat-vulnerability/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT Plus 订阅漏洞深度分析 - Google Play Billing 鉴权缺失导致 0 元订阅</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="">
+    <a href="https://blog.caowo.de/posts/windsurf-api-proxy/">
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Windsurf 开源反代工具：59 个 AI 模型一站式接入</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        © 
+        
+        2026 言零的博客 - 20260405
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.0">Stack</a></b> designed by <a href="https://jimmycai.com/" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe-lightbox.esm.min.js")).default;
+        const styleHref = "https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("https:\/\/cdn.jsdelivr.net\/npm\/photoswipe@5.4.4\/dist\/photoswipe.esm.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+    
+
+            </main>
+            <div class="ads-mobile-inline">
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">站长推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">API 中转站</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      Claude 全系列 · 自有号池<br>
+      在线率 99%+ · 站长自用
+    </div>
+    <a href="https://switchbase.vip/register?aff=MOSH" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: #fff;
+      background: #8b5cf6;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">switchbase.vip →</a>
+  </div>
+</section>
+
+                
+<section class="widget" style="
+  background: var(--card-background);
+  border-radius: var(--card-border-radius);
+  box-shadow: var(--shadow-l1);
+  overflow: hidden;
+">
+  <div style="padding: var(--card-padding);">
+    <div style="margin-bottom: 12px; font-size: 12px; color: var(--card-text-color-tertiary); letter-spacing: 0.5px; font-weight: 600;">推荐</div>
+    <div style="margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--card-text-color-main); line-height: 1.4;">AI 会员充值</div>
+    <div style="margin-bottom: 14px; font-size: 13px; color: var(--card-text-color-secondary); line-height: 1.7;">
+      ChatGPT · Claude · Grok<br>
+      正规渠道 · 自动发货 30s
+    </div>
+    <a href="https://faka.redeemai.me/" target="_blank" rel="noopener" style="
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--accent-color-text);
+      background: var(--accent-color);
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 1.5;
+    ">faka.redeemai.me →</a>
+  </div>
+</section>
+
+            </div>
+        </div>
+        
+<script type="text/javascript" src="./Google Play 内购 CC Max 漏洞深度拆解 — 一个 Bundle.putInt 就能白嫖 $250_月的 Claude Max_files/main.acaf849f2b273f6a8368a58b001f336738d0c948d92e79b116467d0c7515f932.js" defer=""></script>
+
+
+    
+
+</body></html>
