@@ -4,4 +4,5 @@ public
 deploy.bat
 content/default/*
 themes/*
+!themes/PaperMod
 static/img/png/

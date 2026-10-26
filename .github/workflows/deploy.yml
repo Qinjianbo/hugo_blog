@@ -1,0 +1,77 @@
+name: Deploy Hugo site
+
+# Push to master deploys. Manual run is also available for testing,
+# including a dry-run mode that checks the build + SSH path without
+# actually syncing (rsync --dry-run).
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run only (build + rsync --dry-run, no real deploy)"
+        required: false
+        default: "false"
+        type: boolean
+
+permissions:
+  contents: read
+
+# Never run two deploys at the same time: deploy.sh uses rsync --delete,
+# and overlapping syncs could leave the site half-updated.
+concurrency:
+  group: hugo-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: "0.168.0"
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      # Same behaviour as the old deploy.sh: drafts are published.
+      - name: Build site (with drafts, like deploy.sh)
+        run: hugo -D --cleanDestinationDir
+
+      - name: Deploy via rsync
+        env:
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_PATH: ${{ secrets.REMOTE_PATH }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ -z "${REMOTE_USER:-}" ] || [ -z "${REMOTE_HOST:-}" ] || [ -z "${REMOTE_PATH:-}" ] || [ -z "${SSH_PRIVATE_KEY:-}" ]; then
+            echo "Missing required secrets: REMOTE_USER, REMOTE_HOST, REMOTE_PATH, SSH_PRIVATE_KEY" >&2
+            exit 1
+          fi
+          SSH_PORT="${SSH_PORT:-22}"
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "${SSH_KNOWN_HOSTS:-}" ]; then
+            printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            # Fallback only; prefer setting SSH_KNOWN_HOSTS in secrets.
+            ssh-keyscan -p "$SSH_PORT" "$REMOTE_HOST" >> ~/.ssh/known_hosts
+          fi
+          RSYNC_FLAGS=(-avz --delete --exclude '.DS_Store' --exclude 'Thumbs.db')
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            RSYNC_FLAGS+=(--dry-run)
+            echo "DRY RUN: no files will be changed on the server"
+          fi
+          rsync "${RSYNC_FLAGS[@]}" \
+            -e "ssh -p $SSH_PORT -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes" \
+            "public/" "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/"
