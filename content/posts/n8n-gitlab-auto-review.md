@@ -1,4 +1,5 @@
 ---
+description: "基于 n8n 的 GitLab 代码评审自动化：MR 触发后自动取 diff、调用 AI 评审，再把意见回写到 GitLab 讨论区，适合想省人工评审时间的团队。"
 title: 让AI帮你审代码！N8N+GitLab自动化智能评审全流程实战
 date: 2025-05-09T22:38:16+08:00
 lastmod: 2025-05-09T22:38:16+08:00

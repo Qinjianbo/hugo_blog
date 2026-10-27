@@ -1,4 +1,5 @@
 ---
+description: "让 n8n 的 Puppeteer 节点驱动本地 Chrome 的关键是先开远程调试模式，本文讲清启动方法，并拆解一个完整的浏览器自动化工作流。"
 title: "n8n自动化实战：Chrome调试模式与Puppeteer节点全解析"
 date: 2025-06-07T15:25:18+08:00
 lastmod: 2025-06-07T15:25:18+08:00

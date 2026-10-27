@@ -1,4 +1,5 @@
 ---
+description: "iPhone 上 Charles 抓包卡在证书时怎么办：先删掉旧的 Charles 描述文件和信任设置，再重新装证书，把 HTTPS 明文抓包恢复正常。"
 title: iPhone上删除旧的Charles证书并重新配置HTTPS抓包
 date: 2026-05-09T09:20:00+08:00
 lastmod: 2026-05-09T09:20:00+08:00

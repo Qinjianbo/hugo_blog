@@ -1,4 +1,5 @@
 ---
+description: "Cherry Studio 全面介绍：支持多家大模型服务商的跨平台 AI 聊天客户端，内置 300 多个助手，支持文档处理、WebDAV 与多模型同屏对话。"
 title: "Cherry Studio：跨平台AI聊天助手客户端全攻略"
 date: 2025-04-19T10:40:53+08:00
 lastmod: 2025-04-19T10:40:53+08:00

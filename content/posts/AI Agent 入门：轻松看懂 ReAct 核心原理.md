@@ -1,4 +1,5 @@
 ---
+description: "用通俗语言讲清 AI Agent 和普通大模型的区别，以及 ReAct“思考加行动”的核心循环，最后带你亲手实现一个能动手的 Agent。"
 title: AI Agent 入门：轻松看懂 ReAct 核心原理
 date: 2025-08-19T09:38:16+08:00
 lastmod: 2025-08-19T09:38:16+08:00

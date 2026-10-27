@@ -1,4 +1,5 @@
 ---
+description: "用 Wireshark 抓 HTTPS 流量的完整流程：选对网卡、配合浏览器 TLS key log 看到请求路径与响应内容，并提醒只分析自己有权限的流量、妥善保管抓包文件。"
 title: "如何使用 Wireshark 抓取并分析 HTTPS 流量"
 date: 2026-05-22T16:30:00+08:00
 lastmod: 2026-05-22T16:30:00+08:00

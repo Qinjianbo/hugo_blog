@@ -1,4 +1,5 @@
 ---
+description: "用 ffmpeg 把 GIF 转成 MP4 的实用指南：基本转换、H.264 编码与 crf 质量控制、帧率与分辨率调整，以及批量处理技巧。"
 title: 如何使用ffmpeg将gif转换成mp4
 date: 2025-08-19T14:12:33+08:00
 lastmod: 2025-08-19T14:12:33+08:00

@@ -1,4 +1,5 @@
 ---
+description: "n8n 的 Extract From File 节点详解：从 CSV、HTML、JSON、ICS、电子表格、PDF 与 RTF 等二进制文件中提取数据并转成 JSON。"
 title: "N8n Extract From File 节点详解"
 date: 2025-05-01T23:07:55+08:00
 lastmod: 2025-05-01T23:07:55+08:00

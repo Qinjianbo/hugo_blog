@@ -1,4 +1,5 @@
 ---
+description: "拆解 RAGFlow 的 embedding 系统：多提供商统一接口的设计、20 多种模型支持，以及默认本地 embedding 模型的实现方式。"
 title: RAGFlow Embedding 实现机制
 date: 2025-08-15T09:09:01+08:00
 lastmod: 2025-08-15T09:09:01+08:00

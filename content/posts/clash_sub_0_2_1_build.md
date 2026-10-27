@@ -1,4 +1,5 @@
 ---
+description: "记录一次在无域名 CentOS 海外服务器上搭建 VLESS + Reality、并让 Clash Verge 成功订阅的完整实战过程，仅供学习交流。"
 title: 从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]
 date: 2026-01-04T16:21:41+08:00
 lastmod: 2026-01-04T16:21:41+08:00

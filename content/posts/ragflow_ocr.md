@@ -1,4 +1,5 @@
 ---
+description: "拆解 RAGFlow 的 OCR 系统：文本检测与识别分离的架构、布局识别的 10 种类型，以及 deepdoc/vision 里的核心模块分工。"
 title: RAGFlow OCR实现机制
 date: 2025-08-14T16:18:01+08:00
 lastmod: 2025-08-14T16:18:01+08:00
