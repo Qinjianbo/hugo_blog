@@ -7,10 +7,7 @@ avatar: /img/avatar.jpeg
 categories:
   - 投资理财
 tags:
-  - 复利
-  - 定投
-  - 低利率
-  - 资产配置
+  - 投资理财
 draft: false
 description: 用年化3%的低利率做例子，拆解复利和定投的真实作用，给普通人可执行的理财起步方案。
 aiSummary: "用年化3%的低利率做例子，拆解复利和定投的真实作用，给普通人可执行的理财起步方案。"

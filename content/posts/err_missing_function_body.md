@@ -12,7 +12,6 @@ categories:
   - 问题积累
 tags:
   - Golang
-  - syntax_err
 # nolastmod: true
 draft: false
 build:

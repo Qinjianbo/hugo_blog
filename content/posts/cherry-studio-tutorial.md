@@ -12,9 +12,7 @@ tags:
   - AI
   - 工具
   - 效率工具
-  - AI助手
-  - 开发工具
-  - 教程
+  - AI Agent
 draft: false
 aiSummary: "Cherry Studio作为一款强大的AI聊天助手客户端，其丰富的功能需要系统性的学习才能充分发挥其价值。本文将为您提供从入门到精通的完整学习指南。"
 aiKeyPoints:

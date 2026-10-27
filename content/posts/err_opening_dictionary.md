@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/erro
 categories:
   - 问题积累
 tags:
-  - appdata
-  - error
+  - 工具
 # nolastmod: true
 draft: false
 build:

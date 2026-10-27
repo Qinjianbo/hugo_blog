@@ -13,7 +13,6 @@ tags:
   - AI
   - LLM
   - 微信公众号
-  - 内容创作
 draft: false
 aiSummary: "在了解了MCP的基本概念后，本文将深入探讨如何构建一个专门用于微信公众号运营的MCP系统。这个系统将帮助我们实现自动化的内容创作、发布和管理。"
 aiKeyPoints:

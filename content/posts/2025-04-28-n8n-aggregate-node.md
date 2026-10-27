@@ -12,10 +12,7 @@ categories:
 
 tags:
   - n8n
-  - Aggregate
-  - 数据聚合
   - 工作流
-  - 实用技巧
 
 draft: false
 aiSummary: "价值主张 本文系统介绍了 n8n Aggregate 节点的功能、参数配置、典型应用场景与实用案例，帮助自动化开发者高效实现数据聚合与处理。"

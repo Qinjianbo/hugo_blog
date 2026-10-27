@@ -13,7 +13,6 @@ categories:
   - Golang
 tags:
   - Golang
-  - 编程语言
 # nolastmod: true
 draft: false
 aiSummary: "在Go语言中， url.Values 类型是一个映射字符串到字符串切片的映射，通常用于处理URL查询参数。有时，您可能需要将普通的map[string]string转换为url.Values。本文将介绍如何实现这一转换。"

@@ -10,8 +10,6 @@ categories:
   - AI
 tags:
   - AI Agent
-  - ReAct
-  - Plan-and-Execute
 # nolastmod: true
 draft: false
 aiSummary: "AI Agent 的浪潮已经到来，但你真的理解它是什么，以及它背后是如何工作的吗？本文将带你从概念到原理，再到亲手实现，彻底搞懂 AI Agent 的核心。"

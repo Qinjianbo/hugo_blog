@@ -11,9 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Ubun
 categories:
   - 技术教程
 tags:
-  - globalproject
-  - vpn
-  - openconnect
+  - ubuntu
 # nolastmod: true
 draft: false
 aiSummary: "公司的vpn是使用globalprotect来进行连接的，但是在ubuntu下没有globalprotect的客户端可以使用"

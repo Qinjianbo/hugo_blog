@@ -9,10 +9,7 @@ categories:
   - 安全
 tags:
   - TLS
-  - 指纹识别
-  - JA3
-  - JA4
-  - 风控
+  - 支付安全
 draft: false
 description: "介绍 TLS 指纹、JA3/JA4 的基本原理，以及网站如何用它辅助识别脚本和自动化流量。"
 aiSummary: "TLS 指纹来自 HTTPS 握手阶段的 ClientHello，它能帮助服务端判断客户端到底像不像真实浏览器。本文介绍 TLS 指纹、JA3/JA4、常见检测维度、局限，以及网站防御自动化注册和爬虫时的落地思路。"

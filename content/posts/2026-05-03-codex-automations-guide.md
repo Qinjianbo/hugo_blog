@@ -11,7 +11,6 @@ tags:
   - Codex
   - 自动化
   - OpenAI
-  - AI 自动化
 draft: false
 description: "基于 OpenAI 官方 Codex 文档，梳理 Codex Automations 的工作方式、线程自动化与独立自动化区别、worktree 隔离和权限安全边界。"
 aiSummary: "Codex Automations 是 Codex App 里用于定时执行后台任务的能力。你可以让 Codex 按计划巡检项目、轮询 PR、跟进部署或持续执行某个技能，同时通过 worktree、sandbox 和 rules 控制风险边界。"

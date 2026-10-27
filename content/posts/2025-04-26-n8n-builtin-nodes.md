@@ -11,10 +11,8 @@ categories:
   
 tags:
   - n8n
-  - 节点
   - 工作流
   - 自动化
-  - 集成
   
 draft: false
 aiSummary: "n8n 作为开源自动化平台，其强大之处在于丰富的内置节点（Built-in Nodes）体系。本文将系统梳理 n8n 内置节点的类型、功能与典型应用场景，帮助你高效构建自动化工作流。"

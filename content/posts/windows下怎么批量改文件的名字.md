@@ -13,7 +13,6 @@ categories:
   - Windows
 tags:
   - 文件管理
-  - 批量重命名
 # nolastmod: true
 draft: false
 aiSummary: "在Windows操作系统中，有时您可能需要批量修改多个文件的名字。无论是为了整理照片、文档还是其他类型的文件，批量重命名都可以节省大量时间和精力。本文将介绍几种在Windows下批量改文件名字的方法。"

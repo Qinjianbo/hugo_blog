@@ -11,9 +11,6 @@ categories:
   
 tags:
   - n8n
-  - Activation Trigger
-  - 工作流触发
-  - 替代方案
   - 自动化
   
 draft: false

@@ -10,9 +10,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/在D
 #   - /img/cover.jpg
 categories:
   - 总结
-tags:
-  - DaDa英语
-  - 生活
 # nolastmod: true
 draft: false
 aiSummary: "马上就要离开DaDa了，简单总结从进入DaDa到离开DaDa的这一年中的生活以及学习。DaDa英语，上海卓赞教育信息有限公司。短链接。"

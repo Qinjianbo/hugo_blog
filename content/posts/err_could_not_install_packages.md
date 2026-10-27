@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/ERRO
 categories:
   - 问题积累
 tags:
-  - python
-  - pip
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "ERROR: Could not install packages due to an OSError: [WinError 5] 拒绝访问。: 'E:\\webui\\sd-webui-aki-v4.2\\python\\Lib\\site-packages\\cv2\\cv2.pyd' Consider using the --user option or check the permissi"

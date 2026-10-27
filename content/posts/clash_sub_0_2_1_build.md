@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - clash
 tags:
-  - clash
-  - google
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "从 0 到可用：CentOS 服务器搭建 VLESS + Reality，并让 Clash Verge 成功订阅[仅供学习交流，请勿用于违法行为]"

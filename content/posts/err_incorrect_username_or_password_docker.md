@@ -12,7 +12,6 @@ categories:
   - 问题积累
 tags:
   - Docker
-  - unauthorized
 # nolastmod: true
 draft: false
 aiSummary: "docker pull 报错 error unauthorized: incorrect username or password"

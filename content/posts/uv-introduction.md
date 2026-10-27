@@ -8,12 +8,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - 技术教程
   - 数据分析
-tags:
-  - UV
-  - 数据分析
-  - 网站统计
-  - 流量分析
-  - 用户行为
 draft: false
 aiSummary: "在网站分析和数字营销领域，UV（Unique Visitor，独立访客）是一个极其重要的指标。本文将全面介绍UV的概念、计算方法以及其在实际应用中的重要性。"
 aiKeyPoints:

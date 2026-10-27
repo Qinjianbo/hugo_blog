@@ -15,7 +15,6 @@ tags:
   - n8n
   - LLM
   - ChatGPT
-  - 记忆
   - 工作流
 # nolastmod: true
 draft: false

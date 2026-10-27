@@ -11,9 +11,6 @@ categories:
 tags:
   - AI
   - LLM
-  - Agent
-  - 智能体
-  - 协作系统
 draft: false
 aiSummary: "在人工智能快速发展的今天，Agent to Agent（智能体协作）技术正在成为一个令人兴奋的研究领域。本文将深入探讨智能体协作的原理、实践方法以及优缺点，帮助读者全面了解这项革命性技术。"
 aiKeyPoints:

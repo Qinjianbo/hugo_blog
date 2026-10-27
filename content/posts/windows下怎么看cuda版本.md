@@ -11,7 +11,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/wind
 categories:
   - AI绘画
 tags:
-  - CUDA
   - AI绘画
 # nolastmod: true
 draft: false

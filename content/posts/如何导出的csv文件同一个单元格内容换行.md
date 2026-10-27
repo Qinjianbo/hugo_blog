@@ -11,7 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/如�
 categories:
   - 技术教程
 tags:
-  - csv
+  - 工具
 # nolastmod: true
 draft: false
 build:

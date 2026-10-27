@@ -12,8 +12,6 @@ categories:
   - 工具
 tags:
   - ubuntu
-  - virtualbox
-  - 虚拟机
 # nolastmod: true
 draft: false
 aiSummary: "本文主要介绍在windows下通过virtualbox安装ubuntu的过程，希望帮到在windows想使用ubuntu系统的小伙伴。"

@@ -12,7 +12,6 @@ categories:
   - 技术教程
 tags:
   - mysql
-  - 锁
 # nolastmod: true
 draft: false
 aiSummary: "关于MySQL并发控制中读写锁与锁粒度的形象举例！"

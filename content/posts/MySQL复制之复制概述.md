@@ -12,7 +12,6 @@ categories:
   - 运维必备
 tags:
   - mysql
-  - 主从复制
 # nolastmod: true
 draft: false
 build:

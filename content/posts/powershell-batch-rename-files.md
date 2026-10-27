@@ -8,8 +8,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - Windows
 tags:
-  - PowerShell
-  - 批处理
   - 文件管理
 aiSummary: "在日常工作中，我们经常需要批量重命名文件，特别是当我们有大量图片或文档需要按照特定格式重命名时。本文将介绍如何使用 PowerShell 来实现文件的批量重命名。"
 aiKeyPoints:

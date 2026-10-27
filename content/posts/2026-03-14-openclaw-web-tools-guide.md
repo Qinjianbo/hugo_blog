@@ -10,11 +10,6 @@ categories:
   - 工具
 tags:
   - OpenClaw
-  - web_search
-  - web_fetch
-  - Brave
-  - Perplexity
-  - Gemini
 draft: false
 description: 把 OpenClaw 官方 Web Tools 文档整理成中文教程，讲清楚 web_search 与 web_fetch 的工作方式、提供方选择、配置方法和示例代码。
 source_url: https://docs.openclaw.ai/tools/web

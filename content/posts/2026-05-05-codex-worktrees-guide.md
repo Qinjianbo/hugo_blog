@@ -9,7 +9,6 @@ categories:
   - OpenAI
 tags:
   - Codex
-  - Worktree
   - Git
   - OpenAI
 draft: false

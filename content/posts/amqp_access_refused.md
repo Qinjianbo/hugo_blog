@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Logi
 categories:
   - 问题积累
 tags:
-  - rabbitmq
-  - access
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "ACCESS REFUSED - Login was refused using authentication mechanism AMQPLAIN"

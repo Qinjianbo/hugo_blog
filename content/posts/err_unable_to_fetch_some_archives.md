@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Unab
 categories:
   - 问题积累
 tags:
-  - apt-get
-  - fix-missing
+  - ubuntu
 # nolastmod: true
 draft: false
 build:

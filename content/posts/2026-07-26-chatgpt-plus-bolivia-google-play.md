@@ -11,7 +11,6 @@ categories:
 tags:
   - ChatGPT
   - ChatGPT Plus
-  - Google Play
   - OpenAI
 draft: false
 description: "整理 Android 端通过 Google Play 玻利维亚区订阅 ChatGPT Plus 的操作路径、价格换算、付款失败原因和账号风险提醒。"

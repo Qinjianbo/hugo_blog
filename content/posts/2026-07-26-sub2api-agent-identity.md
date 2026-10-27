@@ -11,8 +11,6 @@ tags:
   - Sub2API
   - Codex
   - OpenAI
-  - Agent Identity
-  - API 网关
 draft: false
 description: "结合 Sub2API 最新 release 与当前源码，梳理 Agent Identity 模式的核心逻辑：从保存 OAuth Token 转向保存 agent_runtime_id 与本地 Ed25519 私钥，并分析它的体验变化和风险边界。"
 ---

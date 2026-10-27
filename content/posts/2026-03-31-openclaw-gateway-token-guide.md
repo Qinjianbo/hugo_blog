@@ -10,9 +10,6 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Gateway
-  - Token
-  - 认证
 draft: false
 description: 把 OpenClaw Gateway token 的作用、典型使用场景，以及它和 password、setup token 的区别整理成一篇中文说明。
 source_url: https://docs.openclaw.ai/cli/gateway

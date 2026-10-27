@@ -11,9 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Anim
 categories:
   - AI绘画
 tags:
-  - SD
   - AI绘画
-  - AnimateDiff
 # nolastmod: true
 draft: false
 aiSummary: "这是一篇关于AnimateDiff的文章，文章主要从几个方面介绍 AnimateDiff ，包括什么是 AnimateDiff 、如何在Stable Diffustion WebUI 中使用 AnimateDiff 等。本篇文章的内容主要翻译自 。"

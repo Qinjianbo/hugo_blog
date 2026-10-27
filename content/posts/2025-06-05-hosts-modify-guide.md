@@ -9,10 +9,7 @@ categories:
   - 网络工具
   - 运维必备
 tags:
-  - hosts
-  - 系统配置
-  - 网络
-  - 跨平台
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "在日常开发、测试或访问特定网站时，我们经常需要修改本地的 hosts 文件来实现域名解析的自定义。本文将介绍在 Windows、macOS 和 Linux 各平台下如何安全、有效地修改 hosts 文件。"

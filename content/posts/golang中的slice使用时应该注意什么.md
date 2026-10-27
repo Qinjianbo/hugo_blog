@@ -13,7 +13,6 @@ categories:
   - Golang
 tags:
   - Golang
-  - Slice
 # nolastmod: true
 draft: false
 aiSummary: "Go语言中的slice是一种灵活且强大的内置数据类型，它提供了比数组更灵活的内存抽象。然而，在使用slice时，有一些关键点需要注意以避免常见的问题和错误。本文将讨论在使用Go语言的slice时应注意的事项。"

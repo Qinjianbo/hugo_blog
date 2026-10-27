@@ -12,8 +12,6 @@ tags:
   - OpenClaw
   - CLI
   - AI Agent
-  - Onboarding
-  - Wizard
 draft: false
 description: 把 OpenClaw 官方 CLI Onboarding Wizard 文档整理成中文教程，讲清楚 openclaw onboard 的默认配置、Advanced 选项、本地与远程模式差异，以及多 Agent 追加方式。
 source_url: https://docs.openclaw.ai/start/wizard

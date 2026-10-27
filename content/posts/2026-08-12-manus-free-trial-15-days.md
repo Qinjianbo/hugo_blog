@@ -8,10 +8,8 @@ categories:
   - AI
   - 工具
 tags:
-  - Manus
   - AI Agent
   - 免费试用
-  - 白嫖
 draft: false
 description: "整理 Manus 1.6 / 1.6 Lite 限时免费体验活动的规则、操作步骤和注意事项，截止 2026 年 8 月 25 日，全程无需绑卡。"
 ---

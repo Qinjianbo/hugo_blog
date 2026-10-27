@@ -11,6 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/我�
 categories:
   - 总结
 tags:
+  - 微信公众号
 # nolastmod: true
 draft: false
 aiSummary: "本篇文章意在为自己的公众号文章引流，里面索引了很多自己公众号文章的链接"

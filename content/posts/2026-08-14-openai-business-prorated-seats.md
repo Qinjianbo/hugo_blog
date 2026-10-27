@@ -9,10 +9,6 @@ categories:
   - 工具
 tags:
   - OpenAI
-  - ChatGPT Business
-  - Team 空间
-  - 订阅计费
-  - 席位
 draft: false
 description: "整理 OpenAI ChatGPT Business 席位按剩余账期计费的规则，解释为什么临期 Team 空间会被高价收购，以及普通用户需要注意的账单和账号风险。"
 ---

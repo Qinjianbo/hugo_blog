@@ -10,10 +10,6 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Workspace
-  - AGENTS.md
-  - SOUL.md
-  - USER.md
 draft: false
 description: 把 OpenClaw workspace 的作用、文件分工和一套适合个人长期使用的模板整理成中文说明，帮助你快速理解 AGENTS.md、SOUL.md、USER.md 和 TOOLS.md 该怎么写。
 source_url: https://docs.openclaw.ai/agent-workspace

@@ -12,7 +12,6 @@ categories:
   - 运维必备
 tags:
   - mysql
-  - 主从复制
 # nolastmod: true
 draft: false
 aiSummary: "最近又自己弄了台小服务器，学习了下mysql的主从数据库配置，记录一下配置过程，其实是mariadb的，但是应该都差不多。整个过程配置起来还是比较简单的，没有遇到什么坑，嘿嘿！"

@@ -10,10 +10,6 @@ categories:
   - n8n
 tags:
   - n8n
-  - 数据合并
-  - 循环
-  - 批量处理
-  - 教程
 aiSummary: "本文基于 n8n 官方 Level Two 教程，系统讲解 n8n 中数据合并、循环与批量处理的核心节点和实战技巧，帮助你高效应对多数据流、循环处理和大批量数据自动化场景。"
 aiKeyPoints:
   - "1. 数据合并（Merge）"

@@ -11,9 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/如�
 categories:
   - 技术教程
 tags:
-  - 启动盘
   - ubuntu
-  - mac
 # nolastmod: true
 draft: false
 aiSummary: "公司给我们配了台式机，要求开发统一安装ubuntu作为开发机系统，借此学习ubuntu的相关知识。目前用的mac，需要制作一个u盘启动盘来安装ubuntu到台式机，但是找不到好的工具，在网上看到一篇文章，在此进行记录。"

@@ -8,9 +8,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - AI
 tags:
-  - Ollama
   - DeepSeek
-  - AI模型
   - 本地部署
 draft: false
 aiSummary: "在人工智能快速发展的今天，越来越多的人希望能在本地运行强大的AI模型。本文将为您详细介绍如何使用Ollama在本地部署和运行Deepseek模型，让您能够在保护隐私的同时享受AI带来的便利。"

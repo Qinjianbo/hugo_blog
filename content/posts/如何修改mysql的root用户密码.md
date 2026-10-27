@@ -12,7 +12,6 @@ categories:
   - 运维必备
 tags:
   - mysql
-  - 密码修改
 # nolastmod: true
 draft: false
 build:

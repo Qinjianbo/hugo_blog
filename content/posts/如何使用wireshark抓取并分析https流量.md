@@ -8,9 +8,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - 技术教程
 tags:
-  - Wireshark
   - HTTPS
-  - 抓包
   - TLS
 draft: false
 aiSummary: "本文记录如何在 macOS 上使用 Wireshark 抓取 HTTPS 流量，并通过 Chrome 的 SSLKEYLOGFILE 让 Wireshark 解密 HTTP/2 内容。"

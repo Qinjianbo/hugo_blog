@@ -12,7 +12,6 @@ categories:
   - 技术教程
 tags:
   - HTTPS
-  - HTTP
 # nolastmod: true
 draft: false
 aiSummary: "HTTPS = HTTP + 加密 + 认证 + 完整性保护"

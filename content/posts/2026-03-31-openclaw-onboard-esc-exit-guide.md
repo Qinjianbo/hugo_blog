@@ -10,9 +10,7 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Onboarding
   - CLI
-  - Wizard
 draft: false
 description: 把 openclaw onboard 中途按 Esc 退出后的恢复方法整理成一篇中文教程，讲清楚什么时候重跑向导、什么时候用 configure，以及什么时候才需要 reset。
 source_url: https://docs.openclaw.ai/start/wizard

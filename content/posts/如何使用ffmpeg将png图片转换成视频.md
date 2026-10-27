@@ -13,7 +13,6 @@ categories:
   - 视频处理
 tags:
   - ffmpeg
-  - 图片转视频
 # nolastmod: true
 draft: false
 aiSummary: "FFmpeg是一个强大的开源工具，可以用来录制、转换和流化音频和视频。在本文中，我们将学习如何使用FFmpeg将一系列png图片转换成视频文件。"

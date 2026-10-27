@@ -11,7 +11,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/zook
 categories:
   - 问题积累
 tags:
-  - zookeeper
   - ubuntu
 # nolastmod: true
 draft: false

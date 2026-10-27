@@ -9,10 +9,7 @@ categories:
   - 网络工具
   - 技术教程
 tags:
-  - ngrok
-  - 内网穿透
-  - 端口映射
-  - 教程
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "ngrok 是一款非常流行的内网穿透工具，可以让你本地的 Web 服务（如 n8n、网站、API 等）快速暴露到公网，方便外部访问和调试。本文将详细介绍 ngrok 的原理、注册、配置、使用步骤及常见问题。"

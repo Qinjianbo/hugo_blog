@@ -14,10 +14,6 @@ categories:
 
 tags:
   - n8n
-  - SQL
-  - Chatbot
-  - 数据查询
-  - ClickHouse
 # nolastmod: true
 draft: false
 aiSummary: "本文将结合实际工作流截图，详细介绍如何用 n8n 打造一个基于大模型的 SQL 智能支付数据查询助手，实现自然语言到SQL的自动转换与安全执行，极大提升数据服务效率。"

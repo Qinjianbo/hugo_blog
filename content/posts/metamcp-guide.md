@@ -12,8 +12,6 @@ tags:
   - MCP
   - AI
   - LLM
-  - MetaMCP
-  - 工具管理
 draft: false
 aiSummary: "随着AI工具的发展，各种MCP(Model Context Protocol)服务层出不穷。如何高效管理这些MCP成为了一个重要问题。本文将介绍MetaMCP这个强大的MCP管理工具，帮助你统一管理所有的MCP服务。"
 aiKeyPoints:

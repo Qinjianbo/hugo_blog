@@ -13,7 +13,6 @@ categories:
   - Windows
 tags:
   - 文件管理
-  - 磁盘清理
 # nolastmod: true
 draft: false
 build:

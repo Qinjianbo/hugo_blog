@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/twit
 categories:
   - 分布式
 tags:
-  - snowflake
-  - 雪花算法
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "本文主要介绍分布式唯一ID生成算法--雪花算法。"

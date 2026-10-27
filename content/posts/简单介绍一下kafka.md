@@ -10,10 +10,9 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 # images:
 #   - /img/cover.jpg
 categories:
-  - 分布式系统  # 假设这是一个与文章相关的分类
+  - 分布式系统
 tags:
-  - Kafka  # 文章相关标签
-  - 消息队列  # 文章相关标签
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "Kafka是一个由Apache软件基金会开发的开源流处理平台，它具有高吞吐量、可扩展性和容错性。本文将为您提供Kafka的简要介绍。"

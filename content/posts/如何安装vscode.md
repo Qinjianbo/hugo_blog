@@ -8,9 +8,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
 categories:
   - 工具
 tags:
-  - VSCode
-  - 编辑器
-  - 开发环境
+  - 工具
 draft: false
 aiSummary: "Visual Studio Code（简称VSCode）是微软推出的一款轻量级但功能强大的代码编辑器，深受开发者喜爱。本文将介绍如何在Windows系统上安装VSCode。"
 aiKeyPoints:

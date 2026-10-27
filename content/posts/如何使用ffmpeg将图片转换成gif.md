@@ -11,7 +11,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - ffmpeg
 tags:
-  - gif
   - ffmpeg
 # nolastmod: true
 draft: false

@@ -11,9 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/chsh
 categories:
   - 问题积累
 tags:
-  - chsh
-  - PAM
-  - oh-my-zsh
+  - shell
 # nolastmod: true
 draft: false
 build:

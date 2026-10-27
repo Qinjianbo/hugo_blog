@@ -8,10 +8,7 @@ avatar: /img/avatar.jpeg
 categories:
   - 问题积累
 tags:
-  - Charles
-  - iPhone
-  - HTTPS抓包
-  - 证书
+  - HTTPS
 draft: false
 aiSummary: "这篇文章记录了如何在 iPhone 上删除旧的 Charles 证书，重新下载并安装新的 Charles Proxy CA，并完成 HTTPS 抓包验证。"
 aiKeyPoints:

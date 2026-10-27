@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/上�
 categories:
   - 上海必备
 tags:
-  - 上海积分
-  - 人力资源
+  - 生活
 # nolastmod: true
 draft: false
 aiSummary: "想要办上海积分的小伙伴赶紧进来看看哈，已经整理好了办理过程中所需的所有材料及材料收集地址，并附带详细流程，希望可以帮到各位想留在上海的小伙伴们。"

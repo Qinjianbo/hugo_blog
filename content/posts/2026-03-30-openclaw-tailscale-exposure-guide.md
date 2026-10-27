@@ -10,9 +10,6 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Tailscale
-  - Gateway
-  - 网络
 draft: false
 description: 把 OpenClaw 的 Tailscale exposure 功能整理成一篇中文说明，讲清 off、serve、funnel 三种模式的区别，以及它和 gateway.bind tailnet 的边界。
 source_url: https://docs.openclaw.ai/gateway/tailscale

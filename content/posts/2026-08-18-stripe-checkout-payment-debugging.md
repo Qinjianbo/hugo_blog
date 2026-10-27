@@ -8,12 +8,6 @@ categories:
   - 支付
   - 技术
 tags:
-  - Stripe
-  - Checkout
-  - PaymentIntent
-  - HAR
-  - Webhook
-  - 3DS
   - 支付安全
 draft: false
 description: "从 HAR 抓包复盘 Stripe Checkout 支付链路，拆解 Checkout Session、PaymentIntent、Invoice、Subscription、Webhook Event 的字段关系、状态机、幂等处理和对账方法。"

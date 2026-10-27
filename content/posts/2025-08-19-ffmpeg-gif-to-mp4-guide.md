@@ -10,10 +10,6 @@ categories:
   - 视频处理
 tags:
   - ffmpeg
-  - gif
-  - mp4
-  - 视频转换
-  - 多媒体处理
 draft: false
 aiSummary: "GIF格式虽然广泛用于网络分享，但在某些场景下需要转换为MP4格式以获得更好的压缩率和兼容性。本文将详细介绍如何使用ffmpeg将GIF文件转换为MP4格式，包括基本转换、质量优化、批量处理等实用技巧。"
 aiKeyPoints:

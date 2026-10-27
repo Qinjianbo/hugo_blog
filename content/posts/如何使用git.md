@@ -9,8 +9,7 @@ categories:
   - 技术教程
 tags:
   - Git
-  - 版本控制
-  - 开发工具
+  - 工具
 draft: false
 aiSummary: "Git 是当今最流行的版本控制系统，它能够有效地管理你的代码，跟踪文件的变化，并支持多人协作开发。本文将详细介绍 Git 的基本概念、主要功能以及如何在不同系统中安装和使用它。"
 aiKeyPoints:

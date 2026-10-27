@@ -10,9 +10,6 @@ categories:
   - n8n
 tags:
   - n8n
-  - 数据结构
-  - 数据转换
-  - 教程
 aiSummary: "本文基于 n8n 官方 Level Two 教程，系统讲解 n8n 的数据结构、Code 节点的用法，以及常见的数据转换技巧。适合希望深入理解 n8n 数据流和自动化处理的用户。"
 aiKeyPoints:
   - "n8n 数据结构基础"

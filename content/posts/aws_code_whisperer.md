@@ -11,7 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/aws_
 categories:
   - AI
 tags:
-  - 代码编辑助手
+  - AI Agent
   - AI
 # nolastmod: true
 draft: false

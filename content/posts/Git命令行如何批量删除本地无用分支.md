@@ -12,7 +12,6 @@ categories:
   - 工具
 tags:
   - Git
-  - 分支删除
 # nolastmod: true
 draft: false
 aiSummary: "在使用git管理自己的项目时，不免会遇到想要删除多个本地分支的情况，这时，我们可以采用git brand -D 来进行逐个删除，那有没有更好的办法，让我来一次性删除多个无用分支呢？答案是肯定的，我们可以通过执行命令... Cut out summary from your post content here."

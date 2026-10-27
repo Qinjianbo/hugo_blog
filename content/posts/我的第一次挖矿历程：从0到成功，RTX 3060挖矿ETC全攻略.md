@@ -13,9 +13,6 @@ categories:
   - 挖矿
   - 区块链
 tags:
-  - 挖矿
-  - 比特币
-  - 区块链
   - 加密货币
 # nolastmod: true
 draft: false

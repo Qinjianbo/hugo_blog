@@ -10,10 +10,7 @@ categories:
   - macOS
 tags:
   - OpenClaw
-  - macOS
   - AI Agent
-  - Onboarding
-  - 安装指南
 draft: false
 description: 把 OpenClaw 官方 macOS Onboarding 文档整理成中文教程，涵盖首次启动、Gateway 选择、权限授权、CLI 与引导聊天等完整流程。
 source_url: https://docs.openclaw.ai/start/onboarding

@@ -12,7 +12,6 @@ categories:
   - Golang
 tags:
   - Golang
-  - Interface
 # nolastmod: true
 draft: false
 aiSummary: "在Go语言中， interface{} 是一种灵活的类型，可以存储任何类型的值。然而，有时候我们需要知道一个 interface{} 字段的具体类型，以便我们能够进行更精确的操作。本文将介绍如何在Go语言中判断一个 interface{} 字段的具体类型。"

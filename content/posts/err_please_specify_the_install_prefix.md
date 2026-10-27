@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Plea
 categories:
   - 问题积累
 tags:
-  - 编译PHP
-  - iconv
+  - php
 # nolastmod: true
 draft: false
 build:

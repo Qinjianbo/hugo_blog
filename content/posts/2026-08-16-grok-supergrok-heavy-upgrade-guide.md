@@ -8,11 +8,7 @@ categories:
   - AI
   - 工具
 tags:
-  - Grok
-  - SuperGrok
-  - Heavy
-  - 订阅
-  - 优惠
+  - AI
 draft: false
 description: "记录一次通过两个 Grok SuperGrok 定向优惠页开通 Heavy 的实操路径：先用 50% off 页面开 SuperGrok，再用 67% off 页面升级 Heavy，并检查是否抵扣前一笔费用。"
 ---

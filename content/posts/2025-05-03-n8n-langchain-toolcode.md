@@ -10,7 +10,6 @@ categories:
 tags:
   - n8n
   - LangChain
-  - 代码工具
 draft: false
 aiSummary: "LangChain ToolCode节点是n8n中一个强大的子节点，专为开发者设计，支持通过JavaScript或Python代码扩展工作流功能。本文将详细介绍其功能、配置方法及实际应用场景。"
 aiKeyPoints:

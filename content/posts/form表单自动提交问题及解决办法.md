@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Form
 categories:
   - 问题积累
 tags:
-  - form
-  - 自动提交
+  - 工具
 # nolastmod: true
 draft: false
 aiSummary: "今天收到一个任务，任务内容是这样：有一个搜索输入框，在搜索输入框内输入内容后，回车，发现页面自动刷新了，要求回车后进行搜索而不是刷新页面。开始以为是vue的问题，后来查了查原来是form表单的一种提交机制，解决办法有两种！"

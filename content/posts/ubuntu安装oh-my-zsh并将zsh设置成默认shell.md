@@ -12,7 +12,6 @@ categories:
   - 技术教程
 tags:
   - shell
-  - zsh
 # nolastmod: true
 draft: false
 aiSummary: "今天从新给电脑装了ubuntu系统，然后从新装一遍oh-my-zsh，在此记录安装过程，以备后续自己再使用！"

@@ -8,11 +8,7 @@ categories:
   - AI
   - 工具
 tags:
-  - HeyGen
-  - AI 视频
-  - OMEN
   - 免费试用
-  - 风险提醒
 draft: false
 description: "整理 HeyGen 3 个月免费试用与 HP OMEN 合作入口传闻，说明官方渠道核验方式、领取建议，以及不要用撞码/脚本试码的原因。"
 ---

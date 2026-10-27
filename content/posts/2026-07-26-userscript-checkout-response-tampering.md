@@ -8,10 +8,6 @@ categories:
   - 安全
   - 前端
 tags:
-  - Tampermonkey
-  - Userscript
-  - Fetch
-  - XMLHttpRequest
   - 支付安全
 draft: false
 description: "围绕 Claude 0 元支付脚本传闻，用一份脱敏的本地演示版油猴脚本讲清接口响应篡改的实现思路、风险边界，以及支付系统该如何做服务端防护。"

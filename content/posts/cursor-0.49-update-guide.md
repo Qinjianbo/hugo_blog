@@ -10,8 +10,7 @@ categories:
   - 工具
 tags:
   - Cursor
-  - IDE
-  - 代码编辑助手
+  - AI Agent
   - 效率工具
 draft: false
 aiSummary: "Cursor 0.49.x 版本带来了一系列令人兴奋的新功能和改进，包括规则生成、终端控制优化、MCP 图像支持等。本文将详细介绍这些更新内容，帮助您更好地利用这些新特性提升开发效率。"

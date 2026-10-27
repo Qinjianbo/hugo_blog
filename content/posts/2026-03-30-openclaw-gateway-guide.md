@@ -10,9 +10,7 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Gateway
   - CLI
-  - 运维
 draft: false
 description: 把 OpenClaw Gateway 的作用、典型链路、配置方式和状态检查命令整理成一篇中文教程，帮助你快速理解本地与远程 Gateway 的使用方式。
 source_url: https://docs.openclaw.ai/cli/gateway

@@ -12,7 +12,6 @@ categories:
   - 问题积累
 tags:
   - nginx
-  - permission
 # nolastmod: true
 draft: false
 aiSummary: "ajax 异步提交数据服务器返回500，但程序日志中未发现错误，后来在Nginx错误日志中发现了错误信息： 26054 open() \"/var/lib/nginx/tmp/client body/0000000005\" failed (13: Permission denied)"

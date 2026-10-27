@@ -12,7 +12,6 @@ tags:
   - MCP
   - AI
   - LLM
-  - 协议设计
 draft: false
 aiSummary: "MCP（Model Context Protocol）是一种用于规范和增强大语言模型行为的协议框架。本文将深入探讨如何设计和实现一个专业级别的MCP，帮助开发者更好地控制和优化AI模型的输出。"
 aiKeyPoints:

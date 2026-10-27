@@ -11,7 +11,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/PHP�
 categories:
   - 技术教程
 tags:
-  - mkdir
   - php
 # nolastmod: true
 draft: false

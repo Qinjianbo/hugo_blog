@@ -10,7 +10,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/金�
 #   - /img/cover.jpg
 categories:
   - 总结
-tags:
 # nolastmod: true
 draft: false
 build:

@@ -10,8 +10,6 @@ categories:
   - 工具
 tags:
   - n8n
-  - GitLab
-  - 代码评审
   - AI
 # nolastmod: true
 draft: false

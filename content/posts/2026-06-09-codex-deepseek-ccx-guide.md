@@ -10,9 +10,7 @@ categories:
 tags:
   - Codex
   - DeepSeek
-  - CCX
   - OpenAI
-  - 教程
 draft: false
 description: "整理一套通过 CCX 让 Codex 接入 DeepSeek 的本地配置流程，包括 API Key 申请、客户端安装、网关接入和模型映射。"
 aiSummary: "这篇文章把一套通过 CCX 接入 DeepSeek 并让 Codex 使用的本地配置流程整理成了可操作步骤，包括 DeepSeek API Key 申请、Codex 客户端安装、CCX 作为中间网关的配置、连通性验证和模型重定向。"

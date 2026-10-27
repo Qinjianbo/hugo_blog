@@ -10,9 +10,6 @@ categories:
   - n8n
 tags:
   - n8n
-  - 数据类型
-  - 数据处理
-  - 教程
 aiSummary: "本文基于 n8n 官方 Level Two 教程，系统讲解 n8n 如何处理 HTML/XML、日期时间、二进制等多种数据类型，并通过实战演示常见节点的用法和数据转换技巧。"
 aiKeyPoints:
   - "1. 处理 HTML 和 XML 数据"

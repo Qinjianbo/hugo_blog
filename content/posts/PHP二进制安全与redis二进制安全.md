@@ -12,7 +12,6 @@ categories:
   - 技术教程
 tags:
   - php
-  - 二进制安全
 # nolastmod: true
 draft: false
 build:

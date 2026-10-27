@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/匿�
 categories:
   - Golang
 tags:
-  - 匿名函数
-  - 闭包
+  - Golang
 # nolastmod: true
 draft: false
 build:

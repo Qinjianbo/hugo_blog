@@ -12,7 +12,6 @@ categories:
   - 运维必备
 tags:
   - nginx
-  - 日志切分
 # nolastmod: true
 draft: false
 aiSummary: "今天在网上查询nginx的其他问题的时候，无意间看到原来nginx其实是可以自动按天切分日志的，记得之前在公司看到公司的运维都是写脚本切分日志的，这里配置并记录一下nginx如何按天自动切分日志。"

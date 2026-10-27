@@ -12,7 +12,6 @@ tags:
   - n8n
   - 工作流
   - 自动化
-  - 教程
 aiSummary: "本文将带你通过 n8n 官方教程，快速上手构建一个迷你自动化工作流。你将学会如何用 n8n 获取 Hacker News 上关于\"automation\"的10条最新资讯，并掌握节点配置、执行与保存的完整流程。"
 aiKeyPoints:
   - "教程目标"

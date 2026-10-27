@@ -9,9 +9,6 @@ categories:
   - RAGFlow
 tags:
   - RAGFlow
-  - embedding
-  - 文本向量化
-  - 文本向量检索
 aiSummary: "RAGFlow 的 embedding 系统采用了 多提供商统一接口 的设计模式，支持 20+ 种不同的 embedding 提供商和模型，包括本地模型和云端 API 服务。该系统为 RAG（检索增强生成）提供了高质量的文本向量化能力。"
 aiKeyPoints:
   - "概述"

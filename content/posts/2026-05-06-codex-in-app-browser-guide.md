@@ -9,9 +9,7 @@ categories:
   - OpenAI
 tags:
   - Codex
-  - Browser
   - OpenAI
-  - 前端开发
 draft: false
 description: "基于 OpenAI 官方 Codex 文档，整理 In-app Browser 的使用场景、Browser plugin 操作方式、页面评论工作流和安全边界。"
 aiSummary: "Codex In-app Browser 是 Codex app 里用于共享网页预览和视觉反馈的能力。它适合本地开发服务器、文件预览和无需登录的公开页面，可以让 Codex 查看渲染结果、接收页面评论，并围绕具体视觉问题迭代前端代码。"

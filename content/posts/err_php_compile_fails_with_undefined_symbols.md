@@ -12,7 +12,6 @@ categories:
   - 问题积累
 tags:
   - php
-  - x86_64
 # nolastmod: true
 draft: false
 build:

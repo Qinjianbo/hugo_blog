@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/miss
 categories:
   - 问题积累
 tags:
-  - mac系统更新
-  - xcode-select
+  - 工具
 # nolastmod: true
 draft: false
 build:

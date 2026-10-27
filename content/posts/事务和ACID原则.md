@@ -11,8 +11,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
 categories:
   - 技术教程
 tags:
-  - 事务
-  - ACID
   - mysql
 # nolastmod: true
 draft: false

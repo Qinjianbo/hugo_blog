@@ -10,7 +10,6 @@ categories:
   - 技术教程
 tags:
   - OpenClaw
-  - Hooks
   - 自动化
   - CLI
 draft: false

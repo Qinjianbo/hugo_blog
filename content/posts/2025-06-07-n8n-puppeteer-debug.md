@@ -13,9 +13,7 @@ categories:
 tags:
   - n8n
   - puppeteer
-  - Chrome
   - 自动化
-  - 浏览器调试
 # nolastmod: true
 draft: false
 aiSummary: "在自动化测试、网页抓取、数据采集等场景中，Puppeteer凭借其强大的浏览器自动化能力成为开发者的利器。而n8n作为可视化自动化平台，通过Puppeteer节点可以无缝集成浏览器操作。但要让n8n的Puppeteer节点真正\"驱动\"本地Chrome浏览器，首先需要启动Chrome的远程调试模式。本文将手把手教你如何配置，并详细解读一个简单的n8n-puppeteer工作流。"

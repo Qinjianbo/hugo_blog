@@ -10,8 +10,6 @@ categories:
 tags:
   - OpenAI
   - ChatGPT Plus
-  - AI 教育
-  - 马耳他
 draft: false
 description: OpenAI 与马耳他政府合作，为完成 AI 素养课程的公民提供一年免费 ChatGPT Plus，这可能是 AI 公共服务化的一个信号。
 source_url: https://openai.com/index/malta-chatgpt-plus-partnership/

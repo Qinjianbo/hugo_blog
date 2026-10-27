@@ -9,9 +9,7 @@ categories:
   - 工具
 tags:
   - Cursor
-  - IDE
   - 效率工具
-  - AI编程助手
 draft: false
 aiSummary: "在当今快速发展的软件开发领域，提高开发效率成为每个开发者的必修课。本文将为您介绍一款革命性的AI驱动的IDE工具——Cursor，以及如何利用它来显著提升您的编程效率。"
 aiKeyPoints:

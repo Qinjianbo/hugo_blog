@@ -10,10 +10,7 @@ categories:
   - CLI
 tags:
   - OpenClaw
-  - Install
   - CLI
-  - Node.js
-  - pnpm
 draft: false
 description: 把 OpenClaw 官方 install 文档整理成中文安装教程，包含推荐安装脚本、npm 和 pnpm 安装、源码安装、校验命令以及常见 PATH 排障命令。
 source_url: https://docs.openclaw.ai/install

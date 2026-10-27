@@ -10,10 +10,7 @@ categories:
   - Agent
 tags:
   - OpenClaw
-  - VirusTotal
   - AI Agent
-  - 技能市场
-  - 代码安全
 draft: false
 description: OpenClaw 宣布与 VirusTotal 合作，为 ClawHub 技能市场加入代码与威胁情报扫描，这对 AI Agent 生态的安全建设意味着什么？
 source_url: https://openclaw.ai/blog/virustotal-partnership

@@ -10,9 +10,6 @@ categories:
 tags:
   - Codex
   - OpenAI
-  - GPT-5.6
-  - 配置
-  - 风险提醒
 draft: false
 description: "复盘一篇 GPT-5.6-Sol-WM 隐藏模型教程的发现思路，说明本地模型缓存、visibility、服务器授权之间的关系，并整理一套合规使用 GPT-5.6 Sol 的实用配置方法。"
 ---

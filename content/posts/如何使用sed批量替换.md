@@ -11,8 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
 categories:
   - 技术教程
 tags:
-  - sed
-  - 批量替换
+  - shell
 # nolastmod: true
 draft: false
 build:

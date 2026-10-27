@@ -10,10 +10,6 @@ categories:
   - n8n
 tags:
   - n8n
-  - Steam
-  - 飞书
-  - 自动报表
-  - 教程
 # nolastmod: true
 draft: false
 aiSummary: "本文介绍一个基于 n8n 的自动化工作流：定时获取 Steam 支付成功订单，统计每日总单数与金额，并通过飞书机器人推送日报。适用于游戏、电商等需要自动汇总订单数据并团队共享的场景。"

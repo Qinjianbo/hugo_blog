@@ -8,11 +8,7 @@ categories:
   - 安全
   - SaaS
 tags:
-  - Figma
   - 支付安全
-  - SEPA
-  - 订阅系统
-  - 风控
 draft: false
 description: "围绕网上流传的 Figma 0 元购文章，改写成一篇安全复盘：用本地模拟案例解释订阅支付为什么会被绕过，并整理 SaaS 支付系统的服务端防护清单。"
 source_url: "https://blog.chatai.codes/archives/10/"

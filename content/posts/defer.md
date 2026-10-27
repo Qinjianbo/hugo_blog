@@ -11,7 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/gola
 categories:
   - Golang
 tags:
-  - defer
+  - Golang
 # nolastmod: true
 draft: false
 build:

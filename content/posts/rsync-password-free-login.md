@@ -10,7 +10,6 @@ categories:
 tags:
   - rsync
   - SSH
-  - 运维技巧
 draft: false
 aiSummary: "在使用rsync进行文件同步时，每次都需要输入密码确实很麻烦。本文将介绍如何配置rsync实现免密登录，提高工作效率。"
 aiKeyPoints:

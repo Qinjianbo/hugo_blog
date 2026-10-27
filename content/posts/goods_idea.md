@@ -10,7 +10,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/我�
 #   - /img/cover.jpg
 categories:
   - 总结
-tags:
 # nolastmod: true
 draft: false
 aiSummary: "本篇文章将记录一些自己平时的所悟所感，持续更新..."

@@ -12,7 +12,6 @@ categories:
   - AI绘画
 tags:
   - AI绘画
-  - gif
   - ffmpeg
 # nolastmod: true
 draft: false

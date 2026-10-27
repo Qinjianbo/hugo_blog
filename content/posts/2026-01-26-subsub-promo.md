@@ -5,9 +5,6 @@ lastmod: 2026-01-26T10:00:00+08:00
 author: 胡巴
 tags:
   - ChatGPT
-  - 订阅升级
-  - 优惠券
-  - 支付技巧
 categories:
   - 技术教程
 draft: false
