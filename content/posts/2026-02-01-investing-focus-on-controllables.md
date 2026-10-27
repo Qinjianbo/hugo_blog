@@ -13,7 +13,7 @@ tags:
   - 段永平
 categories:
   - 投资理财
-draft: true
+draft: false
 description: "把注意力从“预测涨跌”转回到“可控之事”：能力圈、估值与安全边际、仓位与现金、长期持有与卖出规则。"
 aiSummary: "把注意力从“预测涨跌”转回到“可控之事”：能力圈、估值与安全边际、仓位与现金、长期持有与卖出规则。"
 aiKeyPoints:

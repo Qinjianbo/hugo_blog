@@ -12,7 +12,7 @@ categories:
   - 总结
 tags:
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

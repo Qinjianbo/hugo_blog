@@ -15,7 +15,7 @@ tags:
   - PAM
   - oh-my-zsh
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

@@ -14,7 +14,7 @@ tags:
   - 网络访问
   - 教程
 # nolastmod: true
-draft: true
+draft: false
 aiSummary: "你是否在本地搭建了 n8n 服务，却苦于无法让同事或朋友远程访问？本文将系统介绍几种常见方法，帮助你安全、便捷地让外部用户访问你本地部署的 n8n 自动化平台。"
 aiKeyPoints:
   - "场景说明"

@@ -15,7 +15,7 @@ tags:
   - 文件管理
   - 磁盘清理
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

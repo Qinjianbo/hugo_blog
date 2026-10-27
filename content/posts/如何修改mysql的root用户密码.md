@@ -14,7 +14,7 @@ tags:
   - mysql
   - 密码修改
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

@@ -14,7 +14,7 @@ tags:
   - php
   - x86_64
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

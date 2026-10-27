@@ -13,7 +13,7 @@ categories:
 tags:
   - shell
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

@@ -14,7 +14,7 @@ tags:
   - mac系统更新
   - xcode-select
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

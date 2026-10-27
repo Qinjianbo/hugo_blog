@@ -14,7 +14,7 @@ tags:
   - 端口映射
   - 教程
 # nolastmod: true
-draft: true
+draft: false
 aiSummary: "ngrok 是一款非常流行的内网穿透工具，可以让你本地的 Web 服务（如 n8n、网站、API 等）快速暴露到公网，方便外部访问和调试。本文将详细介绍 ngrok 的原理、注册、配置、使用步骤及常见问题。"
 aiKeyPoints:
   - "一、ngrok 原理简介"

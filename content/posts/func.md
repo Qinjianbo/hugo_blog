@@ -14,7 +14,7 @@ tags:
   - 匿名函数
   - 闭包
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

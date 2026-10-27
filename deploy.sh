@@ -37,8 +37,8 @@ REMOTE_PATH=${REMOTE_PATH}
 SSH_PORT=${SSH_PORT:-22}
 BUILD_DIR=${BUILD_DIR:-public}
 
-echo "==> Building site with drafts (hugo -D)..."
-hugo -D --cleanDestinationDir -d "${BUILD_DIR}"
+echo "==> Building site (drafts are not published)..."
+hugo --cleanDestinationDir -d "${BUILD_DIR}"
 
 echo "==> Syncing to ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}"
 RSYNC_FLAGS=(-avz --delete --exclude '.DS_Store' --exclude 'Thumbs.db')

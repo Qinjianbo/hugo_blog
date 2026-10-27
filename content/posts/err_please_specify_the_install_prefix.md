@@ -14,7 +14,7 @@ tags:
   - 编译PHP
   - iconv
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

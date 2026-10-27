@@ -14,7 +14,7 @@ tags:
   - php
   - 二进制安全
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

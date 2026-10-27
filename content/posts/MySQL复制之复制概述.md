@@ -14,7 +14,7 @@ tags:
   - mysql
   - 主从复制
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

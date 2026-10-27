@@ -13,7 +13,7 @@ categories:
 tags:
   - csv
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

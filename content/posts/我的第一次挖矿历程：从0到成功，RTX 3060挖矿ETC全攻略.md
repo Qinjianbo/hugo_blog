@@ -18,7 +18,7 @@ tags:
   - 区块链
   - 加密货币
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

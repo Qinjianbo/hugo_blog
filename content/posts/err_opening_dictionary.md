@@ -14,7 +14,7 @@ tags:
   - appdata
   - error
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never

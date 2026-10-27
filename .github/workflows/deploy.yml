@@ -39,9 +39,9 @@ jobs:
           hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
 
-      # Same behaviour as the old deploy.sh: drafts are published.
-      - name: Build site (with drafts, like deploy.sh)
-        run: hugo -D --cleanDestinationDir
+      # Drafts are not published; only non-draft posts are built.
+      - name: Build site
+        run: hugo --cleanDestinationDir
 
       - name: Deploy via rsync
         env:

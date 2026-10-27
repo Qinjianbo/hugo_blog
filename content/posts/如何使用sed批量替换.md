@@ -14,7 +14,7 @@ tags:
   - sed
   - 批量替换
 # nolastmod: true
-draft: true
+draft: false
 build:
   render: never
   list: never
