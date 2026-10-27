@@ -16,6 +16,7 @@ tags:
 draft: false
 description: "记录一次通过两个 Grok SuperGrok 定向优惠页开通 Heavy 的实操路径：先用 50% off 页面开 SuperGrok，再用 67% off 页面升级 Heavy，并检查是否抵扣前一笔费用。"
 ---
+> ⚠️ **请先核对（2026-10-27 更新）：文中为 Grok 定向优惠页，价格和抵扣以你自己账号的结账页为准，优惠随时可能下线或变化。付款前务必确认套餐名、周期和金额，不显示就不要硬付。**
 
 最近看到一个 Grok Heavy 开通思路：先用 SuperGrok 50% off 的两个月优惠页买入，再马上打开 Heavy 67% off 的三个月优惠页，看结账页是否给出 99 美元 Heavy，并抵扣刚刚买 SuperGrok 的费用。
 
