@@ -8,7 +8,7 @@ categories:
   - AI
   - OpenAI
 tags:
-  - sub2api
+  - Sub2API
   - Codex
   - OpenAI
   - Docker

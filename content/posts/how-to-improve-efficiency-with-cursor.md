@@ -6,7 +6,7 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (25).jpg
 categories:
-  - 开发工具
+  - 工具
 tags:
   - Cursor
   - IDE

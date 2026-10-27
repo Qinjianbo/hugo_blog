@@ -11,7 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
 categories:
   - 工具
 tags:
-  - git
+  - Git
   - 分支删除
 # nolastmod: true
 draft: false

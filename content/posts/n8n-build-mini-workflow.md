@@ -6,8 +6,8 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/10.jpg
 categories:
-  - 自动化工具
-  - n8n教程
+  - 自动化
+  - n8n
 tags:
   - n8n
   - 工作流

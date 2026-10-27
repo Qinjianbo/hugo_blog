@@ -7,11 +7,11 @@ avatar: /img/avatar.jpeg
 categories:
   - AI
   - Agent
-  - 实用教程
+  - 技术教程
 tags:
   - OpenClaw
   - Hooks
-  - Automation
+  - 自动化
   - CLI
 draft: false
 description: 把 OpenClaw hooks 的作用、常见内置 hook 以及小白用户最稳的启用顺序整理成一篇中文教程。

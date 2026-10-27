@@ -6,7 +6,7 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/22.jpg
 categories:
-  - 自动化工具
+  - 自动化
   - n8n
   - puppeteer
   

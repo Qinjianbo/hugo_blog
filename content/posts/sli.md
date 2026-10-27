@@ -9,9 +9,9 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/slic
 # images:
 #   - /img/cover.jpg
 categories:
-  - golang
+  - Golang
 tags:
-  - slice
+  - Slice
 # nolastmod: true
 draft: true
 build:

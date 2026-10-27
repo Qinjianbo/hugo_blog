@@ -7,9 +7,9 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/15.jpg
 categories:
   - 自动化
-  - 开发工具
+  - 工具
 tags:
-  - N8N
+  - n8n
   - GitLab
   - 代码评审
   - AI

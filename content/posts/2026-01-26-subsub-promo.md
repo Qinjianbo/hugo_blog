@@ -9,7 +9,7 @@ tags:
   - 优惠券
   - 支付技巧
 categories:
-  - 工具教程
+  - 技术教程
 draft: false
 description: "SubSub 代开 ChatGPT Plus，无需外卡，附 6 张 5 美元优惠券（有效期至 2026-01-30 00:00:00）。"
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/8.jpg

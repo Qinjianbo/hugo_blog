@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (35).jpg
 categories:
   - 技术教程
-  - AI开发
+  - AI
 tags:
   - AI
   - LLM

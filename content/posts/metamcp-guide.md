@@ -6,8 +6,8 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (30).jpg
 categories:
-  - AI开发
-  - 技术分享
+  - AI
+  - 技术教程
 tags:
   - MCP
   - AI

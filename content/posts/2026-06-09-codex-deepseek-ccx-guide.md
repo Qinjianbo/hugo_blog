@@ -7,7 +7,6 @@ avatar: /img/avatar.jpeg
 categories:
   - AI
   - OpenAI
-  - DeepSeek
 tags:
   - Codex
   - DeepSeek

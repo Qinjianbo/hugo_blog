@@ -8,7 +8,6 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 categories:
   - n8n
   - 自动化
-  - 工作流
   
 tags:
   - n8n

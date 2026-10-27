@@ -6,7 +6,7 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/cover.jpg
 categories:
-  - 开发工具
+  - 工具
 tags:
   - VSCode
   - 编辑器

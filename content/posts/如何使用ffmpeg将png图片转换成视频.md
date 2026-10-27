@@ -10,7 +10,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 # images:
 #   - /img/cover.jpg
 categories:
-  - 视频制作
+  - 视频处理
 tags:
   - ffmpeg
   - 图片转视频

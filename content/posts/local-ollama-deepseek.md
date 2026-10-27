@@ -6,10 +6,10 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (23).jpg
 categories:
-  - AI工具
+  - AI
 tags:
   - Ollama
-  - Deepseek
+  - DeepSeek
   - AI模型
   - 本地部署
 draft: false

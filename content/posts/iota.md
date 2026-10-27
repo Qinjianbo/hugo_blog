@@ -9,7 +9,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/gola
 # images:
 #   - /img/cover.jpg
 categories:
-  - golang
+  - Golang
 tags:
   - iota
 # nolastmod: true

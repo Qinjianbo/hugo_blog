@@ -5,7 +5,7 @@ lastmod: 2026-02-06T10:00:00+08:00
 author: 胡巴
 avatar: /img/avatar.jpeg
 categories:
-  - 理财
+  - 投资理财
 tags:
   - 复利
   - 定投

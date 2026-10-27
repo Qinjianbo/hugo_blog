@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (36).jpg
 categories:
   - 技术教程
-  - 开发工具
+  - 工具
 tags:
   - Cursor
   - IDE

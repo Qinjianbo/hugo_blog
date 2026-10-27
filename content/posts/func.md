@@ -9,7 +9,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/匿�
 # images:
 #   - /img/cover.jpg
 categories:
-  - golang
+  - Golang
 tags:
   - 匿名函数
   - 闭包

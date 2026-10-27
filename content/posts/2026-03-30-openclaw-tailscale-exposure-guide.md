@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 categories:
   - AI
   - Agent
-  - 实用教程
+  - 技术教程
 tags:
   - OpenClaw
   - Tailscale

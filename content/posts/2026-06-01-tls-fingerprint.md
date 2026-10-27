@@ -6,7 +6,7 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: /img/tls-fingerprint-flow.svg
 categories:
-  - 网络安全
+  - 安全
 tags:
   - TLS
   - 指纹识别

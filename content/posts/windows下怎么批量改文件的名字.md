@@ -10,7 +10,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 # images:
 #   - /img/cover.jpg
 categories:
-  - Windows技巧
+  - Windows
 tags:
   - 文件管理
   - 批量重命名

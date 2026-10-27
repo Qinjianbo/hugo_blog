@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/21.jpg
 categories:
   - 网络工具
-  - 系统运维
+  - 运维必备
 tags:
   - hosts
   - 系统配置

@@ -7,7 +7,6 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (35).jpg
 categories:
   - 自动化
-  - 低代码
   - n8n
   
 tags:

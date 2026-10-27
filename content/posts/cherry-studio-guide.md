@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (32).jpg
 categories:
   - 技术教程
-  - AI工具
+  - AI
 tags:
   - AI
   - 工具

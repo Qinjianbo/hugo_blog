@@ -9,7 +9,7 @@ categories:
   - OpenAI
 tags:
   - Codex
-  - Automations
+  - 自动化
   - OpenAI
   - AI 自动化
 draft: false

@@ -10,10 +10,10 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto
 # images:
 #   - /img/cover.jpg
 categories:
-  - Golang编程  # 假设这是一个与文章相关的分类
+  - Golang
 tags:
-  - Golang  # 文章相关标签
-  - Map  # 文章相关标签
+  - Golang
+  - Map
 # nolastmod: true
 draft: false
 aiSummary: "在Go语言中，map是一种非常灵活的数据结构，用于存储键值对。然而，在使用map时，有一些关键点需要注意以避免常见的问题和错误。本文将讨论在使用Go语言的map时应注意的事项。"

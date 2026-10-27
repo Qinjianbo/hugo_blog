@@ -7,7 +7,7 @@ avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto1/posts/19.jpg
 categories:
   - 网络工具
-  - 实用教程
+  - 技术教程
 tags:
   - ngrok
   - 内网穿透

@@ -9,7 +9,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/Ubun
 # images:
 #   - /img/cover.jpg
 categories:
-  - 技术文章
+  - 技术教程
 tags:
   - tensorflow
 # nolastmod: true

@@ -11,7 +11,7 @@ cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/miss
 categories:
   - 问题积累
 tags:
-  - golang
+  - Golang
   - syntax_err
 # nolastmod: true
 draft: true

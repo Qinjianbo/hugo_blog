@@ -9,7 +9,6 @@ categories:
   - 自动化
   - AI
   - n8n
-  - 大模型
   - 记忆力
   
 tags:

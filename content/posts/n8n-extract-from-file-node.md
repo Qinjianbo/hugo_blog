@@ -6,7 +6,7 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (42).jpg
 categories:
-  - 自动化工具
+  - 自动化
 tags:
   - n8n
   - 自动化

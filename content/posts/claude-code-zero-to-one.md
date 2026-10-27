@@ -6,11 +6,11 @@ author: 胡巴
 avatar: /img/avatar.jpeg
 cover: https://blog-boboidea.oss-cn-hangzhou.aliyuncs.com/article/img/posts/auto/article (42).jpg
 categories:
-  - claude code
+  - Claude Code
 tags:
-  - claude code
+  - Claude Code
   - 开发
-  - golang
+  - Golang
   - 全栈
 aiSummary: "摘要： 朋友让我帮忙做中型全栈项目，我虽主攻后端，但想到AI如今强大，早闻 Claude Code 业内顶尖，索性借此机会实测一番，看它究竟有多强。 AI编程 ClaudeCode Golang Vue Flutter 全栈开发 程序员转型 未来已来"
 aiKeyPoints:
