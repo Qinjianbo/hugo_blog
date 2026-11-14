@@ -1,8 +1,8 @@
 ---
 description: "Agent Skills 系列第七篇：Agent 越能干，越要先立规矩。安全审计 Skill 就是动手前先过的一道关：哪些事碰都不能碰，哪些信息绝不能发，通不过就不动手。"
 title: "给 Agent 立规矩：安全审计 Skill"
-date: 2026-11-09T12:00:00+08:00
-lastmod: 2026-11-09T12:00:00+08:00
+date: 2026-11-10T05:30:00+08:00
+lastmod: 2026-11-10T05:30:00+08:00
 author: 胡巴
 categories:
   - 技术教程

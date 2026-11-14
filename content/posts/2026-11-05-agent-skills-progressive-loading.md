@@ -1,8 +1,8 @@
 ---
 description: "Agent Skills 系列第三篇：Skill 写长了就变慢变贵。渐进加载让 Agent 每次只读当时需要的那部分，scripts、references、assets 各有分工，正文只留步骤和判断。"
 title: "让 Skill 真正好用：渐进加载与文件分工"
-date: 2026-11-05T15:00:00+08:00
-lastmod: 2026-11-05T15:00:00+08:00
+date: 2026-11-05T23:25:00+08:00
+lastmod: 2026-11-05T23:25:00+08:00
 author: 胡巴
 categories:
   - 技术教程

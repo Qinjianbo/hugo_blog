@@ -1,8 +1,8 @@
 ---
 description: "Agent Skills 系列第二篇：一个文件夹、一个 SKILL.md 就够了；name 和 description 是仅有的两个必填项，描述写准了，Skill 才会在该用的时候被触发。"
 title: "第一个 Skill：SKILL.md 到底怎么写"
-date: 2026-11-04T12:30:00+08:00
-lastmod: 2026-11-04T12:30:00+08:00
+date: 2026-11-05T22:57:00+08:00
+lastmod: 2026-11-05T22:57:00+08:00
 author: 胡巴
 categories:
   - 技术教程

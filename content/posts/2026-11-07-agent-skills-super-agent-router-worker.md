@@ -1,8 +1,8 @@
 ---
 description: "Agent Skills 系列第六篇：几个 Agent 一起干活，总得有人管。Super-agent 就是一个常驻的 Router 加一群各干各的 Worker，派活、收活、盯进度全归 Router，干活的只管自己那一份。"
 title: "Super-agent 架构拆解：Router 与 Worker"
-date: 2026-11-07T10:55:00+08:00
-lastmod: 2026-11-07T10:55:00+08:00
+date: 2026-11-09T19:19:00+08:00
+lastmod: 2026-11-09T19:19:00+08:00
 author: 胡巴
 categories:
   - 技术教程

@@ -1,8 +1,8 @@
 ---
 description: "Agent Skills 系列第一篇：提示词是每次现说现忘，Skill 是把一套固定做法写成文件，让 Agent 在合适的任务上自动照着做。"
 title: "认识 Agent Skills：为什么光会写提示词不够了"
-date: 2026-11-04T12:00:00+08:00
-lastmod: 2026-11-04T12:00:00+08:00
+date: 2026-11-04T05:09:00+08:00
+lastmod: 2026-11-04T05:09:00+08:00
 author: 胡巴
 categories:
   - 技术教程
