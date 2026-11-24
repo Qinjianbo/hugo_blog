@@ -1,0 +1,15 @@
+{{- /* bookish/header.html：方向一顶栏，站名字标 + 导航。入参为当前页面。 */ -}}
+{{- $page := . -}}
+{{- $current := "" -}}
+{{- if $page.IsHome -}}{{- $current = "home" -}}
+{{- else if eq $page.Kind "taxonomy" -}}{{- $current = "series" -}}{{- end -}}
+<header class="top">
+  <div class="wrap">
+    <a class="wordmark" href="{{ "/" | relLangURL }}">{{ site.Title }}<small>boboidea.com</small></a>
+    <nav class="main" aria-label="站内导航">
+      <a href="{{ "/" | relLangURL }}"{{ if eq $current "home" }} aria-current="page"{{ end }}>首页</a>
+      <a href="{{ "/series/" | relLangURL }}"{{ if eq $current "series" }} aria-current="page"{{ end }}>系列</a>
+      <a href="{{ "/#latest" | relLangURL }}">最新文章</a>
+    </nav>
+  </div>
+</header>

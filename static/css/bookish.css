@@ -1,0 +1,286 @@
+/* 方向一 · 吕敬人书卷气 —— 四页共用样式（首页 / 系列页 / 总览页 / 文章页）
+   暖纸、衬线、朱砂一处。正文不低于 14px。 */
+
+:root{
+  --paper:#f6f1e5; --paper-2:#efe7d2; --ink:#211d18; --ink-2:#655c4e;
+  --rule:#d9cfb8; --rule-strong:#b9ab8c; --cinnabar:#a8341f;
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  /* 供 AI 摘要 partial 的内联样式使用 */
+  --border:var(--rule); --entry:var(--paper-2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--ink); text-decoration:none}
+a:hover{text-decoration:underline; text-underline-offset:4px}
+img{display:block; max-width:100%}
+.wrap{max-width:1080px; margin:0 auto; padding:0 32px}
+
+/* 顶栏：字标 + 导航 */
+header.top{padding:28px 0 0}
+header.top .wrap{display:flex; align-items:baseline; justify-content:space-between; gap:24px; flex-wrap:wrap}
+.wordmark{font-family:var(--serif); font-size:24px; font-weight:700; letter-spacing:.06em; line-height:1.3}
+.wordmark small{font-family:var(--sans); font-size:13px; font-weight:400; color:var(--ink-2); letter-spacing:0; margin-left:10px}
+nav.main{display:flex; gap:28px}
+nav.main a{font-size:15px; padding:4px 0}
+nav.main a[aria-current="page"]{font-weight:700; border-bottom:2px solid var(--ink)}
+
+/* 首屏 */
+.hero{padding:72px 0 56px}
+.hero h1{font-family:var(--serif); font-size:34px; font-weight:700; line-height:1.4; letter-spacing:.02em}
+.hero p{margin-top:14px; font-size:15px; color:var(--ink-2)}
+
+/* 书架：首页四本书并排 */
+.shelf{display:grid; grid-template-columns:repeat(4,1fr); gap:28px; padding-bottom:8px}
+/* 书架：总览页流式网格，系列再多也自然换行 */
+.shelf-all{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:28px; padding-bottom:8px}
+.book{display:block}
+.book .cover{
+  display:block; aspect-ratio:3/4; overflow:hidden; background:var(--paper-2);
+  border:1px solid var(--rule);
+}
+.book .cover img{width:100%; height:100%; object-fit:cover}
+.book .vol{margin-top:16px; font-family:var(--serif); font-size:15px; color:var(--cinnabar); letter-spacing:.12em}
+.book h2{margin-top:6px; font-family:var(--serif); font-size:19px; font-weight:700; line-height:1.45}
+.book .meta{margin-top:6px; font-size:13px; color:var(--ink-2); line-height:1.7}
+.book:hover h2{text-decoration:underline; text-underline-offset:4px}
+.shelf-note{margin-top:28px; padding-top:16px; border-top:1px solid var(--rule); font-size:14px; color:var(--ink-2)}
+.all-series{margin-top:28px; padding-top:20px; border-top:1px solid var(--rule-strong)}
+.all-series a{font-family:var(--serif); font-size:19px; font-weight:700}
+.all-series span{margin-left:16px; font-size:13px; color:var(--ink-2)}
+
+/* 最新文章 */
+.latest{padding:72px 0 40px}
+.latest h2{font-family:var(--serif); font-size:26px; font-weight:700; line-height:1.4}
+.latest ul{list-style:none; margin-top:8px}
+.latest li{border-bottom:1px solid var(--rule)}
+.latest li a{display:flex; align-items:baseline; gap:20px; padding:18px 0}
+.latest .date{flex:0 0 108px; font-size:13px; color:var(--ink-2)}
+.latest .t{font-family:var(--serif); font-size:17px; font-weight:600; line-height:1.5}
+.latest li a:hover .t{text-decoration:underline; text-underline-offset:4px}
+
+/* 卷首：书封 + 题名 */
+.series-head{padding:64px 0 48px}
+.series-head .wrap{display:flex; gap:40px; align-items:flex-start}
+.series-head .cover{flex:0 0 200px; aspect-ratio:3/4; overflow:hidden; background:var(--paper-2); border:1px solid var(--rule)}
+.series-head .cover img{width:100%; height:100%; object-fit:cover}
+.series-head .vol{font-family:var(--serif); font-size:16px; color:var(--cinnabar); letter-spacing:.12em}
+.series-head h1{margin-top:8px; font-family:var(--serif); font-size:34px; font-weight:700; line-height:1.4}
+.series-head .meta{margin-top:16px; font-size:14px; color:var(--ink-2); line-height:2}
+
+/* 进度 */
+.progress{padding:0 0 8px}
+.progress .ticks{display:flex; gap:6px}
+.progress .ticks i{flex:1; height:4px; background:var(--ink)}
+.progress p{margin-top:12px; font-size:13px; color:var(--ink-2)}
+
+/* 卷目 */
+.chapters{padding:40px 0 24px}
+.chapters ol{list-style:none}
+.chapters li{border-bottom:1px solid var(--rule)}
+.chapters li a{display:flex; align-items:baseline; gap:20px; padding:20px 0}
+.chapters .no{flex:0 0 76px; font-family:var(--serif); font-size:15px; color:var(--cinnabar); letter-spacing:.06em}
+.chapters .t{font-family:var(--serif); font-size:18px; font-weight:600; line-height:1.5}
+.chapters .date{margin-left:auto; flex:0 0 auto; font-size:13px; color:var(--ink-2)}
+.chapters li a:hover .t{text-decoration:underline; text-underline-offset:4px}
+
+/* 卷末 */
+.series-foot{padding:36px 0 40px}
+.series-foot .wrap{display:flex; gap:32px; flex-wrap:wrap}
+.series-foot a{font-family:var(--serif); font-size:17px; font-weight:600; padding:6px 0; border-bottom:1px solid var(--rule-strong)}
+
+/* 一叶书：版心居中，旁注在切口 */
+.leaf{
+  max-width:1080px; margin:0 auto; padding:64px 32px 0;
+  display:grid; grid-template-columns:minmax(0,680px) 220px; gap:72px; justify-content:center;
+}
+.article-head .series{font-size:14px; color:var(--ink-2)}
+.article-head .series b{font-weight:600; color:var(--cinnabar)}
+.article-head h1{margin-top:10px; font-family:var(--serif); font-size:36px; font-weight:700; line-height:1.4}
+.article-head .meta{margin-top:16px; font-size:14px; color:var(--ink-2)}
+.article-body{margin-top:40px; font-size:17px; line-height:1.95}
+.article-body p{margin:0 0 22px}
+.article-body h2{margin:56px 0 20px; font-family:var(--serif); font-size:23px; font-weight:700; line-height:1.5}
+.article-body h3{margin:44px 0 16px; font-family:var(--serif); font-size:20px; font-weight:700; line-height:1.5}
+.article-body h4{margin:36px 0 14px; font-family:var(--serif); font-size:18px; font-weight:700; line-height:1.5}
+.article-body ul, .article-body ol{margin:0 0 22px; padding-left:26px}
+.article-body ul li, .article-body ol li{margin-bottom:12px; padding-left:6px}
+.article-body strong{font-weight:700}
+.article-body blockquote{margin:0 0 22px; padding:4px 0 4px 20px; border-left:3px solid var(--cinnabar); color:var(--ink-2)}
+.article-body blockquote p{margin:0 0 12px}
+.article-body hr{border:none; border-top:1px solid var(--rule); margin:36px 0}
+.article-body table{border-collapse:collapse; margin:0 0 22px; font-size:15px; line-height:1.6; display:block; overflow-x:auto}
+.article-body th, .article-body td{border:1px solid var(--rule); padding:8px 12px; text-align:left}
+.article-body th{background:var(--paper-2); font-family:var(--serif)}
+.article-body img{margin:0 auto 22px}
+.article-body figure{margin:0 0 22px}
+.article-body figcaption{font-size:13px; color:var(--ink-2); text-align:center; margin-top:8px}
+/* 正文首个 h1 与模板标题重复时只留模板标题（锚点仍在，目录可跳） */
+.article-body.dup-h1 > h1:first-child{display:none}
+/* 代码：沿用现站 Chroma 配色（深底）， token 颜色见文件末尾 */
+.article-body code{font-family:var(--mono); font-size:.88em; background:var(--paper-2); border:1px solid var(--rule); border-radius:4px; padding:1px 5px}
+.article-body pre{margin:0 0 22px; padding:16px 18px; background:#24273a; border-radius:6px; overflow-x:auto; font-size:14px; line-height:1.7}
+.article-body pre code{background:none; border:none; padding:0; font-size:14px; color:#cad3f5}
+.article-body .highlight{margin:0 0 22px}
+.article-body .highlight pre{margin:0}
+.article-end{margin-top:56px; padding-top:24px; border-top:1px solid var(--rule)}
+.article-end nav{display:flex; gap:32px; flex-wrap:wrap}
+.article-end nav a{font-family:var(--serif); font-size:17px; font-weight:600; padding:6px 0; border-bottom:1px solid var(--rule-strong)}
+.article-end #vcomments{margin-top:40px}
+
+/* 切口旁注栏 */
+aside.notes{position:sticky; top:32px; align-self:start; padding-top:8px}
+aside.notes h2{font-family:var(--serif); font-size:16px; font-weight:700; padding-bottom:12px; border-bottom:1px solid var(--rule-strong)}
+aside.notes .count{margin-top:14px; font-size:14px}
+aside.notes .count b{font-weight:700; color:var(--cinnabar)}
+aside.notes .mini{list-style:none; margin-top:14px}
+aside.notes .mini li{padding:7px 0; border-bottom:1px solid var(--rule); font-size:13px; line-height:1.6; color:var(--ink-2)}
+aside.notes .mini li .no{font-family:var(--serif); color:var(--cinnabar); margin-right:8px}
+aside.notes .mini li.now{color:var(--ink); font-weight:600}
+aside.notes .mini li a{color:inherit}
+aside.notes .all{margin-top:16px; font-size:14px; font-weight:600}
+aside.notes .toc-block{margin-top:28px; padding-top:20px; border-top:1px solid var(--rule)}
+#TableOfContents ul{list-style:none; margin-top:14px}
+#TableOfContents li{padding:6px 0; border-bottom:1px solid var(--rule); font-size:13px; line-height:1.6}
+#TableOfContents li ul{margin-top:6px; padding-left:14px}
+#TableOfContents li ul li{border-bottom:none; padding:4px 0}
+#TableOfContents a{color:var(--ink-2)}
+#TableOfContents a:hover{color:var(--ink)}
+
+/* 地脚：留白 */
+footer.site{margin-top:40px; padding:32px 0 180px; border-top:1px solid var(--rule-strong)}
+footer.site p{font-size:13px; color:var(--ink-2); line-height:2}
+footer.site p a{color:var(--ink-2)}
+
+@media (max-width:1100px){
+  .leaf{grid-template-columns:1fr; gap:0}
+  aside.notes{position:static; order:-1; padding:0 0 28px; margin-bottom:32px; border-bottom:1px solid var(--rule-strong)}
+  aside.notes .mini, aside.notes .toc-block{display:none}
+  aside.notes h2{display:none}
+  aside.notes .count{margin-top:0}
+  aside.notes .all{margin-top:10px}
+}
+@media (max-width:900px){
+  .shelf{grid-template-columns:repeat(2,1fr); gap:24px 20px}
+  .hero{padding:52px 0 44px}
+  .hero h1{font-size:28px}
+}
+@media (max-width:760px){
+  .series-head{padding:48px 0 40px}
+  .series-head .wrap{flex-direction:column; gap:24px}
+  .series-head .cover{flex-basis:auto; width:168px}
+  .series-head h1{font-size:28px}
+  .chapters .no{flex-basis:64px; font-size:14px}
+  .chapters .t{font-size:17px}
+  .chapters li a{flex-wrap:wrap; gap:2px}
+  .chapters .date{margin-left:84px; flex-basis:calc(100% - 84px)}
+  .leaf{padding-top:48px}
+  .article-head h1{font-size:28px}
+  .article-body{font-size:16px}
+  .article-body h2{font-size:21px; margin-top:44px}
+}
+@media (max-width:480px){
+  .wrap{padding:0 20px}
+  .leaf{padding-left:20px; padding-right:20px}
+  header.top .wrap{gap:12px}
+  nav.main{gap:20px}
+  .hero{padding:44px 0 36px}
+  .hero h1{font-size:25px}
+  .book h2{font-size:17px}
+  .book .meta{font-size:12px}
+  .all-series span{display:block; margin:8px 0 0}
+  .latest li a{flex-wrap:wrap; gap:4px; padding:16px 0}
+  .latest .date{flex-basis:100%}
+  .series-head h1{font-size:25px}
+  .chapters .date{margin-left:64px; flex-basis:calc(100% - 64px)}
+  .article-head h1{font-size:25px}
+  footer.site{padding-bottom:140px}
+}
+
+/* 代码高亮：沿用现站 Chroma 配色（从现站构建产物提取） */
+.chroma{color:#cad3f5;background-color:#24273a}
+.chroma .err{color:#ed8796}
+.chroma .lnlinks{outline:none;text-decoration:none;color:inherit}
+.chroma .lntd{vertical-align:top;padding:0;margin:0;border:0}
+.chroma .lntable{border-spacing:0;padding:0;margin:0;border:0}
+.chroma .hl{background-color:#474733}
+.chroma .lnt{white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#8087a2}
+.chroma .ln{white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#8087a2}
+.chroma .line{display:flex}
+.chroma .k{color:#c6a0f6}
+.chroma .kc{color:#f5a97f}
+.chroma .kd{color:#ed8796}
+.chroma .kn{color:#8bd5ca}
+.chroma .kp{color:#c6a0f6}
+.chroma .kr{color:#c6a0f6}
+.chroma .kt{color:#ed8796}
+.chroma .na{color:#8aadf4}
+.chroma .nb{color:#91d7e3}
+.chroma .bp{color:#91d7e3}
+.chroma .nc{color:#eed49f}
+.chroma .no{color:#eed49f}
+.chroma .nd{color:#8aadf4;font-weight:700}
+.chroma .ni{color:#8bd5ca}
+.chroma .ne{color:#f5a97f}
+.chroma .nf{color:#8aadf4}
+.chroma .fm{color:#8aadf4}
+.chroma .nl{color:#91d7e3}
+.chroma .nn{color:#f5a97f}
+.chroma .py{color:#f5a97f}
+.chroma .nt{color:#c6a0f6}
+.chroma .nv{color:#f4dbd6}
+.chroma .vc{color:#f4dbd6}
+.chroma .vg{color:#f4dbd6}
+.chroma .vi{color:#f4dbd6}
+.chroma .vm{color:#f4dbd6}
+.chroma .s{color:#a6da95}
+.chroma .sa{color:#ed8796}
+.chroma .sb{color:#a6da95}
+.chroma .sc{color:#a6da95}
+.chroma .dl{color:#8aadf4}
+.chroma .sd{color:#6e738d}
+.chroma .s2{color:#a6da95}
+.chroma .se{color:#8aadf4}
+.chroma .sh{color:#6e738d}
+.chroma .si{color:#a6da95}
+.chroma .sx{color:#a6da95}
+.chroma .sr{color:#8bd5ca}
+.chroma .s1{color:#a6da95}
+.chroma .ss{color:#a6da95}
+.chroma .m{color:#f5a97f}
+.chroma .mb{color:#f5a97f}
+.chroma .mf{color:#f5a97f}
+.chroma .mh{color:#f5a97f}
+.chroma .mi{color:#f5a97f}
+.chroma .il{color:#f5a97f}
+.chroma .mo{color:#f5a97f}
+.chroma .o{color:#91d7e3;font-weight:700}
+.chroma .ow{color:#91d7e3;font-weight:700}
+.chroma .c{color:#6e738d;font-style:italic}
+.chroma .ch{color:#6e738d;font-style:italic}
+.chroma .cm{color:#6e738d;font-style:italic}
+.chroma .c1{color:#6e738d;font-style:italic}
+.chroma .cs{color:#6e738d;font-style:italic}
+.chroma .cp{color:#6e738d;font-style:italic}
+.chroma .cpf{color:#6e738d;font-weight:700;font-style:italic}
+.chroma .gd{color:#ed8796;background-color:#363a4f}
+.chroma .ge{font-style:italic}
+.chroma .gr{color:#ed8796}
+.chroma .gh{color:#f5a97f;font-weight:700}
+.chroma .gi{color:#a6da95;background-color:#363a4f}
+.chroma .gs{font-weight:700}
+.chroma .gu{color:#f5a97f;font-weight:700}
+.chroma .gt{color:#ed8796}
+.chroma .gl{text-decoration:underline}
+.chroma{background-color:unset!important}
+.chroma .hl{display:flex}
+.chroma .lnt{padding:0 0 0 12px}
+.chroma code{padding:8px 0}
+.chroma .line .cl,.chroma .ln{padding:0 10px}
+.chroma .lntd:last-of-type{width:100%}

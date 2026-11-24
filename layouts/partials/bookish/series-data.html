@@ -1,0 +1,27 @@
+{{- /* series-data: 全部系列按首篇日期升序排列，附篇数、起止日期、卷号、封面。
+   注意：Hugo 把分类名小写后做 map 键（muse 从入门到精通），而 data/series.yaml 的键
+   是原文大小写，且 term 页 .Title 保留原文大小写——所以查封面时按小写键匹配，
+   显示名取 term 页 .Title（与现站一致）。
+   返回 slice，每项：name / term / pages / count / first / last / vol / cover / position / complete */ -}}
+{{- $metaByName := dict -}}
+{{- range $k, $v := site.Data.series -}}
+  {{- $metaByName = merge $metaByName (dict (lower $k) $v) -}}
+{{- end -}}
+{{- $out := slice -}}
+{{- range $name, $tax := .Site.Taxonomies.series -}}
+  {{- $pages := $tax.Pages.ByDate -}}
+  {{- $n := len $pages -}}
+  {{- if gt $n 0 -}}
+    {{- $first := (index $pages 0).Date -}}
+    {{- $last := (index $pages (sub $n 1)).Date -}}
+    {{- $meta := index $metaByName (lower $name) | default dict -}}
+    {{- $display := $tax.Page.Title | default $name -}}
+    {{- $out = $out | append (dict "name" $display "term" $tax "pages" $pages "count" $n "first" $first "last" $last "cover" ($meta.cover | default "") "position" ($meta.position | default "50% 50%") "complete" ($meta.complete | default false)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $out = sort $out "first" "asc" -}}
+{{- $withVol := slice -}}
+{{- range $i, $s := $out -}}
+  {{- $withVol = $withVol | append (merge $s (dict "vol" (add $i 1))) -}}
+{{- end -}}
+{{- return $withVol -}}

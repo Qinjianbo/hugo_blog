@@ -1,0 +1,60 @@
+{{- /* 首页：方向一。系列书架（最新 4 个）+ 最新文章。 */ -}}
+{{- $series := partial "bookish/series-data.html" . -}}
+{{- $postCount := len (where .Site.RegularPages "Section" "posts") -}}
+{{- $totalSeriesPosts := 0 -}}
+{{- range $series }}{{ $totalSeriesPosts = add $totalSeriesPosts .count }}{{ end }}
+{{- $homeSeries := $series -}}
+{{- if gt (len $series) 4 }}{{ $homeSeries = last 4 $series }}{{ end }}
+{{- $latest := first 8 (sort (where .Site.RegularPages "Section" "posts") "Date" "desc") -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+{{ partial "bookish/head.html" (dict "page" . "title" site.Title) }}
+<body>
+{{ partial "bookish/header.html" . }}
+<main>
+  {{- if $series }}
+  <section class="hero">
+    <div class="wrap">
+      <h1>{{ partial "bookish/cnnum.html" (len $series) }}个系列，{{ partial "bookish/cnnum.html" $totalSeriesPosts }}篇，从入门到精通。</h1>
+      <p>全站{{ partial "bookish/cnnum.html" $postCount }}篇 · 成体系的教程站</p>
+    </div>
+  </section>
+
+  <section aria-label="系列">
+    <div class="wrap">
+      <div class="shelf">
+        {{- range $homeSeries }}
+        <a class="book" href="{{ .term.Page.RelPermalink }}">
+          <span class="cover"><img src="/images/series-covers/{{ .cover }}" alt="{{ .name }} 封面"{{ if ne .position "50% 50%" }} style="object-position:{{ .position }}"{{ end }}></span>
+          <span class="vol">卷{{ partial "bookish/cnnum.html" .vol }}</span>
+          <h2>{{ .name }}</h2>
+          <p class="meta">{{ .count }} 篇<br>{{ .first.Format "2006-01-02" }} 至 {{ .last.Format "2006-01-02" }}</p>
+        </a>
+        {{- end }}
+      </div>
+      <p class="all-series"><a href="{{ "/series/" | relLangURL }}">全部系列</a><span>共 {{ len $series }} 个系列，{{ $totalSeriesPosts }} 篇</span></p>
+    </div>
+  </section>
+  {{- else }}
+  <section class="hero">
+    <div class="wrap">
+      <h1>{{ site.Title }}</h1>
+      <p>全站{{ $postCount }}篇</p>
+    </div>
+  </section>
+  {{- end }}
+
+  <section class="latest" id="latest" aria-label="最新文章">
+    <div class="wrap">
+      <h2>最新文章</h2>
+      <ul>
+        {{- range $latest }}
+        <li><a href="{{ .RelPermalink }}"><span class="date">{{ .Date.Format "2006-01-02" }}</span><span class="t">{{ .Title }}</span></a></li>
+        {{- end }}
+      </ul>
+    </div>
+  </section>
+</main>
+{{ partial "bookish/footer.html" . }}
+</body>
+</html>

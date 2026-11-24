@@ -1,81 +1,82 @@
-{{- define "main" }}
-
-<article class="post-single">
-  <header class="post-header">
-    {{ partial "breadcrumbs.html" . }}
-    <h1 class="post-title entry-hint-parent">
-      {{ .Title }}
-      {{- if .Draft }}
-      <span class="entry-hint" title="Draft">
-        <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
-          <path
-            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-        </svg>
-      </span>
-      {{- end }}
-    </h1>
-    {{- if .Description }}
-    <div class="post-description">
-      {{ .Description }}
-    </div>
-    {{- end }}
-    {{- if not (.Param "hideMeta") }}
-    <div class="post-meta">
-      {{- partial "post_meta.html" . -}}
-      {{- partial "translation_list.html" . -}}
-      {{- partial "edit_post.html" . -}}
-      {{- partial "post_canonical.html" . -}}
-    </div>
-    {{- end }}
+{{- /* 文章页：方向一“一叶书”。粘性旁注栏（本系列进度 + 小目录）。
+   保留 AI 摘要、Valine 评论、FAQ schema；按原型略去首页/SubSub/AdPower 横幅。
+   正文首个 h1 与模板标题重复时只留模板标题（锚点仍在，目录可跳）。 */ -}}
+{{- $seriesName := "" -}}
+{{- with .Params.series }}{{ $seriesName = index . 0 }}{{ end }}
+{{- $termRel := "" -}}
+{{- $seriesPages := slice -}}
+{{- $pos := 0 -}}
+{{- if $seriesName -}}
+  {{- /* 注意：.Site.Taxonomies.series 的键是小写后的分类名（如 muse 从入门到精通），
+       而 frontmatter 的 series 是原文大小写——查表时先 lower，否则含拉丁字母的系列查不到 */ -}}
+  {{- $tax := index .Site.Taxonomies.series (lower $seriesName) -}}
+  {{- with $tax -}}
+    {{- $seriesPages = .Pages.ByDate -}}
+    {{- $termRel = .Page.RelPermalink -}}
+    {{- range $i, $p := $seriesPages -}}
+      {{- if eq $p.RelPermalink $.RelPermalink -}}{{- $pos = add $i 1 -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $dupH1 := false -}}
+{{- $contentStr := printf "%s" .Content -}}
+{{- if hasPrefix (strings.TrimSpace $contentStr) "<h1" -}}
+  {{- $firstH1 := index (findRE `(?s)<h1[^>]*>.*?</h1>` $contentStr 1) 0 -}}
+  {{- $h1Text := $firstH1 | replaceRE `<[^>]+>` "" | strings.TrimSpace -}}
+  {{- if eq $h1Text .Title -}}{{- $dupH1 = true -}}{{- end -}}
+{{- end -}}
+{{- $hasToc := gt (len (findRE "<li" (printf "%s" .TableOfContents))) 0 -}}
+{{- $meta := slice (.Params.author | default site.Params.author) (.Date.Format "2006-01-02") -}}
+{{- with .Params.categories }}{{ $meta = $meta | append (delimit . "、") }}{{ end }}
+{{- with .Params.tags }}{{ $meta = $meta | append (delimit . "、") }}{{ end }}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+{{ partial "bookish/head.html" (dict "page" . "title" .Title "description" .Description) }}
+<body>
+{{ partial "bookish/header.html" . }}
+<main>
+<div class="leaf">
+<article>
+  <header class="article-head">
+    {{- if $seriesName }}<p class="series">{{ if $termRel }}<a href="{{ $termRel }}">{{ $seriesName }}</a>{{ else }}{{ $seriesName }}{{ end }} · <b>第{{ partial "bookish/cnnum.html" $pos }}篇</b></p>{{ end }}
+    <h1>{{ .Title }}</h1>
+    <p class="meta">{{ delimit $meta " · " }}</p>
   </header>
-  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
-  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
-  {{- if (.Param "ShowToc") }}
-  {{- partial "toc.html" . }}
-  {{- end }}
 
   {{- partial "ai_summary.html" . }}
 
-  {{- with site.Params.homeBanner }}
-    {{- if and (in site.Params.mainSections $.Type) .image .url }}
-    {{- partial "home_banner.html" . }}
-    {{- end }}
-  {{- end }}
+  <div class="article-body{{ if $dupH1 }} dup-h1{{ end }}">{{ .Content }}</div>
 
-  {{- if .Content }}
-  <div class="post-content md-content">
-    {{- if not (.Param "disableAnchoredHeadings") }}
-    {{- partial "anchored_headings.html" .Content -}}
-    {{- else }}{{ .Content }}{{ end }}
-  </div>
-  {{- end }}
-
-  {{- with site.Params.adspowerBanner }}
-    {{- if and (in site.Params.mainSections $.Type) .image .url }}
-    {{- partial "adspower_banner.html" . }}
-    {{- end }}
-  {{- end }}
-
-  <footer class="post-footer">
-    {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
-    <ul class="post-tags">
-      {{- range ($.GetTerms $tags) }}
-      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
-      {{- end }}
-    </ul>
-    {{- if (.Param "ShowPostNavLinks") }}
-    {{- partial "post_nav_links.html" . }}
-    {{- end }}
-    {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
-    {{- partial "share_icons.html" . -}}
-    {{- end }}
+  <footer class="article-end">
+    <nav aria-label="读完导航">
+      {{- if $seriesName }}<a href="{{ $termRel }}">回系列全表</a>{{ end }}
+      <a href="{{ "/" | relLangURL }}">回首页书架</a>
+    </nav>
+    {{- partial "comments.html" . }}
   </footer>
-
-  {{- if (.Param "comments") }}
-  {{- partial "comments.html" . }}
-  {{- end }}
 </article>
 
-{{- partial "ai_faq_schema.html" . }}
-
-{{- end }}{{/* end main */}}
+<aside class="notes" aria-label="旁注">
+  {{- if $seriesName }}
+  <h2>本系列进度</h2>
+  <p class="count"><b>第 {{ $pos }} 篇</b> / 共 {{ len $seriesPages }} 篇</p>
+  <ol class="mini">
+    {{- range $i, $p := $seriesPages }}
+    <li{{ if eq (add $i 1) $pos }} class="now"{{ end }}><span class="no">第{{ partial "bookish/cnnum.html" (add $i 1) }}篇</span>{{ if ne (add $i 1) $pos }}<a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>{{ else }}{{ $p.Title }}{{ end }}</li>
+    {{- end }}
+  </ol>
+  <p class="all"><a href="{{ $termRel }}">看全表</a></p>
+  {{- end }}
+  {{- if $hasToc }}
+  <div class="toc-block">
+    <h2>小目录</h2>
+    {{ .TableOfContents }}
+  </div>
+  {{- end }}
+</aside>
+</div>
+</main>
+{{ partial "bookish/footer.html" . }}
+{{ partial "ai_faq_schema.html" . }}
+</body>
+</html>

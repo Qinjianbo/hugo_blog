@@ -1,0 +1,62 @@
+{{- /* 单个系列页（term 页，如 /series/本地/开源大模型从入门到精通/）。
+   链接一律用 .RelPermalink，不手拼地址（系列名含“/”时地址会嵌一层）。
+   总览页（/series/）不在此模板——见 layouts/_default/series-overview.html。 */ -}}
+{{- $all := partial "bookish/series-data.html" . -}}
+{{- $pages := .Pages.ByDate -}}
+{{- $n := len $pages -}}
+{{- $first := index $pages 0 -}}
+{{- $last := index $pages (sub $n 1) -}}
+{{- $vol := 0 -}}{{- $cover := "" -}}{{- $position := "50% 50%" -}}{{- $complete := false -}}
+{{- range $all -}}
+  {{- if eq .name $.Title -}}{{- $vol = .vol -}}{{- $cover = .cover -}}{{- $position = .position -}}{{- $complete = .complete -}}{{- end -}}
+{{- end -}}
+{{- $cats := slice -}}{{- $tags := slice -}}
+{{- range .Pages -}}
+  {{- range .Params.categories }}{{ $cats = $cats | append . }}{{ end }}
+  {{- range .Params.tags }}{{ $tags = $tags | append . }}{{ end }}
+{{- end -}}
+{{- $cats = uniq $cats -}}{{- $tags = uniq $tags -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+{{ partial "bookish/head.html" (dict "page" . "title" .Title "description" (printf "共 %d 篇。" $n)) }}
+<body>
+{{ partial "bookish/header.html" . }}
+<main>
+  <section class="series-head" aria-label="系列介绍">
+    <div class="wrap">
+      {{- if $cover }}<div class="cover"><img src="/images/series-covers/{{ $cover }}" alt="{{ .Title }} 封面"{{ if ne $position "50% 50%" }} style="object-position:{{ $position }}"{{ end }}></div>{{ end }}
+      <div>
+        {{- if $vol }}<p class="vol">卷{{ partial "bookish/cnnum.html" $vol }}</p>{{ end }}
+        <h1>{{ .Title }}</h1>
+        <p class="meta">共 {{ $n }} 篇 · {{ $first.Date.Format "2006-01-02" }} 至 {{ $last.Date.Format "2006-01-02" }}<br>分类：{{ delimit $cats "、" }} · 标签：{{ delimit $tags "、" }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="progress" aria-label="连载进度">
+    <div class="wrap">
+      <div class="ticks" aria-hidden="true">{{- range $pages }}<i></i>{{ end }}</div>
+      <p>{{ $n }} 篇{{ if $complete }}已完结{{ else }}连载中{{ end }} · 最后一篇 {{ $last.Date.Format "2006-01-02" }}</p>
+    </div>
+  </section>
+
+  <section class="chapters" aria-label="全表">
+    <div class="wrap">
+      <ol>
+        {{- range $i, $p := $pages }}
+        <li><a href="{{ $p.RelPermalink }}"><span class="no">第{{ partial "bookish/cnnum.html" (add $i 1) }}篇</span><span class="t">{{ $p.Title }}</span><span class="date">{{ $p.Date.Format "2006-01-02" }}</span></a></li>
+        {{- end }}
+      </ol>
+    </div>
+  </section>
+
+  <nav class="series-foot" aria-label="卷末导航">
+    <div class="wrap">
+      <a href="{{ $first.RelPermalink }}">读第一篇</a>
+      <a href="{{ "/" | relLangURL }}">回首页书架</a>
+    </div>
+  </nav>
+</main>
+{{ partial "bookish/footer.html" . }}
+</body>
+</html>

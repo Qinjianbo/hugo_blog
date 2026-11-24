@@ -1,0 +1,14 @@
+"Muse 从入门到精通":
+  cover: cover-muse.webp
+  complete: true
+"Agent Skills 从入门到精通":
+  cover: cover-agent-skills.webp
+  position: "65% 50%"
+  complete: true
+"让 AI 操作电脑从入门到精通":
+  cover: cover-computer-use.webp
+  position: "70% 50%"
+  complete: true
+"本地/开源大模型从入门到精通":
+  cover: cover-local-models.webp
+  complete: true

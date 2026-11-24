@@ -1,0 +1,31 @@
+{{- /* bookish/head.html：方向一四页共用的 <head>。入参 dict：page / title / description */ -}}
+{{- $page := .page -}}
+{{- $title := .title | default $page.Title -}}
+{{- $desc := .description | default ($page.Description | default site.Params.description) -}}
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow">
+<title>{{ if eq $title site.Title }}{{ site.Title }}{{ else }}{{ $title }} · {{ site.Title }}{{ end }}</title>
+{{- with $desc }}<meta name="description" content="{{ . }}">{{ end }}
+<meta name="author" content="{{ site.Params.author | default "huba" }}">
+<link rel="canonical" href="{{ $page.Permalink }}">
+<link rel="icon" href="/favicon.ico">
+{{- with $page.OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="RSS">{{ end }}
+{{- range $page.Translations }}<link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">{{ end }}
+{{- partial "ai_meta.html" $page }}
+{{- partial "google_analytics.html" $page }}
+{{- if or hugo.IsProduction (eq site.Params.env "production") }}
+{{- with site.Params.ads.client }}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>{{ end }}
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?aea13b8a38780f1f66760cfeb0028fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+{{- end }}
+<link rel="stylesheet" href="/css/bookish.css">
+</head>

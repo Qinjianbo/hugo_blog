@@ -1,0 +1,38 @@
+{{- /* 系列总览页（/series/）：方向一书架网格。
+   经 content/series/_index.md 的 layout frontmatter 指定本模板；
+   Hugo 0.168 的分类总览页查找不分具体分类（taxonomy/terms.html 通用于全部分类），
+   所以不用 terms.html——那样会连分类/标签总览页一起改掉。 */ -}}
+{{- $all := partial "bookish/series-data.html" . -}}
+{{- $total := 0 -}}
+{{- range $all }}{{ $total = add $total .count }}{{ end }}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+{{ partial "bookish/head.html" (dict "page" . "title" "全部系列" "description" (printf "共 %d 个系列。" (len $all))) }}
+<body>
+{{ partial "bookish/header.html" . }}
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>全部系列</h1>
+      <p>共 {{ len $all }} 个系列，{{ $total }} 篇。新增系列会出现在这里，首页只保留最新 4 个。</p>
+    </div>
+  </section>
+
+  <section aria-label="全部系列">
+    <div class="wrap">
+      <div class="shelf-all">
+        {{- range $all }}
+        <a class="book" href="{{ .term.Page.RelPermalink }}">
+          <span class="cover"><img src="/images/series-covers/{{ .cover }}" alt="{{ .name }} 封面"{{ if ne .position "50% 50%" }} style="object-position:{{ .position }}"{{ end }}></span>
+          <span class="vol">卷{{ partial "bookish/cnnum.html" .vol }}</span>
+          <h2>{{ .name }}</h2>
+          <p class="meta">{{ .count }} 篇<br>{{ .first.Format "2006-01-02" }} 至 {{ .last.Format "2006-01-02" }}</p>
+        </a>
+        {{- end }}
+      </div>
+    </div>
+  </section>
+</main>
+{{ partial "bookish/footer.html" . }}
+</body>
+</html>
