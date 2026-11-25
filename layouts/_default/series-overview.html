@@ -23,7 +23,7 @@
       <div class="shelf-all">
         {{- range $all }}
         <a class="book" href="{{ .term.Page.RelPermalink }}">
-          <span class="cover"><img src="/images/series-covers/{{ .cover }}" alt="{{ .name }} 封面"{{ if ne .position "50% 50%" }} style="object-position:{{ .position }}"{{ end }}></span>
+          {{- if .cover }}<span class="cover"><img src="/images/series-covers/{{ .cover }}" alt="{{ .name }} 封面"{{ if ne .position "50% 50%" }} style="object-position:{{ .position }}"{{ end }}></span>{{ end }}
           <span class="vol">卷{{ partial "bookish/cnnum.html" .vol }}</span>
           <h2>{{ .name }}</h2>
           <p class="meta">{{ .count }} 篇<br>{{ .first.Format "2006-01-02" }} 至 {{ .last.Format "2006-01-02" }}</p>

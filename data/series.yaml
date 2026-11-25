@@ -12,3 +12,6 @@
 "本地/开源大模型从入门到精通":
   cover: cover-local-models.webp
   complete: true
+"MCP 从入门到精通":
+  cover: cover-mcp.webp
+  complete: false
