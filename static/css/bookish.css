@@ -100,6 +100,9 @@ nav.main a[aria-current="page"]{font-weight:700; border-bottom:2px solid var(--i
   max-width:1080px; margin:0 auto; padding:64px 32px 0;
   display:grid; grid-template-columns:minmax(0,680px) 220px; gap:72px; justify-content:center;
 }
+/* 网格子项默认 min-width:auto 会被长代码行/宽表格的 min-content 撑宽，窄屏下整栏溢出居中裁切 */
+.leaf > *{min-width:0}
+.article-body pre, .article-body table{max-width:100%}
 .article-head .series{font-size:14px; color:var(--ink-2)}
 .article-head .series b{font-weight:600; color:var(--cinnabar)}
 .article-head h1{margin-top:10px; font-family:var(--serif); font-size:36px; font-weight:700; line-height:1.4}
